@@ -10,6 +10,8 @@ namespace RealEstateApp.Core.Application
 {
     public static class ServiceRegistration
     {
+
+       
         public static void AddApplicationLayerForWebApp(this IServiceCollection service) 
         {
             GenericService(service);
@@ -21,7 +23,7 @@ namespace RealEstateApp.Core.Application
         #region Generic
         private static void GenericService(this IServiceCollection service)
         {
-            service.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+            service.AddTransient(typeof(IGenericService<,,,>), typeof(GenericService<,,,>));
             service.AddTransient(typeof(IGenericRepository<,>), typeof(IGenericRepository<,>));
         }
 

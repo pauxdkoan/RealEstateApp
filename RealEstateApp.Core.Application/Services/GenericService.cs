@@ -5,20 +5,20 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class GenericService<SaveVm,Vm, Model>:IGenericService<SaveVm,Vm,Model>
+    public class GenericService<SaveVm,Vm, Model,TId>:IGenericService<SaveVm,Vm,Model,TId>
         where SaveVm : class
         where Vm : class
         where Model : class
     {
-        private readonly IGenericRepository<Model> _repository;
+        private readonly IGenericRepository<Model, TId> _repository;
         private readonly IMapper _mapper;
 
-        public GenericService(IGenericRepository<Model> repository, IMapper mapper)
+        public GenericService(IGenericRepository<Model,TId> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-        public virtual async Task Update(SaveVm vm, int id)
+        public virtual async Task Update(SaveVm vm, TId id)
         {
             Model entity = _mapper.Map<Model>(vm);
             await _repository.UpdateAsync(entity, id);
@@ -46,13 +46,13 @@ namespace RealEstateApp.Core.Application.Services
             return entitiesVm;
         }
 
-        public virtual async Task Delete(int id)
+        public virtual async Task Delete(TId id)
         {
             var product = await _repository.GetByIdAsync(id);
             await _repository.DeleteAsync(product);
         }
 
-        public virtual async Task<SaveVm> GetByIdSaveViewModel(int id)
+        public virtual async Task<SaveVm> GetByIdSaveViewModel(TId id)
         {
             var entity = await _repository.GetByIdAsync(id);
 
