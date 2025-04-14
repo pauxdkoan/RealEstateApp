@@ -15,12 +15,9 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Features\" />
-    <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositories\" />
     <Folder Include="Mappings\" />
     <Folder Include="Wrappers\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
