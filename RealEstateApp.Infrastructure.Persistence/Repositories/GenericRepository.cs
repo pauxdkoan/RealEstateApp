@@ -6,7 +6,7 @@ using RealEstateApp.Infrastructure.Persistence.Contexts;
 
 namespace RealEstateApp.Infrastructure.Persistence.Repositories
 {
-    public class GenericRepository<Entity> : IGenericRepository<Entity>
+    public class GenericRepository<Entity, TId> : IGenericRepository<Entity, TId>
         where Entity : class
     {
 
@@ -31,7 +31,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Repositories
             return entities;
         }
 
-        public virtual async Task UpdateAsync(Entity entity, int id)
+        public virtual async Task UpdateAsync(Entity entity, TId id)
         {
             var entry = await _dbContext.Set<Entity>().FindAsync(id);
             _dbContext.Entry(entry).CurrentValues.SetValues(entity);
@@ -78,7 +78,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Repositories
             return query.AsQueryable();
         }
 
-        public virtual async Task<Entity> GetByIdAsync(int id)
+        public virtual async Task<Entity> GetByIdAsync(TId id)
         {
             return await _dbContext.Set<Entity>().FindAsync(id);
         }

@@ -15,15 +15,14 @@ namespace RealEstateApp.Core.Application
             GenericService(service);
             GenericConfigurations(service);
 
-            #region Services
-            #endregion
+       
         }
 
         #region Generic
         private static void GenericService(this IServiceCollection service)
         {
             service.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-            service.AddTransient(typeof(IGenericRepository<>), typeof(IGenericRepository<>));
+            service.AddTransient(typeof(IGenericRepository<,>), typeof(IGenericRepository<,>));
         }
 
         private static void GenericConfigurations(this IServiceCollection service) 

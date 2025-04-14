@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateApp", "RealEstateApp\RealEstateApp.csproj", "{6A6C31D3-CC03-4B7A-8C57-A3D6A05896E5}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateApp.Infrastructure.Persistence", "RealEstateApp.Infrastructure.Persistence\RealEstateApp.Infrastructure.Persistence.csproj", "{0EEA3A9B-CADD-4E6E-8B17-A2B52E8FC186}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateApp.WebApi", "RealEstateApp.WebApi\RealEstateApp.WebApi.csproj", "{0043E3E3-9225-4654-94E4-DA04608FBC4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateApp.Infrastructure.Shared", "RealEstateApp.Infrastructure.Shared\RealEstateApp.Infrastructure.Shared.csproj", "{8D095C49-DDBE-4102-A9BD-B848DFCFD50F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{0043E3E3-9225-4654-94E4-DA04608FBC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0043E3E3-9225-4654-94E4-DA04608FBC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0043E3E3-9225-4654-94E4-DA04608FBC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D095C49-DDBE-4102-A9BD-B848DFCFD50F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D095C49-DDBE-4102-A9BD-B848DFCFD50F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D095C49-DDBE-4102-A9BD-B848DFCFD50F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D095C49-DDBE-4102-A9BD-B848DFCFD50F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +79,6 @@ Global
 		{408B7A1C-21DF-48F5-AEDD-39A863397B51} = {E2C24E90-0EEA-4ABC-AD9E-33F056608534}
 		{0EEA3A9B-CADD-4E6E-8B17-A2B52E8FC186} = {E2C24E90-0EEA-4ABC-AD9E-33F056608534}
 		{0043E3E3-9225-4654-94E4-DA04608FBC4C} = {F0E407C7-0D57-4AEF-88A1-1E104409B7CE}
+		{8D095C49-DDBE-4102-A9BD-B848DFCFD50F} = {E2C24E90-0EEA-4ABC-AD9E-33F056608534}
 	EndGlobalSection
 EndGlobal

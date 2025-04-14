@@ -11,11 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Features\" />
-    <Folder Include="Mappings\" />
     <Folder Include="Wrappers\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
