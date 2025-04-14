@@ -62,7 +62,7 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                 IdentityCard = request.IdentityCard,
                 Photo = request.PhotoUrl,
                 EmailConfirmed =false,
-                
+
                 IsActive=false,
             };
             
@@ -131,6 +131,35 @@ namespace RealEstateApp.Infrastructure.Identity.Service
 
             return response;
         }
+
+        public async Task<string> ConfirmAccountAsync(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null) 
+            {
+                return $"No hay cuenta registrada con este usuario";
+            }
+
+            token= Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                user.IsActive = true;
+                await _userManager.UpdateAsync(user);
+                await _userRepository.UpdateAsync(new User
+                {
+                    IsActive = user.IsActive,
+                }, user.Id);
+
+                return $"Correo confirmado de {user.Email}. Ahora puedes utilizar la app";
+            }
+            else 
+            {
+                return $"Ocurrio un error mientras se confirmaba el {user.Email}";
+            }
+
+        }
+
 
         #region Protected
         protected async Task<string> SendVerificationEmailUri(ApplicationUser user, string origin) 
