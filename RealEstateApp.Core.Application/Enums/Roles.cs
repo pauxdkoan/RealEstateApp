@@ -4,10 +4,10 @@ namespace RealEstateApp.Core.Application.Enums
 {
     public enum Roles
     {
-        Cliente,
-        Agente,
-        Administrador,
-        Desarrollador
+        Cliente=1,
+        Agente=2,
+        Administrador=3,
+        Desarrollador=4
 
 
     }

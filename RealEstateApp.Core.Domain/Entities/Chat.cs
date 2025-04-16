@@ -4,6 +4,7 @@ namespace RealEstateApp.Core.Domain.Entities
 {
     public class Chat
     {
+        
         public int Id { get; set; }
 
         //Relacion N-1 con Property

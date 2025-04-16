@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RealEstateApp.Core.Application.ViewModels.Offer
 {
-    public class OfferViewModel
+    public class OfferVm
     {
 
     }

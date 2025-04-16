@@ -1,0 +1,17 @@
+﻿
+
+using RealEstateApp.Core.Application.Dtos.Account;
+using RealEstateApp.Core.Application.ViewModels.User;
+using RealEstateApp.Core.Domain.Entities;
+
+namespace RealEstateApp.Core.Application.Interfaces.Services
+{
+    public interface IUserService : IGenericService<SaveUserVm, UserVm, User, string>
+    {
+        Task<AuthenticationResponse> LoginAsync(LoginVm vm);
+        Task SignOutAsync();
+        Task<RegisterResponse> RegisterAsync(SaveUserVm vm, string origin);
+        Task<string> ConfirmEmailAsync(string userId, string token);
+        Task<List<string>> GetAllRoles();
+    }
+}

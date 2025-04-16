@@ -29,6 +29,7 @@ namespace RealEstateApp.Infrastructure.Shared.Service
                 email.To.Add(MailboxAddress.Parse(request.To));
                 email.Subject= request.Subject;
                 var builder= new BodyBuilder();
+                builder.HtmlBody = request.Body;
                 email.Body= builder.ToMessageBody();
                 using var smtp= new SmtpClient();
                 smtp.Connect(MailSettings.SmtpHost, MailSettings.SmtpPort, MailKit.Security.SecureSocketOptions.StartTls);

@@ -9,7 +9,7 @@ namespace RealEstateApp.Core.Application.Dtos.Account
         public string Email { get; set; }
         public string Phone {  get; set; }
         public string Password {  get; set; }
-        public string PhotoUrl {  get; set; }
+        public string Photo {  get; set; }
 
         public string? IdentityCard {  get; set; } // admin/desarrolladores
 

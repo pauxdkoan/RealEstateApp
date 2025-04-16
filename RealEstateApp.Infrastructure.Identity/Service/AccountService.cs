@@ -9,24 +9,32 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Infrastructure.Identity.Entities;
 using System.Text;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
-using AutoMapper;
 using RealEstateApp.Core.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace RealEstateApp.Infrastructure.Identity.Service
 {
-    public class AccountService
+    public class AccountService :IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        
 
-        public AccountService(UserManager<ApplicationUser> userManager, IEmailService emailService, IUserRepository userRepository, IMapper mapper) 
+        public AccountService(UserManager<ApplicationUser> userManager, IEmailService emailService, 
+            IUserRepository userRepository, RoleManager<IdentityRole> roleManager) 
         {  
             _userManager = userManager;
             _userRepository = userRepository;
             _emailService = emailService;
-            _mapper = mapper;
+            _roleManager = roleManager;
+        }
+
+        public async Task<List<string>> GetAllRoles() 
+        {
+            var roles= await _roleManager.Roles.Select(r=>r.Name).ToListAsync();
+            return roles;
         }
 
         public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin) 
@@ -36,19 +44,19 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                 HasError = false,
             };
 
-            var userWithSameUsername = _userManager.FindByNameAsync(request.UserName);
+            var userWithSameUsername = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUsername != null) 
             { 
                 response.HasError = true;
-                response.Error = $"El nombre de usuario: '{request.UserName}' ya esta registrado.";
+                response.Error = $"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
                 return response;
             }
 
-            var userWithSameEmail = _userManager.FindByEmailAsync(request.Email);
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail != null)
             {
                 response.HasError = true;
-                response.Error = $"El correo: '{request.UserName}' ya esta registrado.";
+                response.Error = $"El correo: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
                 return response;
             }
 
@@ -60,7 +68,7 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                 UserName = request.UserName,
                 PhoneNumber = request.Phone,
                 IdentityCard = request.IdentityCard,
-                Photo = request.PhotoUrl,
+                Photo = request.Photo,
                 EmailConfirmed =false,
 
                 IsActive=false,
@@ -80,6 +88,8 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                         Id= client.Id,
                         FirstName = client.FirstName,
                         LastName= client.LastName,
+                        UserName=client.UserName,
+                        Phone= client.PhoneNumber,
                         IdentityCard= client.IdentityCard,
                         IsActive= client.IsActive,
                         Photo= client.Photo,
@@ -109,10 +119,13 @@ namespace RealEstateApp.Infrastructure.Identity.Service
 
                     //Se registra  el usuario del esquema dbo:
                     var userReference = new User() 
-                    { 
+                    {
+                        Id= agent.Id,
                         FirstName=user.FirstName,
                         LastName=user.LastName,
+                        UserName=user.UserName,
                         IdentityCard=user.IdentityCard,
+                        Phone=user.PhoneNumber,
                         IsActive=user.IsActive,
                         Photo=user.Photo,
                         Email=user.Email,
@@ -121,11 +134,15 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                     
                     await _userRepository.AddAsync(userReference);
                 }
+
+                /*Falta el registro de desarrolladores y admin 
+                  Se agrega despues por q no se si vienen activo por default...
+                 */
             }
             else
             {
                 response.HasError = true;
-                response.Error = $"Ocurrio un error inesperado al intentar registrar el usuario.";
+                response.Error = $"Ocurrio un error inesperado al intentar registrar su usuario.";
                 return response;
             }
 
@@ -146,10 +163,9 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             {
                 user.IsActive = true;
                 await _userManager.UpdateAsync(user);
-                await _userRepository.UpdateAsync(new User
-                {
-                    IsActive = user.IsActive,
-                }, user.Id);
+                var userDbo= await _userRepository.GetByIdAsync(user.Id);
+                userDbo.IsActive = true;
+                await _userRepository.UpdateAsync(userDbo, userDbo.Id);
 
                 return $"Correo confirmado de {user.Email}. Ahora puedes utilizar la app";
             }

@@ -1,4 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using RealEstateApp.Core.Application.Enums
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
+
+@inject IHttpContextAccessor httpContextAccesor
+@{
+    var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isClient = user != null ? user.Rol == Roles.Cliente.ToString() : false;
+    var isAgent = user != null ? user.Rol == Roles.Agente.ToString() : false;
+
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -20,9 +34,50 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+
+                        @if(user!=null)
+                        {
+                            <!--Aqui van las vistas compartidas-->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+
+                            if(isClient)
+                            {
+                                <!--Aqui van las vistas del cliente-->
+                            }
+
+                            if(isAgent)
+                            {
+                                <!--Aqui van las vistas del agente-->
+                            }
+
+                            <!--Aqui van las vistas compartidas-->
+                            <li class="nav-item align-content-end">
+                                <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="User" asp-action="LogOut">Cerrar session </a>
+                            </li>
+                        }
+
+                        else
+                        {
+                            <!--Aqui va las vistas principales (ANTES DEL LOGIN)-->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Login</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Unete a la App</a>
+                            </li>
+                        }
+
+                        
+                     
+
+                        
                        
                     </ul>
                 </div>

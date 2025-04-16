@@ -24,7 +24,8 @@ namespace RealEstateApp.Core.Application
         private static void GenericService(this IServiceCollection service)
         {
             service.AddTransient(typeof(IGenericService<,,,>), typeof(GenericService<,,,>));
-            service.AddTransient(typeof(IGenericRepository<,>), typeof(IGenericRepository<,>));
+            service.AddTransient<IUserService, UserService>();
+
         }
 
         private static void GenericConfigurations(this IServiceCollection service) 
