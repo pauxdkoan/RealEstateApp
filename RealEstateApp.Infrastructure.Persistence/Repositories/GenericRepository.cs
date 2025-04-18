@@ -82,5 +82,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Set<Entity>().FindAsync(id);
         }
+
+       
     }
 }

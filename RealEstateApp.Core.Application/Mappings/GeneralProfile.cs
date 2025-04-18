@@ -2,6 +2,11 @@
 
 using AutoMapper;
 using RealEstateApp.Core.Application.Dtos.Account;
+using RealEstateApp.Core.Application.ViewModels.Property;
+using RealEstateApp.Core.Application.ViewModels.Property.FavoriteProperty;
+using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
+using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
+using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Domain.Entities;
 
@@ -44,6 +49,50 @@ namespace RealEstateApp.Core.Application.Mappings
 
 
             #endregion
+
+            #region PropertyProfile
+            //Property->PropertyVm
+            CreateMap<Property, PropertyVm>()
+                .ReverseMap();
+
+            //Property-SavePropertyVm
+            CreateMap<Property, SavePropertyVm>()
+            .ReverseMap();
+
+
+            #endregion
+
+            #region PropertyImageProfile
+
+            //PropertyImage->PropertyImageVm
+            CreateMap<PropertyImage, PropertyImageVm>()
+                .ReverseMap();
+
+         
+            #endregion
+
+            #region PropertyTypeProfile
+
+            //PropertyType->PropertyTypeVm
+            CreateMap<PropertyType, PropertyTypeVm>()
+                .ReverseMap();
+            #endregion
+
+            #region FavoritePropertyProfile
+
+            //FavoriteProperty->FavoritePropertyVm
+            CreateMap<FavoriteProperty, FavoritePropertyVm>()
+                .ReverseMap();
+
+
+            #endregion
+
+            #region SalesType
+            //SalesType->SalesTypeVm
+            CreateMap<SalesType, SalesTypeVm>()
+                .ReverseMap();
+            #endregion
+
         }
     }
 }

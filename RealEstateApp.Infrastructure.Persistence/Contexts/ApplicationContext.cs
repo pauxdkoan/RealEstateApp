@@ -1,8 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Domain.Entities;
-using System;
-using System.Runtime.CompilerServices;
+
 
 namespace RealEstateApp.Infrastructure.Persistence.Contexts
 {

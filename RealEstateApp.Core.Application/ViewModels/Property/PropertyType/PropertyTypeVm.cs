@@ -1,9 +1,6 @@
-﻿
-using RealEstateApp.Core.Application.ViewModels.Property;
-
-namespace RealEstateApp.Core.Application.ViewModels.SalesType
+﻿namespace RealEstateApp.Core.Application.ViewModels.Property.PropertyType
 {
-    public class SalesTypeVm
+    public class PropertyTypeVm
     {
         public int Id { get; set; }
         public string Name { get; set; }

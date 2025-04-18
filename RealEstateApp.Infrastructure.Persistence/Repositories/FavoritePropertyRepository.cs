@@ -7,10 +7,10 @@ using RealEstateApp.Infrastructure.Persistence.Contexts;
 
 namespace RealEstateApp.Infrastructure.Persistence.Repositories
 {
-    public class UserRepository : GenericRepository<User,string>, IUserRepository
+    public class FavoritePropertyRepository : GenericRepository<FavoriteProperty,int>, IFavoritePropertyRepository
     {
         private readonly ApplicationContext _context;
-        public UserRepository(ApplicationContext context) : base(context) { }
+        public FavoritePropertyRepository(ApplicationContext context) : base(context) { }
 
         
     }
