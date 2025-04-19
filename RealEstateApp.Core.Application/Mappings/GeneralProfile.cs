@@ -2,6 +2,10 @@
 
 using AutoMapper;
 using RealEstateApp.Core.Application.Dtos.Account;
+using RealEstateApp.Core.Application.ViewModels.Chat;
+using RealEstateApp.Core.Application.ViewModels.Improvement;
+using RealEstateApp.Core.Application.ViewModels.Improvement.PropertyImprovement;
+using RealEstateApp.Core.Application.ViewModels.Offer;
 using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.Property.FavoriteProperty;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
@@ -87,9 +91,33 @@ namespace RealEstateApp.Core.Application.Mappings
 
             #endregion
 
-            #region SalesType
+            #region SalesTypeProfile
             //SalesType->SalesTypeVm
             CreateMap<SalesType, SalesTypeVm>()
+                .ReverseMap();
+            #endregion
+
+            #region PropertyImprovementsProfile
+            //PropertyImprovement->PropertyImprovementVm
+            CreateMap<PropertyImprovement, PropertyImprovementVm>()
+                .ReverseMap();
+            #endregion
+
+            #region ImprovementProfile
+            //Improvement->ImprovementVm
+            CreateMap<Improvement, ImprovementVm>()
+                .ReverseMap();
+            #endregion
+
+            #region OffersProfile
+            //Offer->OfferVm
+            CreateMap<Offer, OfferVm>()
+                .ReverseMap();
+            #endregion
+
+            #region ChatsProfile
+            //Chat->ChatVm
+            CreateMap<Chat, ChatVm>()
                 .ReverseMap();
             #endregion
 

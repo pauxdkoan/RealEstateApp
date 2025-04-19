@@ -16,18 +16,23 @@ namespace RealEstateApp.Controllers
             _propertyService = propertyService;
         }
 
-        public async Task<ActionResult> Index() 
+        public async Task<IActionResult> Index() 
         {
             var propertyList=await _propertyService.GetAllListViewModel();
             return View(propertyList);
         }
 
-        public async Task<ActionResult> ToggleFavoriteProperty(int id, string clientId) 
+        public async Task<IActionResult> ToggleFavoriteProperty(int id, string clientId) 
         {
             await _clientService.ToggleFavoriteProperty(id, clientId);
             return RedirectToRoute(new {controller="Client",  action="Index"});
         }
 
+        public async Task<IActionResult> PropertyDeatails(int id) 
+        { 
+            var propertyDetails= await _propertyService.PropertyDetails(propertyId:id);
+            return View(propertyDetails);
+        }
 
 
 
