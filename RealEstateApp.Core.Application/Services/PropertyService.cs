@@ -4,11 +4,15 @@ using AutoMapper;
 
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Chat;
+using RealEstateApp.Core.Application.ViewModels.Improvement.PropertyImprovement;
+using RealEstateApp.Core.Application.ViewModels.Offer;
 using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.Property.FavoriteProperty;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
+using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services
@@ -26,7 +30,11 @@ namespace RealEstateApp.Core.Application.Services
 
         public async override Task<List<PropertyVm>> GetAllListViewModel()
         {
-            var propertyList=  await _propertyRepository.GetAllListWithIncludeAsync(new List<string> { "PropertyType", "PropertyImages", "SalesType", "FavoriteProperties" });
+            var propertyList=  await _propertyRepository.GetAllListWithIncludeAsync(new List<string> 
+            { "PropertyType", "PropertyImages", "SalesType", "FavoriteProperties", 
+              "PropertyImprovements", "PropertyImprovements.Improvement", "Agent",
+              "Offers", "Chats", "Chats.Messages"
+            });
             var propertyListVm = propertyList.Select(p => new PropertyVm()
             {
                 Id = p.Id,
@@ -40,12 +48,33 @@ namespace RealEstateApp.Core.Application.Services
                 PropertyImageVms = _mapper.Map<List<PropertyImageVm>>(p.PropertyImages),
                 PropertyTypeVm = _mapper.Map<PropertyTypeVm>(p.PropertyType),
                 SalesTypeVm = _mapper.Map<SalesTypeVm>(p.SalesType),
-                FavoritePropertyVms = _mapper.Map<List<FavoritePropertyVm>>(p.FavoriteProperties)
+                FavoritePropertyVms = _mapper.Map<List<FavoritePropertyVm>>(p.FavoriteProperties),
+
+                //Propiedades agregadas para el detalle de propiedades
+                PropertyImprovements= _mapper.Map<List<PropertyImprovementVm>>(p.PropertyImprovements),
+                AgentId = p.AgentId,
+                Agent=_mapper.Map<UserVm>(p.Agent),
+                Description = p.Description,
+
+                //Propiedades agregadas para ofertas y el chat de cliente
+                Offers= _mapper.Map<List<OfferVm>>(p.Offers),
+                Chats = _mapper.Map<List<ChatVm>>(p.Chats),
+
+
             }).ToList();
             
             return propertyListVm;
 
         }
+
+        public async Task<PropertyVm> PropertyDetails(int propertyId) 
+        {
+            var propertyList = await GetAllListViewModel();
+            var propertyDetails = propertyList.Find(p=>p.Id==propertyId);
+            return propertyDetails;
+        }
+
+
         
     }
 }

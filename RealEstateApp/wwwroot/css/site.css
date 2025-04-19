@@ -29,3 +29,58 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+/*Detalle de propiedad*/
+.carousel-item {
+    transition: transform 1s ease-in-out;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+/*Chat y oferta*/
+
+.chat-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.message {
+    max-width: 80%;
+    margin-bottom: 1rem;
+}
+
+.client-message {
+    margin-left: auto;
+    text-align: right;
+}
+
+    .client-message .message-content {
+        background-color: #0d6efd;
+        color: white;
+        border-radius: 15px 15px 0 15px;
+    }
+
+.agent-message .message-content {
+    background-color: #e9ecef;
+    border-radius: 15px 15px 15px 0;
+}
+
+.message-content {
+    padding: 10px 15px;
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.message-header {
+    margin-bottom: 0.25rem;
+}

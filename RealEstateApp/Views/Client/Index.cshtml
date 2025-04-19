@@ -5,6 +5,7 @@
 
 @inject IHttpContextAccessor httpContextAccesor
 @{
+    ViewData["Title"] = "Home";
     var user =  httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
    
 }
@@ -60,7 +61,7 @@
                             }
                             
                             <!--OJO NO ES UN BOTON EN SI, ESTO DEBERIA SER CUANDO SE PRESIONE LA TARJETA DONDE ESTA LA PROPIEDAD... -->
-                            <a asp-controller="Client" asp-action="Details" asp-route-id="@item.Id"  class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
+                            <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
                         </div>
 
                         

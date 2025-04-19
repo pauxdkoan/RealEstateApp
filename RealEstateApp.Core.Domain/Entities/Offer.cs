@@ -15,7 +15,7 @@ namespace RealEstateApp.Core.Domain.Entities
 
         //Relacion N-1 con Cliente(User[Rol='Cliente'])
         public string ClientId {  get; set; }
-        public User Cliente { get; set; }
+        public User Cliente { get; set; } 
 
 
 
