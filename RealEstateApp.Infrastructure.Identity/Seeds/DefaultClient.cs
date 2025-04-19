@@ -27,7 +27,7 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
                 var user = await userManager.FindByEmailAsync(defaultClient.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultClient, "cc");
+                    await userManager.CreateAsync(defaultClient, "123Pa$$word!");
                     await userManager.AddToRoleAsync(defaultClient, Roles.Cliente.ToString());
                     var createdUser=await userManager.FindByEmailAsync(defaultClient.Email);
                     var rol = await userManager.GetRolesAsync(createdUser);
@@ -42,6 +42,9 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
                         IsActive = defaultClient.IsActive,
                         Email = defaultClient.Email,
                         Rol = rol.FirstOrDefault(),
+                        UserName = defaultClient.UserName,
+                        
+                        
 
                     });
                 }

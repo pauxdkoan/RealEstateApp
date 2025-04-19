@@ -1,10 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Helpers;
-using RealEstateApp.Core.Application.Dtos.Account;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.User;
-using RealEstateApp.Middlewares;
+
 
 namespace RealEstateApp.Controllers
 {

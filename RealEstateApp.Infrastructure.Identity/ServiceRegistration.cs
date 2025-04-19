@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Infrastructure.Identity.Contexts;
 using RealEstateApp.Infrastructure.Identity.Entities;
@@ -70,6 +71,20 @@ namespace RealEstateApp.Infrastructure.Identity
                 try
                 {
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userRepository = services.GetRequiredService<IUserRepository>();
+                    var salesTypeRepository = services.GetRequiredService<ISalesTypeRepository>();
+                    var propertyTypeRepository = services.GetRequiredService<IPropertyTypeRepository>();
+                    var propertyRepository = services.GetRequiredService<IPropertyRepository>();
+
+
+
+
+
+                    await DefaultSalesType.SeedAsync(salesTypeRepository);
+                    await DefaultPropertyType.SeedAsync(propertyTypeRepository);
+                    await DefaultClient.SeedAsync(userManager, userRepository);
+                    await DefaultAgents.SeedAsync(userManager,userRepository,propertyRepository);
                     await DefaultRoles.SeedAsync(roleManager);
 
                 }
