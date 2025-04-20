@@ -21,11 +21,12 @@ namespace RealEstateApp.Core.Application.Services
     {
         private readonly IPropertyRepository _propertyRepository;
         private readonly IMapper _mapper;
-
-        public PropertyService(IPropertyRepository propertyRepository, IMapper mapper) :base(propertyRepository,mapper) 
+        private readonly IFavoritePropertyRepository _favoritePropertyRepository;
+        public PropertyService(IPropertyRepository propertyRepository, IMapper mapper, IFavoritePropertyRepository favoritePropertyRepository) : base(propertyRepository, mapper)
         {
             _propertyRepository = propertyRepository;
             _mapper = mapper;
+            _favoritePropertyRepository = favoritePropertyRepository;
         }
 
         public async override Task<List<PropertyVm>> GetAllListViewModel()
@@ -75,6 +76,26 @@ namespace RealEstateApp.Core.Application.Services
         }
 
 
-        
+
+        public async Task<List<PropertyVm>> MyProperties(string clientId)
+        {
+           
+            //Obtengo las propiedades favoritas del cliente
+            var favoriteProperties = await _favoritePropertyRepository.GetAllListAsync(); 
+            var myProperties= favoriteProperties.Where(fp=>fp.ClientId==clientId).ToList();
+            
+
+            //Almaceno los id de las propiedades favoritas del cliente
+            List<int> propertiesId =new();
+            myProperties.ForEach(p=>propertiesId.Add(p.PropertyId));
+
+            //Luego obtengo las propiedades con sus includes, luego filtro las propiedades q tengan los id almacenados 
+            var propertyList = await GetAllListViewModel();
+            var MyPropertiesFavorite = propertyList.Where(p=>propertiesId.Contains(p.Id)).ToList();
+
+            return MyPropertiesFavorite;
+        }
+
+
     }
 }

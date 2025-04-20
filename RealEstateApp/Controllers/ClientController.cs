@@ -23,9 +23,13 @@ namespace RealEstateApp.Controllers
             return View(propertyList);
         }
 
-        public async Task<IActionResult> ToggleFavoriteProperty(int id, string clientId) 
+        public async Task<IActionResult> ToggleFavoriteProperty(int id, string clientId, bool fromMyProperties=false) 
         {
             await _clientService.ToggleFavoriteProperty(id, clientId);
+            if (fromMyProperties) 
+            {
+                return RedirectToRoute(new { controller = "Client", action = "MyProperties" });
+            }
             return RedirectToRoute(new {controller="Client",  action="Index"});
         }
 
@@ -34,6 +38,13 @@ namespace RealEstateApp.Controllers
             var propertyDetails= await _propertyService.PropertyDetails(propertyId:id);
             return View(propertyDetails);
         }
+
+        public async Task<IActionResult> MyProperties(string clientId)
+        {
+            var myPropertyList = await _propertyService.MyProperties(clientId);
+            return View(myPropertyList);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateOffer(int propertyId, string clientId, decimal amount )

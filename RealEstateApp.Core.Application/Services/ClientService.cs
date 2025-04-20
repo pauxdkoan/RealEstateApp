@@ -37,7 +37,7 @@ namespace RealEstateApp.Core.Application.Services
 
             if (IsFavorite) 
             { 
-                var favoriteProperty = client.FavoriteProperties.FirstOrDefault(fp => fp.Id==propertyId);
+                var favoriteProperty = client.FavoriteProperties.FirstOrDefault(fp => fp.PropertyId==propertyId);
                 await _favoritePropertyRepository.DeleteAsync(favoriteProperty);
               
             }
@@ -71,7 +71,9 @@ namespace RealEstateApp.Core.Application.Services
 
             await _propertyRepository.UpdateAsync(property,propertyId);
 
-        } 
-      
+        }
+
+    
+
     }
 }
