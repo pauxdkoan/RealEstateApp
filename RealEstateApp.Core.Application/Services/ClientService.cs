@@ -1,8 +1,10 @@
 ﻿
 
 using AutoMapper;
+using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.Property.FavoriteProperty;
 using RealEstateApp.Core.Domain.Entities;
 using System.Reflection.Metadata.Ecma335;
@@ -15,13 +17,15 @@ namespace RealEstateApp.Core.Application.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IFavoritePropertyRepository _favoritePropertyRepository;
+        private readonly IPropertyRepository _propertyRepository;
 
         public ClientService( IMapper mapper, IUserRepository userRepository, 
-            IFavoritePropertyRepository favoritePropertyRepository)
+            IFavoritePropertyRepository favoritePropertyRepository, IPropertyRepository propertyRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _favoritePropertyRepository = favoritePropertyRepository;
+            _propertyRepository = propertyRepository;
         }
 
         public async Task ToggleFavoriteProperty(int propertyId, string clientId)
@@ -47,5 +51,27 @@ namespace RealEstateApp.Core.Application.Services
             
             
         }
+
+        public async Task CreateOffer(int propertyId, string clientId, decimal amount)
+        {
+            var propertyList =  await _propertyRepository.GetAllListWithIncludeAsync(new List<string> { "Offers" });
+            var property= propertyList.FirstOrDefault(p=>p.Id==propertyId);
+
+            //Se agrega la oferta a traves del navigation property
+            property.Offers.Add(new Offer 
+            {
+                ClientId=clientId, 
+                Amount=amount,
+                Date=DateTime.Now,
+                PropertyId=property.Id,
+                State=OfferState.Pendiente.ToString(),
+            });
+
+            //Se atualiza la propiedad
+
+            await _propertyRepository.UpdateAsync(property,propertyId);
+
+        } 
+      
     }
 }

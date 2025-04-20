@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.User.Client;
 
 
 namespace RealEstateApp.Controllers
@@ -32,6 +33,13 @@ namespace RealEstateApp.Controllers
         { 
             var propertyDetails= await _propertyService.PropertyDetails(propertyId:id);
             return View(propertyDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOffer(int propertyId, string clientId, decimal amount )
+        {
+            await _clientService.CreateOffer(propertyId, clientId, amount);
+            return RedirectToAction("PropertyDeatails", new {id= propertyId });
         }
 
 

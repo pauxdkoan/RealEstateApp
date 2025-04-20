@@ -205,13 +205,12 @@
                     <h5 class="modal-title">Nueva Oferta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form asp-controller="Client" asp-action="CreateOffer" method="post">
+                <form asp-controller="Client" asp-route-propertyId="@Model.Id" asp-route-clientId="@user.Id" asp-action="CreateOffer" method="post">
                     <input type="hidden" name="propertyId" value="@Model.Id" />
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Monto de la oferta (USD)</label>
-                            <input type="number" class="form-control" name="amount"
-                                   min="1" step="1000" required>
+                            <label class="form-label">Monto de la oferta (RD)</label>
+                            <input type="number" class="form-control" name="amount" min="5000" step="1000" required>
                         </div>
                     </div>
                     <div class="modal-footer">
