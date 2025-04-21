@@ -39,9 +39,9 @@ namespace RealEstateApp.Controllers
             return View(propertyDetails);
         }
 
-        public async Task<IActionResult> MyProperties(string clientId)
+        public async Task<IActionResult> MyFavoritesProperties(string clientId)
         {
-            var myPropertyList = await _propertyService.MyProperties(clientId);
+            var myPropertyList = await _propertyService.MyFavoritesProperties(clientId);
             return View(myPropertyList);
         }
 

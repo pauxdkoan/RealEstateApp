@@ -17,7 +17,7 @@ namespace RealEstateApp.Core.Application.ViewModels.Property
         public int Id {  get; set; }
         public string Code {  get; set; } //Id de 6 digitos unico
         public decimal Price {  get; set; }
-
+        public bool State {  get; set; } //Disponible/Vendidad
         public string Description {  get; set; }
         public int AmountOfRoom { get; set; }
         public int AmountOfBathroom { get; set; }

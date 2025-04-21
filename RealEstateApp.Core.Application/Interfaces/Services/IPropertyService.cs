@@ -8,6 +8,7 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
     public interface IPropertyService : IGenericService<SavePropertyVm,PropertyVm, Property, int>
     {
         Task<PropertyVm> PropertyDetails(int propertyId);
-        Task<List<PropertyVm>> MyProperties(string clientId);
+        Task<List<PropertyVm>> MyFavoritesProperties(string clientId);
+        Task<List<PropertyVm>> MyProperties(string agentId);
     }
 }

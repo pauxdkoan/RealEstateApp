@@ -24,6 +24,8 @@ namespace RealEstateApp.Core.Application
             service.AddTransient(typeof(IGenericService<,,,>), typeof(GenericService<,,,>));
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<IClientService, ClientService>();
+            service.AddTransient<IAgentService, AgentService>();
+
 
             service.AddTransient<IPropertyService, PropertyService>();
 

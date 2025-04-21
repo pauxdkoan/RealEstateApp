@@ -1,0 +1,78 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
+@model List<PropertyVm>
+
+@inject IHttpContextAccessor httpContextAccesor
+@{
+    ViewData["Title"] = "Home";
+    var user =  httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+   
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-3">
+        <div class="col-3 offset-9">
+            <p>Buscar por codigo</p>
+            <p>Filtrar por tipo de propiedad</p>
+            <p>Filtrar por precio [precio minimo] y un precio maximo</p>
+            <p>Un filtro para colocar la cantidad de habitacion y de baños</p>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        
+
+        @if(Model==null || Model.Count==0)
+        {
+            <h2>No tiene propiedades favoritas guardadas</h2>
+        }
+     
+        else
+        {
+            @foreach(PropertyVm item in Model)
+            {
+                
+                <div class="col-4">
+                    <div class="card shadow-sm">
+                        <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Where(i=>i.Order==1).Select(i=>i.ImageUrl).FirstOrDefault()" />
+                        <h4 class="card-title">@item.PropertyTypeVm.Name</h4>
+                        <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
+                        <p class="card-text">Codigo: @item.Code</p>
+                        <p class="card-text">Precio: @item.Price</p>
+                        <p class="card-text">Metros: @item.PropertySize</p>
+                        <p class="card-text">Baños: @item.AmountOfBathroom</p>
+                        <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
+
+                        <div class="btn-group">
+
+                            <!--Si hay una propiedad q sea favorita el boton es diferente-->
+                            @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id))
+                            {
+                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" asp-route-fromMyProperties="true"  class="btn btn-sm btn-outline-info">Quitar de favoritos</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-sm btn-outline-info">Añadir a favorito</a>
+
+                            }
+                            
+                            <!--OJO NO ES UN BOTON EN SI, ESTO DEBERIA SER CUANDO SE PRESIONE LA TARJETA DONDE ESTA LA PROPIEDAD... -->
+                            <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
+                        </div>
+
+                        
+
+
+                    </div>
+                </div>
+            
+            }
+        }
+    </div>
+ 
+</div>

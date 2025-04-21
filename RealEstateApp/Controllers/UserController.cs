@@ -74,7 +74,7 @@ namespace RealEstateApp.Controllers
             var photoPath = UploadFileHelper.UploadFile(vm.Rol, vm.File, vm.Email);
             vm.Photo = photoPath;
 
-            var origin = Request.Headers["origin"]; //Esto es para...
+            var origin = Request.Headers["origin"]; //Esto es para Obtener la url base...
             RegisterResponse response = await _userService.RegisterAsync(vm, origin);
             
             if (response.HasError)

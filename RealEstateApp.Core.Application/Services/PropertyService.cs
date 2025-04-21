@@ -14,6 +14,7 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Domain.Entities;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RealEstateApp.Core.Application.Services
 {
@@ -41,6 +42,7 @@ namespace RealEstateApp.Core.Application.Services
                 Id = p.Id,
                 Code = p.Code,
                 Price = p.Price,
+                State = p.State,
                 AmountOfBathroom = p.AmountOfBathroom,
                 AmountOfRoom = p.AmountOfRoom,
                 PropertySize = p.PropertySize,
@@ -68,6 +70,7 @@ namespace RealEstateApp.Core.Application.Services
 
         }
 
+        //Detalles de una propiedad
         public async Task<PropertyVm> PropertyDetails(int propertyId) 
         {
             var propertyList = await GetAllListViewModel();
@@ -75,9 +78,8 @@ namespace RealEstateApp.Core.Application.Services
             return propertyDetails;
         }
 
-
-
-        public async Task<List<PropertyVm>> MyProperties(string clientId)
+        //Propiedades favoritas de un usuario (cliente)
+        public async Task<List<PropertyVm>> MyFavoritesProperties(string clientId)
         {
            
             //Obtengo las propiedades favoritas del cliente
@@ -94,6 +96,17 @@ namespace RealEstateApp.Core.Application.Services
             var MyPropertiesFavorite = propertyList.Where(p=>propertiesId.Contains(p.Id)).ToList();
 
             return MyPropertiesFavorite;
+        }
+
+        //Propiedades de un usuario (agente)
+        public async Task<List<PropertyVm>> MyProperties(string agentId) 
+        {
+            var properties = await GetAllListViewModel();
+            properties=properties.Where(p=>p.AgentId==agentId).ToList();
+
+            return properties;
+
+        
         }
 
 

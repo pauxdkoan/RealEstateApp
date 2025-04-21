@@ -29,17 +29,17 @@
 
         @if(Model==null || Model.Count==0)
         {
-            <h2>No tiene propiedades favoritas guardadas</h2>
+            <h2>No hay propiedades</h2>
         }
         else
         {
             @foreach(PropertyVm item in Model)
             {
-                
+               
                 <div class="col-4">
                     <div class="card shadow-sm">
                         <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Where(i=>i.Order==1).Select(i=>i.ImageUrl).FirstOrDefault()" />
-                        <h4 class="card-title">@item.PropertyTypeVm.Name</h4>
+                        <h4 class="card-title">@item.PropertyTypeVm.Name | <b>@(item.State == true ? "Disponible" : "Vendida")</b></h4>
                         <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
                         <p class="card-text">Codigo: @item.Code</p>
                         <p class="card-text">Precio: @item.Price</p>
@@ -48,20 +48,8 @@
                         <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
 
                         <div class="btn-group">
-
-                            <!--Si hay una propiedad q sea favorita el boton es diferente-->
-                            @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id))
-                            {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" asp-route-fromMyProperties="true"  class="btn btn-sm btn-outline-info">Quitar de favoritos</a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-sm btn-outline-info">Añadir a favorito</a>
-
-                            }
-                            
                             <!--OJO NO ES UN BOTON EN SI, ESTO DEBERIA SER CUANDO SE PRESIONE LA TARJETA DONDE ESTA LA PROPIEDAD... -->
-                            <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
+                            <a asp-controller="Agent" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
                         </div>
 
                         
