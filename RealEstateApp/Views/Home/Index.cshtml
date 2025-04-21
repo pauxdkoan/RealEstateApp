@@ -1,8 +1,221 @@
-﻿@{
+﻿@using RealStateApp.Core.Application.ViewModels.View
+@model HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Propiedades - RealStateApp</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg: #f9f9fc;
+            --primary: #3e64ff;
+            --secondary: #f7b801;
+            --accent: #ff6363;
+            --text-dark: #1a1a2e;
+            --text-light: #aaa;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--main-bg);
+            color: var(--text-dark);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        .filter-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+            .filter-box label {
+                font-weight: 500;
+            }
+
+        .search-input {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .search-button {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            height: 45px;
+        }
+
+        .property-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .property-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            }
+
+        .property-image img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .property-info {
+            padding: 20px;
+        }
+
+            .property-info h5 {
+                color: var(--primary);
+                font-weight: bold;
+            }
+
+        .property-price {
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .property-details span {
+            font-size: 0.9rem;
+            margin-right: 15px;
+            color: var(--text-dark);
+        }
+
+        .favorite-icon button {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .favorite-icon .fa-heart.text-danger {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @* @if (Model.UserRole == "Agente") *@
+        @* { *@
+        @*     <h2 class="text-center mb-4">Tus propiedades</h2> *@
+        @* } *@
+        @* else *@
+        @* { *@
+        @*     <h2 class="text-center mb-4">Encuentra tu Propiedad Ideal</h2> *@
+        @* } *@
+
+        <!-- Barra de búsqueda -->
+        <div class="card shadow-sm p-4 mb-4">
+            <form asp-action="Index" method="get">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="Filters.FilterCode.Code" class="form-label">Buscar por Código</label>
+                        <input type="text" class="form-control search-input" asp-for="Filters.FilterCode.Code" placeholder="Ingresa el código de la propiedad">
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Filters.FilterValues.PropertyType" class="form-label">Tipo de Propiedad</label>
+                        <select class="form-select search-input" asp-for="Filters.FilterValues.PropertyType">
+                            <option value="">Cualquier tipo</option>
+                            @* @foreach (var tipo in Model.PropertyTypes) *@
+                            @* { *@
+                            @*     <option value="@tipo.Name">@tipo.Name</option> *@
+                            @* } *@
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label asp-for="Filters.FilterValues.MinPrice" class="form-label">Precio Mínimo</label>
+                        <input type="number" class="form-control search-input" asp-for="Filters.FilterValues.MinPrice" placeholder="Desde">
+                    </div>
+                    <div class="col-md-2">
+                        <label asp-for="Filters.FilterValues.MaxPrice" class="form-label">Precio Máximo</label>
+                        <input type="number" class="form-control search-input" asp-for="Filters.FilterValues.MaxPrice" placeholder="Hasta">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label asp-for="Filters.FilterValues.Bedrooms" class="form-label">Bedrooms</label>
+                        <input type="number" class="form-control search-input" asp-for="Filters.FilterValues.Bedrooms" placeholder="Ej: 2">
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Filters.FilterValues.Bathrooms" class="form-label">Baños</label>
+                        <input type="number" class="form-control search-input" asp-for="Filters.FilterValues.Bathrooms" placeholder="Ej: 1">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100 search-button">Aplicar Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Listado de propiedades -->
+        <div class="container mt-5">
+            <div class="row">
+                @* @if (Model.Properties.Any()) *@
+                @* { *@
+                @*     @foreach (var propiedad in Model.Properties) *@
+                @*     { *@
+                @*         <div class="col-md-4 mb-4"> *@
+                @*             <div class="property-card shadow-sm"> *@
+                @*                 @if (User.Identity.IsAuthenticated && User.IsInRole("Cliente")) *@
+                @*                 { *@
+                @*                     <form asp-action="@(propiedad.IsFavorite ? "RemoveFromFavorites" : "AddToFavorites")" method="post" class="favorite-icon"> *@
+                @*                         <input type="hidden" name="propiedadId" value="@propiedad.Id" /> *@
+                @*                         <button type="submit"> *@
+                @*                             <i class="fas fa-heart @(propiedad.IsFavorite ? "text-danger" : "text-muted")"></i> *@
+                @*                         </button> *@
+                @*                     </form> *@
+                @*                 } *@
+
+                @*                 <a asp-controller="Property" asp-action="Details" asp-route-id="@propiedad.Id" class="text-decoration-none"> *@
+                @*                     <div class="property-image"> *@
+                @*                         @* <img src="@(.im.FirstOrDefault() ?? "https://via.placeholder.com/300")" alt="Imagen de propiedad"> *@ 
+                @*                     </div> *@
+                @*                     <div class="property-info"> *@
+                @*                         <h5>@propiedad.PropertyTypeId</h5> *@
+                @*                         <p class="property-code">Código: @propiedad.Code</p> *@
+                @*                         <p class="property-price">US$ @propiedad.Price</p> *@
+                @*                         <div class="property-details"> *@
+                @*                             <span><i class="fas fa-ruler-combined"></i> @propiedad.PropertySize m²</span> *@
+                @*                             <span><i class="fas fa-bed"></i> @propiedad.AmountOfRoom</span> *@
+                @*                             <span><i class="fas fa-bath"></i> @propiedad.AmountOfBathroom</span> *@
+                @*                         </div> *@
+                @*                     </div> *@
+                @*                 </a> *@
+                @*             </div> *@
+                @*         </div> *@
+                @*     } *@
+                @* } *@
+                @* else *@
+                @* { *@
+                @*     <div class="col-12"> *@
+                @*         <div class="alert alert-warning text-center"> *@
+                @*             No se encontraron propiedades que coincidan con los filtros aplicados. *@
+                @*         </div> *@
+                @*     </div> *@
+                @* } *@
+            </div>
+        </div>
+    </div>
+</body>
+</html>

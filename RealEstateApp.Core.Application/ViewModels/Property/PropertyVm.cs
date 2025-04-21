@@ -22,11 +22,12 @@ namespace RealEstateApp.Core.Application.ViewModels.Property
         public int AmountOfRoom { get; set; }
         public int AmountOfBathroom { get; set; }
         public double PropertySize { get; set; } //En metros
+        public bool IsFavorite { get; set; }
 
         //RELACIONES:
         //Nota faltan: si es necesario agreguenlas 
 
- 
+
 
         public int PropertyTypeId {  get; set; } //Apartamento, casa, etc
         public PropertyTypeVm PropertyTypeVm { get; set; }
