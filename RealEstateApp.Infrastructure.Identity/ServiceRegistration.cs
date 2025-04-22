@@ -77,15 +77,14 @@ namespace RealEstateApp.Infrastructure.Identity
                     var propertyTypeRepository = services.GetRequiredService<IPropertyTypeRepository>();
                     var propertyRepository = services.GetRequiredService<IPropertyRepository>();
 
-
-
-
-
+                    await DefaultRoles.SeedAsync(roleManager);
                     await DefaultSalesType.SeedAsync(salesTypeRepository);
                     await DefaultPropertyType.SeedAsync(propertyTypeRepository);
+
+
                     await DefaultClient.SeedAsync(userManager, userRepository);
                     await DefaultAgents.SeedAsync(userManager,userRepository,propertyRepository);
-                    await DefaultRoles.SeedAsync(roleManager);
+                    
 
                 }
                 catch (Exception ex) 

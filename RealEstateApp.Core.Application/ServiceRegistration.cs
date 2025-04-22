@@ -36,5 +36,7 @@ namespace RealEstateApp.Core.Application
         }
         #endregion
 
+
+
     }
 }

@@ -17,8 +17,8 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
             propertyType1.Description = "Sabana Peridada, Santo Domingo"; //No se muy bien que va en la descripcion realmente
 
             PropertyType propertyType2 = new();
-            propertyType1.Name = "Casa";
-            propertyType1.Description = "San Isidro, Santo Domingo Este";
+            propertyType2.Name = "Casa";
+            propertyType2.Description = "San Isidro, Santo Domingo Este";
 
             var propertyList = await _propertyTypeRepository.GetAllListAsync();
 
