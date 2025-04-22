@@ -60,14 +60,17 @@
                             {
                                 <!--Aqui van las vistas del agente-->
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Home</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mi Perfil</a>
+ 
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mantenimiento de propiedades</a> 
                             }
 
                             <!--Aqui van las vistas compartidas-->
+
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="MyProfile">Mi Perfil</a>
                             <li class="nav-item align-content-end">
-                                <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="" asp-action="">Mi perfil </a>
+                                <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="User" asp-action="LogOut">Cerrar session </a>
                             </li>
+                          
                          
                         }
 
@@ -84,6 +87,10 @@
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Unete a la App</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Agentes</a>
                             </li>
                         }
 

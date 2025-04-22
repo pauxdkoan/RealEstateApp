@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealStateApp.Core.Application.ViewModels.Agent;
 
 
 namespace RealEstateApp.Core.Application.Services
@@ -38,7 +39,5 @@ namespace RealEstateApp.Core.Application.Services
 
         }
 
-
-
-    }
+}
 }
