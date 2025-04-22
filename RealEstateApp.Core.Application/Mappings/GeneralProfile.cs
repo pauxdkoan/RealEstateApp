@@ -63,6 +63,15 @@ namespace RealEstateApp.Core.Application.Mappings
             CreateMap<Property, SavePropertyVm>()
             .ReverseMap();
 
+            //PropertyVm-SavePropertyVm
+            CreateMap<PropertyVm, SavePropertyVm>()
+            .ReverseMap();
+
+            //EditPropertyVm-SavePropertyVm
+            CreateMap<EditPropertyVm, SavePropertyVm>()
+                .ReverseMap();
+
+
 
             #endregion
 
@@ -72,7 +81,12 @@ namespace RealEstateApp.Core.Application.Mappings
             CreateMap<PropertyImage, PropertyImageVm>()
                 .ReverseMap();
 
-         
+            //PropertyImage->SavePropertyImageVm
+            CreateMap<PropertyImage, SavePropertyImageVm>()
+            .ReverseMap();
+
+
+
             #endregion
 
             #region PropertyTypeProfile

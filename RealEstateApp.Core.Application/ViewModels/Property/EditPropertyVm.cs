@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstateApp.Core.Application.ViewModels.Property
 {
-    public class SavePropertyVm
+    public class EditPropertyVm
     {
 
         [Required(ErrorMessage ="Debe indincar el precio de la propiedad")]
@@ -51,10 +51,9 @@ namespace RealEstateApp.Core.Application.ViewModels.Property
         public ICollection<PropertyImprovementVm>? PropertyImprovements { get; set; } //debe
         public ICollection<PropertyImageVm>? PropertyImageVms { get; set; } = new List<PropertyImageVm>(); //Lo inicializo por default pa q no explote en la logica
 
-        [Required(ErrorMessage = "Debe subir al menos una imagen")]
-        [MinLength(1, ErrorMessage = "Debe subir al menos una imagen")]
+ 
         [MaxLength(4, ErrorMessage = "Máximo 4 imágenes permitidas")]
-        public List<IFormFile> Files { get; set; }//1-4 Campos q permita seleccionar de 1 a 4 imagenes
+        public List<IFormFile>? Files { get; set; }//1-4 Campos q permita seleccionar de 1 a 4 imagenes
 
         public string? AgentId {  get; set; }
         public int Id {  get; set; }

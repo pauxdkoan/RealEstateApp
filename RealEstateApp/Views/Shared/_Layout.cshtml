@@ -60,7 +60,7 @@
                                 <!--Aqui van las vistas del agente-->
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Home</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mi Perfil</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mantenimiento de propiedades</a> 
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="PropertyMaintenance">Mantenimiento de propiedades</a>
                             }
 
                             <!--Aqui van las vistas compartidas-->
@@ -109,7 +109,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

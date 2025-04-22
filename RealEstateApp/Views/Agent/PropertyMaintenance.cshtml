@@ -1,0 +1,108 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
+@model List<PropertyVm>
+
+@inject IHttpContextAccessor httpContextAccesor
+@{
+    ViewData["Title"] = "Home";
+    var user =  httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+   
+}
+
+
+
+
+    <div class="row mb-3">
+        <div class="col-3 offset-9">
+            <a asp-controller="Agent" asp-action="CreateProperty" class="btn btn-outline-success">Registrar nueva propiedad</a>
+        </div>
+    </div>
+
+    <div class="row">
+
+        
+
+
+        @if(Model==null || Model.Count==0)
+        {
+            <h2>No hay propiedades</h2>
+        }
+        else
+        {
+
+            @if(Model.All(p=>!p.State))
+            {
+                <h2>No hay propiedades activas</h2>
+            }
+            else
+            {
+
+                @foreach (PropertyVm item in Model)
+                {
+                    @if (item.State)
+                    {
+                        <div class="col-4">
+                            <div class="card shadow-sm">
+                                <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Select(i=>i.ImageUrl).FirstOrDefault()" />
+                                <h4 class="card-title">@item.PropertyTypeVm.Name | <b>@(item.State == true ? "Disponible" : "Vendida")</b></h4>
+                                <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
+                                <p class="card-text">Codigo: @item.Code</p>
+                                <p class="card-text">Precio: @item.Price</p>
+                                <p class="card-text">Metros: @item.PropertySize</p>
+                                <p class="card-text">Baños: @item.AmountOfBathroom</p>
+                                <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
+
+                                <div class="btn-group">
+                                    
+                                    <a asp-controller="Agent" asp-action="EditProperty" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
+                                    <form class="delete-form" method="post" asp-controller="Agent" asp-action="DeleteProperty"
+                                          asp-route-propertyId="@item.Id">
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn">Eliminar</button>
+                                    </form>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    }
+
+
+
+
+                }
+              
+            }
+            @section Scripts {
+            <script>
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const form = this.closest('form');
+
+                        Swal.fire({
+                            title: '¿Eliminar propiedad?',
+                            text: "¡Esta acción no se puede deshacer!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Sí, eliminar!',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            </script>
+            }
+         
+        }
+    </div>
+ 
+</div>

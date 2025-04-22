@@ -1,7 +1,8 @@
 ﻿
 
 using AutoMapper;
-
+using Microsoft.EntityFrameworkCore;
+using RealEstateApp.Core.Application.Helpers;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
@@ -14,7 +15,8 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Domain.Entities;
-using System.Security.Cryptography.X509Certificates;
+
+
 
 namespace RealEstateApp.Core.Application.Services
 {
@@ -29,6 +31,7 @@ namespace RealEstateApp.Core.Application.Services
             _mapper = mapper;
             _favoritePropertyRepository = favoritePropertyRepository;
         }
+        
 
         public async override Task<List<PropertyVm>> GetAllListViewModel()
         {
@@ -67,6 +70,132 @@ namespace RealEstateApp.Core.Application.Services
             }).ToList();
             
             return propertyListVm;
+
+        }
+
+        public async override Task<SavePropertyVm> GetByIdSaveViewModel(int id)
+        {
+            var properties = await GetAllListViewModel();
+            var property= properties.Find(p=>p.Id==id);
+
+            return _mapper.Map<SavePropertyVm>(property);
+
+        }
+
+        public async override Task<SavePropertyVm> Add(SavePropertyVm vm)
+        {
+
+            vm.Code= await GenerateUniqueCode();
+            int order=1;
+            
+            foreach (var images in vm.Files) 
+            {
+                vm.PropertyImageVms.Add(new PropertyImageVm 
+                { 
+                    ImageUrl=UploadFileHelper.UploadFile(null, images,vm.Code,"Propiedad"),
+                    PropertyId=vm.Id,
+                    Order= order++
+                });
+                
+            }
+
+
+            var property =_mapper.Map<Property>(vm);
+            property.State = true;
+            property.PropertyImprovements = new List<PropertyImprovement>();
+
+            foreach (var improvementId in vm.SelectedImprovements)
+            {
+
+                property.PropertyImprovements.Add(new PropertyImprovement
+                {
+
+                    ImprovementId = improvementId,
+                  
+
+
+                });
+
+            }
+
+            property = await _propertyRepository.AddAsync(property);
+
+            
+            return _mapper.Map<SavePropertyVm>(property);
+        }
+
+        public async override Task Update(SavePropertyVm vm, int id)
+        {
+            var properties= await _propertyRepository.GetAllListWithIncludeAsync(new List<string> {"PropertyImprovements",
+            "PropertyImages"  });
+            var property = properties.Find(p => p.Id == id);
+
+            // Actualizar campos básicos
+            property.Price = vm.Price;
+            property.Description = vm.Description;
+            property.PropertySize = vm.PropertySize;
+            property.AmountOfRoom = vm.AmountOfRoom;
+            property.AmountOfBathroom = vm.AmountOfBathroom;
+            property.PropertyTypeId = vm.PropertyTypeId;
+            property.SalesTypeId = vm.SalesTypeId;
+
+            // Manejar mejoras
+            var existingImprovements = property.PropertyImprovements.ToList();
+            var newImprovements = vm.SelectedImprovements?.Except(existingImprovements.Select(i => i.ImprovementId)) ?? new List<int>();
+            var removedImprovements = existingImprovements.Where(i => !vm.SelectedImprovements?.Contains(i.ImprovementId) ?? true);
+
+            foreach (var imp in removedImprovements)
+            {
+                property.PropertyImprovements.Remove(imp);
+            }
+
+            foreach (var improvementId in newImprovements)
+            {
+                property.PropertyImprovements.Add(new PropertyImprovement
+                {
+                    ImprovementId = improvementId,
+                    PropertyId = property.Id
+                });
+            }
+
+            // Manejar imágenes nuevas
+            if (vm.Files != null && vm.Files.Any())
+            {
+                var existingImagesCount = property.PropertyImages.Count;
+                var remainingSlots = 4 - existingImagesCount;
+                var filesToUpload = vm.Files.Take(remainingSlots);
+
+                foreach (var file in filesToUpload)
+                {
+                    var imageUrl = UploadFileHelper.UploadFile(null, file, property.Code, "Propiedad");
+                    property.PropertyImages.Add(new PropertyImage
+                    {
+                        ImageUrl = imageUrl,
+                        PropertyId = property.Id,
+                        Order = existingImagesCount + 1
+                    });
+                    existingImagesCount++;
+                }
+            }
+
+            await _propertyRepository.UpdateAsync(property, id);
+        }
+
+        private async Task<string> GenerateUniqueCode() 
+        {
+            string code;
+            bool codeExists;
+            Random random = new Random();
+
+            do
+            {
+                int number = random.Next(0, 1000000);
+                code=number.ToString("D6");
+                codeExists= await _propertyRepository.GetAllQuery().AnyAsync(p=>p.Code==code);
+            }
+            while (codeExists);
+
+            return code;
 
         }
 
@@ -110,6 +239,7 @@ namespace RealEstateApp.Core.Application.Services
         }
 
 
+       
 
 
     }

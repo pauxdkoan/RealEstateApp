@@ -38,7 +38,7 @@
                
                 <div class="col-4">
                     <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Where(i=>i.Order==1).Select(i=>i.ImageUrl).FirstOrDefault()" />
+                        <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Select(i=>i.ImageUrl).FirstOrDefault()" />
                         <h4 class="card-title">@item.PropertyTypeVm.Name | <b>@(item.State == true ? "Disponible" : "Vendida")</b></h4>
                         <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
                         <p class="card-text">Codigo: @item.Code</p>
