@@ -44,6 +44,28 @@ namespace RealEstateApp.Controllers
             return View(propertyList);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> MyProfile()
+        //{
+        //    var userId = User.FindFirst("UserId")?.Value;
+        //    var model = await _agentService.GetAgentProfileAsync(userId);
+        //    return View(model);
+        //}
+        //[Authorize(Roles = "Agente")]
+
+        //[HttpPost]
+        //public async Task<IActionResult> MyProfile(EditAgentViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
+
+        //    var userId = User.FindFirst("UserId")?.Value;
+        //    await _agentService.UpdateAgentProfileAsync(userId, model);
+
+        //    return RedirectToAction("Index", "Home");
+        //}
+        //[Authorize(Roles = "Agente")]
+
         public async Task<IActionResult> PropertyDeatails(int id)
         {
             

@@ -6,6 +6,7 @@ using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Property;
+using RealStateApp.Core.Application.ViewModels.Agent;
 
 
 namespace RealEstateApp.Core.Application.Services
