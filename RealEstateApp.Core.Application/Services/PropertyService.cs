@@ -35,7 +35,7 @@ namespace RealEstateApp.Core.Application.Services
             var propertyList=  await _propertyRepository.GetAllListWithIncludeAsync(new List<string> 
             { "PropertyType", "PropertyImages", "SalesType", "FavoriteProperties", 
               "PropertyImprovements", "PropertyImprovements.Improvement", "Agent",
-              "Offers", "Chats", "Chats.Messages"
+              "Offers","Offers.Cliente", "Chats", "Chats.Messages"
             });
             var propertyListVm = propertyList.Select(p => new PropertyVm()
             {
@@ -108,6 +108,8 @@ namespace RealEstateApp.Core.Application.Services
 
         
         }
+
+
 
 
     }

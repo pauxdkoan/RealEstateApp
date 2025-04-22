@@ -34,5 +34,12 @@ namespace RealEstateApp.Controllers
             return View(propertyDetails);
 
         }
+
+        [HttpPost]
+        public  async Task<IActionResult> UpdateOfferStatus(int offerId, string newStatus, int propertyId) 
+        { 
+           await _agentService.UpdateOfferStatus(offerId, newStatus);
+           return RedirectToAction("PropertyDeatails", new { id = propertyId });
+        }
     }
 }

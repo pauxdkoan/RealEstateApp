@@ -1,13 +1,10 @@
 ﻿
 
 using AutoMapper;
-using RealEstateApp.Core.Application.Enums;
+using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Property;
-using RealEstateApp.Core.Application.ViewModels.Property.FavoriteProperty;
-using RealEstateApp.Core.Domain.Entities;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace RealEstateApp.Core.Application.Services
 {
@@ -17,18 +14,31 @@ namespace RealEstateApp.Core.Application.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IPropertyRepository _propertyRepository;
+        private readonly IOfferRepository _offerRepository;
 
         public AgentService( IMapper mapper, IUserRepository userRepository, 
-            IPropertyRepository propertyRepository)
+            IPropertyRepository propertyRepository, IOfferRepository offerRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _propertyRepository = propertyRepository;
+            _offerRepository = offerRepository;
         }
 
        
+        public async Task UpdateOfferStatus(int offerId, string newStatus) 
+        {
+            var offer= await _offerRepository.GetByIdAsync(offerId);
+            offer.State= newStatus;
 
-    
+
+            await _offerRepository.UpdateAsync(offer, offerId);
+            
+
+
+        }
+
+
 
     }
 }
