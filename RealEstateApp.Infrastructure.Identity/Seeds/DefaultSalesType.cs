@@ -18,8 +18,8 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
 
 
             SalesType salesType2 = new();
-            salesType1.Name = "Alquiler Amueblado";
-            salesType1.Description = "Muebles feos"; //No se muy bien que va en la descripcion realmente
+            salesType2.Name = "Alquiler Amueblado";
+            salesType2.Description = "Muebles feos"; //No se muy bien que va en la descripcion realmente
 
             var saleTypeList = await _salesTypeRepository.GetAllListAsync();
 
