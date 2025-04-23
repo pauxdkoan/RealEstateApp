@@ -62,7 +62,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rol = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -153,7 +153,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: true),
                     PropertyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

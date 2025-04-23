@@ -48,5 +48,7 @@ namespace RealEstateApp.Core.Application.Services
             
 
         }
+
+
     }
 }

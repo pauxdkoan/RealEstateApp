@@ -226,7 +226,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Order")
+                    b.Property<int?>("Order")
                         .HasColumnType("int");
 
                     b.Property<int>("PropertyId")
@@ -328,7 +328,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photo")
