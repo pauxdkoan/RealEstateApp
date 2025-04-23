@@ -80,6 +80,7 @@
                             }
                         </ul>
                     }
+
                 </div>
             </div>
         </div>
@@ -124,9 +125,17 @@
                     <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Chat con el Agente</h5>
                 </div>
                 <div class="card-body chat-container" style="height: 400px; overflow-y: auto;">
+                    @{
+                        int chatId = 0;
+                    }
+
                     @if (Model.Chats != null && Model.Chats.Any())
                     {
                         var chat = Model.Chats.FirstOrDefault(c => c.ClientId == user.Id);
+                        if (chat != null)
+                        {
+                            chatId = chat.Id;
+                        }
                         if (chat?.Messages != null)
                         {
                             foreach (var message in chat.Messages.OrderBy(m => m.DateTime))
@@ -147,6 +156,7 @@
                 <div class="card-footer">
                     <form asp-controller="Client" asp-action="SendMessage" method="post">
                         <input type="hidden" name="propertyId" value="@Model.Id" />
+                        <input type="hidden" name="chatId" value="@chatId" />
                         <div class="input-group">
                             <input type="text" name="message" class="form-control"
                                    placeholder="Escribe tu mensaje..." required>
@@ -236,7 +246,7 @@
             }
         });
     </script>
-    }
+    
 </div>
 
 @functions {

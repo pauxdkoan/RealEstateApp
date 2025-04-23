@@ -147,6 +147,28 @@ namespace RealEstateApp.Core.Application.Mappings
             //Chat->ChatVm
             CreateMap<Chat, ChatVm>()
                 .ReverseMap();
+
+            //Chat ->SaveChatVm
+            CreateMap<Chat, SaveChatViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Property, opt => opt.Ignore())
+                .ForMember(x => x.Client, opt => opt.Ignore())
+                .ForMember(x => x.Agent, opt => opt.Ignore())
+                .ForMember(x => x.Messages, opt => opt.Ignore());
+            #endregion
+
+            #region MessageProfile
+            //Message->MessageVm
+            CreateMap<Message, MessageVm>()
+                .ReverseMap();
+
+            //Message->SaveMessageVm
+            CreateMap<Message, SaveMessageVm>()
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Chat, opt => opt.Ignore())
+                .ForMember(x => x.Sender, opt => opt.Ignore());
             #endregion
 
         }
