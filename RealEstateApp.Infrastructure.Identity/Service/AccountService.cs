@@ -149,10 +149,10 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         UserName = user.UserName,
-                        IdentityCard = user.IdentityCard,
+                        IdentityCard = admin.IdentityCard,
                         IsActive = user.IsActive,
                         Email = user.Email,
-                        Rol = Roles.Agente.ToString(),
+                        Rol = Roles.Administrador.ToString(),
                     };
 
                     await _userRepository.AddAsync(userReference);
@@ -172,10 +172,10 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         UserName = user.UserName,
-                        IdentityCard = user.IdentityCard,
+                        IdentityCard = developer.IdentityCard,
                         IsActive = user.IsActive,
                         Email = user.Email,
-                        Rol = Roles.Agente.ToString(),
+                        Rol = Roles.Desarrollador.ToString(),
                     };
 
                     await _userRepository.AddAsync(userReference);

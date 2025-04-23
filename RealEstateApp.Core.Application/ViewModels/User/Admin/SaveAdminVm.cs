@@ -24,14 +24,19 @@ namespace RealEstateApp.Core.Application.ViewModels.User.Admin
         public string UserName { get; set; } //Agregue esto
 
         [Required(ErrorMessage = "Debe indicar la contraseña del administrador")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Debe confirmar la contraseña del administrador")]
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coiciden")]
+        [DataType(DataType.Password)]
         public string ConfrimPassword { get; set; }
 
 
         public string Rol { get; set; }=Roles.Administrador.ToString();
         public bool IsActive { get; set; } = true;
+
+        public string? Error {  get; set; }
+        public bool HasError {  get; set; }
     }
 }

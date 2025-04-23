@@ -16,43 +16,59 @@
                 </div>
                 <div class="card-body">
 
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                     <form method="post" asp-controller="Admin" asp-action="@(editMode ? "EditAdmin":"CreateAdmin")">
 
                         <div class="mb-3">
                             <label asp-for="FirstName" class="form-label">Nombre: </label>
-                            <input type="text" asp-for="FirstName" class="form-control" />
+                            <input asp-for="FirstName" class="form-control" />
                             <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="LastName" class="form-label">Apellido: </label>
-                            <input type="text" asp-for="LastName" class="form-control" />
+                            <input  asp-for="LastName" class="form-control" />
                             <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Nombre de usuario: </label>
+                            <input  asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
 
 
                         <div class="mb-3">
                             <label asp-for="IdentityCard" class="form-label">Cedula: </label>
-                            <input type="text" asp-for="IdentityCard" class="form-control" />
+                            <input  asp-for="IdentityCard" class="form-control" />
                             <span asp-validation-for="IdentityCard" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">Correo: </label>
-                            <input type="text" asp-for="Email" class="form-control" />
+                            <input  asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
 
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Contraseña: </label>
-                            <input type="text" asp-for="Password" class="form-control" />
+                            <input  asp-for="Password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="ConfrimPassword" class="form-label">Confirmar Contraseña: </label>
-                            <input type="text" asp-for="ConfrimPassword" class="form-control" />
+                            <input  asp-for="ConfrimPassword" class="form-control" />
                             <span asp-validation-for="ConfrimPassword" class="text-danger"></span>
                         </div>
 

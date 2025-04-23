@@ -12,7 +12,7 @@ using RealEstateApp.Infrastructure.Persistence.Contexts;
 namespace RealEstateApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250423035532_InnitialMigration")]
+    [Migration("20250423054326_InnitialMigration")]
     partial class InnitialMigration
     {
         /// <inheritdoc />

@@ -12,6 +12,7 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
+using RealEstateApp.Core.Application.ViewModels.User.Admin;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Mappings
@@ -48,6 +49,18 @@ namespace RealEstateApp.Core.Application.Mappings
                 .ForMember(x => x.ConfirmPassword, opt => opt.Ignore())
                 .ReverseMap();
 
+            //SaveAdminVm-SaveUserVm
+            CreateMap<SaveAdminVm, SaveUserVm>()
+                .ForMember(x=>x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.File, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+
+
+
+                .ReverseMap();
+
+
 
 
 
@@ -70,6 +83,7 @@ namespace RealEstateApp.Core.Application.Mappings
             //EditPropertyVm-SavePropertyVm
             CreateMap<EditPropertyVm, SavePropertyVm>()
                 .ReverseMap();
+
 
 
 
