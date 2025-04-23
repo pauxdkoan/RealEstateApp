@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Chat;
+using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.User.Client;
 
 
@@ -10,11 +12,17 @@ namespace RealEstateApp.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IPropertyService _propertyService;
-        
-        public ClientController(IClientService clientService, IPropertyService propertyService)
+        private readonly IChatService _chatService;
+        private readonly IAgentService _agentService;
+        private readonly IMessageService _messageService;
+
+        public ClientController(IClientService clientService, IPropertyService propertyService, IChatService chatService, IAgentService agentService, IMessageService messageService)
         {
             _clientService = clientService;
             _propertyService = propertyService;
+            _chatService = chatService;
+            _agentService = agentService;
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index() 
@@ -53,7 +61,35 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("PropertyDeatails", new {id= propertyId });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string message, int chatId, int propertyId)
+        {
+            if (chatId == 0)
+            {
+                PropertyVm property = await _propertyService.GetByIdViewModel(propertyId);
 
+                SaveChatViewModel chat = new SaveChatViewModel
+                {
+                    PropertyId = propertyId,
+                    ClientId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
+                    AgentId = property.AgentId
+                };
 
+                ChatVm chatVm = await _chatService.AddVm(chat);
+                chatId = chatVm.Id;
+
+            }
+
+            SaveMessageVm messageVm = new SaveMessageVm
+            {
+                ChatId = chatId,
+                Content = message,
+                SenderId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+            };
+
+            await _messageService.Add(messageVm);
+            return RedirectToAction("PropertyDeatails", new { id = propertyId });
+
+        }
     }
 }

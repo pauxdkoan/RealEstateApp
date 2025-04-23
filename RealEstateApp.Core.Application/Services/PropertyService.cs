@@ -238,9 +238,11 @@ namespace RealEstateApp.Core.Application.Services
         
         }
 
-
-       
-
-
+        public async Task<PropertyVm> GetByIdViewModel(int id)
+        {
+            var property = await _propertyRepository.GetByIdAsync(id);
+            var propertyVm = _mapper.Map<PropertyVm>(property);
+            return propertyVm;
+        }
     }
 }
