@@ -41,7 +41,7 @@ namespace RealEstateApp.Controllers
         {
             var agentInSession = HttpContext.Session.Get<AuthenticationResponse>("user");
             var propertyList=await _propertyService.MyProperties(agentInSession.Id);
-            return View(propertyList);
+            return View("Home",propertyList);
         }
 
         //[HttpGet]

@@ -12,7 +12,7 @@ using RealEstateApp.Infrastructure.Persistence.Contexts;
 namespace RealEstateApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250415231947_InnitialMigration")]
+    [Migration("20250423035532_InnitialMigration")]
     partial class InnitialMigration
     {
         /// <inheritdoc />
@@ -229,7 +229,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Order")
+                    b.Property<int?>("Order")
                         .HasColumnType("int");
 
                     b.Property<int>("PropertyId")
@@ -331,7 +331,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photo")

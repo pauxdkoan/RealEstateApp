@@ -1,0 +1,73 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.User.Admin
+
+@model SaveAdminVm
+@{
+    bool editMode = Model.Id==null ? false : true;
+    ViewData["Title"] = "Guardar categoria";
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-header bg-dark text-light">
+                    <h4>@(editMode ? $"Editando el Administrador: {Model.FirstName}" : "Registrando nuevo administrador")</h4>
+                </div>
+                <div class="card-body">
+
+                    <form method="post" asp-controller="Admin" asp-action="@(editMode ? "EditAdmin":"CreateAdmin")">
+
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label">Nombre: </label>
+                            <input type="text" asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label">Apellido: </label>
+                            <input type="text" asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label asp-for="IdentityCard" class="form-label">Cedula: </label>
+                            <input type="text" asp-for="IdentityCard" class="form-control" />
+                            <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Correo: </label>
+                            <input type="text" asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Contraseña: </label>
+                            <input type="text" asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfrimPassword" class="form-label">Confirmar Contraseña: </label>
+                            <input type="text" asp-for="ConfrimPassword" class="form-control" />
+                            <span asp-validation-for="ConfrimPassword" class="text-danger"></span>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a asp-controller="Admin" asp-action="AdminMaintenance" class="btn btn-warning">Volver atras</a>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

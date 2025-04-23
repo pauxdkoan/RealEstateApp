@@ -83,6 +83,10 @@ namespace RealEstateApp.Infrastructure.Identity
 
 
                     await DefaultClient.SeedAsync(userManager, userRepository);
+                    await DefaultDeveloper.SeedAsync(userManager, userRepository);
+                    await DefaultAdmin.SeedAsync(userManager, userRepository);
+
+
                     await DefaultAgents.SeedAsync(userManager,userRepository,propertyRepository);
                     
 

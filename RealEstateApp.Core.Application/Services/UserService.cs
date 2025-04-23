@@ -47,7 +47,27 @@ namespace RealEstateApp.Core.Application.Services
         public async Task<RegisterResponse> RegisterAsync(SaveUserVm vm, string origin) 
         { 
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
-            registerRequest.Rol=vm.Rol==1?Roles.Cliente.ToString():Roles.Agente.ToString();
+
+            switch (vm.Rol) 
+            {
+                case (int)Roles.Cliente:
+                    registerRequest.Rol=Roles.Cliente.ToString();
+                    break;
+
+                case (int)Roles.Agente:
+                    registerRequest.Rol = Roles.Agente.ToString();
+                    break;
+
+                case (int)Roles.Desarrollador:
+                    registerRequest.Rol = Roles.Desarrollador.ToString();
+                    break;
+
+                case (int)Roles.Administrador:
+                    registerRequest.Rol = Roles.Administrador.ToString();
+                    break;
+            }
+            
+            
             return await _accountService.RegisterUserAsync(registerRequest, origin);
         }
 

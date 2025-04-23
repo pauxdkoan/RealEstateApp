@@ -13,7 +13,7 @@ namespace RealEstateApp.Core.Domain.Entities
         public string LastName { get; set; }
         public string Email { get; set; }
         public string UserName {  get; set; } //Agregue esto
-        public string Phone {  get; set; } //Agregue esto
+        public string? Phone {  get; set; } //Agregue esto
         public string? Photo { get; set; } //No todos los usuarios se le solicita foto, agregue el nulleable
         public string Rol {  get; set; }
         public bool IsActive { get; set; }

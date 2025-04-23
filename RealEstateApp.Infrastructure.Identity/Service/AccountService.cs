@@ -115,7 +115,7 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                 {
                     var agent=await _userManager.FindByEmailAsync(user.Email);
                     agent.EmailConfirmed = true;
-                    await _userManager.UpdateAsync(user);
+                    await _userManager.UpdateAsync(agent);
 
                     //Se registra  el usuario del esquema dbo:
                     var userReference = new User() 
@@ -134,6 +134,53 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                     
                     await _userRepository.AddAsync(userReference);
                 }
+
+                if (request.Rol == Roles.Administrador.ToString())
+                {
+                    var admin = await _userManager.FindByEmailAsync(user.Email);
+                    admin.IsActive = true;
+                    admin.EmailConfirmed = true;
+                    await _userManager.UpdateAsync(admin);
+
+                    //Se registra  el usuario del esquema dbo:
+                    var userReference = new User()
+                    {
+                        Id = admin.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        UserName = user.UserName,
+                        IdentityCard = user.IdentityCard,
+                        IsActive = user.IsActive,
+                        Email = user.Email,
+                        Rol = Roles.Agente.ToString(),
+                    };
+
+                    await _userRepository.AddAsync(userReference);
+                }
+
+                if (request.Rol == Roles.Desarrollador.ToString())
+                {
+                    var developer = await _userManager.FindByEmailAsync(user.Email);
+                    developer.IsActive = true;
+                    developer.EmailConfirmed = true;
+                    await _userManager.UpdateAsync(developer);
+
+                    //Se registra  el usuario del esquema dbo:
+                    var userReference = new User()
+                    {
+                        Id = developer.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        UserName = user.UserName,
+                        IdentityCard = user.IdentityCard,
+                        IsActive = user.IsActive,
+                        Email = user.Email,
+                        Rol = Roles.Agente.ToString(),
+                    };
+
+                    await _userRepository.AddAsync(userReference);
+                }
+
 
                 /*Falta el registro de desarrolladores y admin 
                   Se agrega despues por q no se si vienen activo por default...

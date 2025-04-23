@@ -1,0 +1,47 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.User
+@model List<UserVm>
+@{
+    ViewData["Title"] = "Mantenimiento de administradores";
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-3">
+        <div class="col-3 offset-9">
+            <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-outline-success">Registrar nuevo administrador</a>
+        </div>
+    </div>
+
+    <div class="row">
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <h2>No hay Administradores registrados</h2>
+        }
+        else
+        {
+            @foreach (UserVm item in Model)
+            {
+                <div class="col-4">
+                    <div class="card shadow-sm">
+
+                        <div class="card-body">
+                            <h4 class="card-title">@(item.FirstName+" "+ item.LastName)</h4>
+                            <p class="card-text">Cedula: @item.IdentityCard</p>
+                            <p class="card-text">Correo: @item.IdentityCard</p>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
+                                    <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Borrar</a>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</div>

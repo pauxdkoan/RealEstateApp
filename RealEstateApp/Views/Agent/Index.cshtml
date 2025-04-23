@@ -7,109 +7,110 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
     :root {
-        --rich-black: #050517;
-        --flame: #CF5C36;
-        --sunset: #EFC88B;
-        --vanilla: #F4E3B2;
-        --platinum: #D3D5D7;
+    --rich-black: #050517;
+    --flame: #CF5C36;
+    --sunset: #EFC88B;
+    --vanilla: #F4E3B2;
+    --platinum: #D3D5D7;
     }
 
     html {
-        font-size: 14px;
+    font-size: 14px;
     }
 
     @@media (min-width: 768px) {
-        html {
-            font-size: 16px;
-        }
+    html {
+    font-size: 16px;
+    }
     }
 
     html {
-        position: relative;
-        min-height: 100%;
+    position: relative;
+    min-height: 100%;
     }
 
     body {
-        margin-bottom: 60px;
-        background-color: var(--vanilla);
+    margin-bottom: 60px;
+    background-color: var(--vanilla);
     }
 
     /* Barra de búsqueda */
     .search-input {
-        border-radius: 50px;
-        padding: 15px 20px;
-        font-size: 18px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: none;
+    border-radius: 50px;
+    padding: 15px 20px;
+    font-size: 18px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
     }
 
     .search-button {
-        position: absolute;
-        right: -20px;
-        top: 50%;
-        transform: translateY(-50%);
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        background-color: var(--flame);
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: var(--flame);
     }
 
     /* Tarjetas de agentes */
     .agent-card {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--vanilla);
+    width: 200px;
+    height: 200px;
+
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--vanilla);
     }
 
-        .agent-card:hover {
-            border-radius: 15px; /* Cambia de circular a rectangular */
-            border: 5px solid var(--flame);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
+    .agent-card:hover {
+    border-radius: 15px; /* Cambia de circular a rectangular */
+    border: 5px solid var(--flame);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
 
-            .agent-card:hover .agent-image img {
-                border-radius: 0; /* Quita los bordes redondeados de la imagen */
-            }
+    .agent-card:hover .agent-image img {
+    border-radius: 0; /* Quita los bordes redondeados de la imagen */
+    }
 
     .agent-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        transition: border-radius 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: border-radius 0.3s ease;
     }
 
     .agent-name {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%) translateY(100%);
-        background-color: var(--rich-black);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 14px;
-        font-weight: bold;
-        opacity: 0;
-        transition: all 0.3s ease;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    background-color: var(--rich-black);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: all 0.3s ease;
     }
 
     .agent-card:hover .agent-name {
-        opacity: 1;
-        transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
     }
 </style>
 
