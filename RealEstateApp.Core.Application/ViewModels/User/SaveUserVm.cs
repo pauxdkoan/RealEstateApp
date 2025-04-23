@@ -35,8 +35,10 @@ namespace RealEstateApp.Core.Application.ViewModels.User
         public string Phone {  get; set; }
 
         [Required(ErrorMessage = "Debe colocar una contraseña")]
-        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         [DataType(DataType.Password)]
+        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$",
+         ErrorMessage = "La contraseña debe incluir al menos una letra mayúscula, una minúscula y un dígito")]
 
         /*Falta ponerle q la contrasena debe tener un tamanio minimo
          pa q no explote identity ya q por default identity el tamano 
@@ -48,6 +50,10 @@ namespace RealEstateApp.Core.Application.ViewModels.User
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coiciden")]
         public string ConfirmPassword {  get; set; }
-        
+
+        public string? IdentityCard { get; set; } //Cedula
+        public string? Id {  get; set; }
+        public bool IsActive {  get; set; }
+
     }
 }

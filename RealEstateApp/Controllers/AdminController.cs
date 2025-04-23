@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Enums;
+using RealEstateApp.Core.Application.Helpers;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Application.ViewModels.User.Admin;
@@ -65,9 +66,45 @@ namespace RealEstateApp.Controllers
         }
 
 
-        public IActionResult TogleState(int id) 
+        public async Task<IActionResult> TogleState(string id)
         {
+            await _userService.UpdateStatusAsync(id);
             return RedirectToAction("AdminMaintenance");
+        }
+
+        public async Task<IActionResult> EditAdmin(string id)
+        {
+            var users = await _userService.GetAllListViewModel();
+            var user = users.Find(u => u.Id == id);
+            var admin=_mapper.Map<EditAdminVm>(user);
+          
+            return View("EditAdmin", admin);
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAdmin(EditAdminVm vm)
+        {
+            if (!ModelState.IsValid) 
+            { 
+                return View("EditAdmin", vm);
+            }
+            var users = await _userService.GetAllListViewModel();
+            var user = users.Find(u => u.Id == vm.Id);
+            var admin = _mapper.Map<SaveUserVm>(vm);
+            admin.Rol = (int) Roles.Administrador;
+
+            var response= await _userService.UpdateUserAsync(admin);
+
+            if (response.HasError)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+                return View(vm);
+            }
+
+            return RedirectToAction("AdminMaintenance");
+
         }
 
 

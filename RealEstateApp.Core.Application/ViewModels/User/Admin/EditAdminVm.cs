@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstateApp.Core.Application.ViewModels.User.Admin
 {
-    public class SaveAdminVm
+    public class EditAdminVm
     {
         public string? Id { get; set; }
         [Required(ErrorMessage ="Debe indicar el nombre del administrador")]
@@ -23,17 +23,17 @@ namespace RealEstateApp.Core.Application.ViewModels.User.Admin
         [Required(ErrorMessage = "Debe indicar el usuario del administrador")]
         public string UserName { get; set; } //Agregue esto
 
-        [Required(ErrorMessage = "Debe indicar la contraseña del administrador")]
+     
         [DataType(DataType.Password)]
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$",
          ErrorMessage = "La contraseña debe incluir al menos una letra mayúscula, una minúscula y un dígito")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
-        [Required(ErrorMessage = "Debe confirmar la contraseña del administrador")]
+      
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coiciden")]
         [DataType(DataType.Password)]
-        public string ConfrimPassword { get; set; }
+        public string? ConfrimPassword { get; set; }
 
 
         public string Rol { get; set; }=Roles.Administrador.ToString();

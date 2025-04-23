@@ -6,6 +6,7 @@ using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.User;
+using RealEstateApp.Core.Application.ViewModels.User.Admin;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services
@@ -23,6 +24,29 @@ namespace RealEstateApp.Core.Application.Services
             _accountService = accountService;
             _mapper = mapper;
             _userRepository = userRepository;
+        }
+
+        public async Task<RegisterResponse> UpdateUserAsync(SaveUserVm vm) 
+        {
+            var updateRequest= _mapper.Map<UpdateRequest>(vm);
+            switch (vm.Rol) 
+            {
+                case (int) Roles.Administrador:
+                    updateRequest.Rol=Roles.Administrador.ToString();
+                    break;
+                case (int)Roles.Agente:
+                    updateRequest.Rol = Roles.Agente.ToString();
+                    break;
+                case (int)Roles.Desarrollador:
+                    updateRequest.Rol = Roles.Desarrollador.ToString();
+                    break;
+                case (int)Roles.Cliente:
+                    updateRequest.Rol = Roles.Cliente.ToString();
+                    break;
+            }
+
+            var response= await _accountService.UpdateUser(updateRequest);
+            return response;
         }
 
         public async Task<AuthenticationResponse> LoginAsync(LoginVm vm) 
@@ -76,6 +100,12 @@ namespace RealEstateApp.Core.Application.Services
             return await _accountService.ConfirmAccountAsync(userId, token);
         }
 
-       
+        public async Task UpdateStatusAsync(string idUser) 
+        { 
+            await _accountService.UpdateStatusAsync(idUser);
+        }
+
+
+
     }
 }

@@ -11,6 +11,7 @@ using System.Text;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using RealEstateApp.Core.Application.ViewModels.User;
 
 namespace RealEstateApp.Infrastructure.Identity.Service
 {
@@ -35,6 +36,79 @@ namespace RealEstateApp.Infrastructure.Identity.Service
         {
             var roles= await _roleManager.Roles.Select(r=>r.Name).ToListAsync();
             return roles;
+        }
+
+        public async Task<RegisterResponse> UpdateUser(UpdateRequest request) 
+        {
+            RegisterResponse response = new()
+            {
+                HasError = false,
+            };
+
+            var user = await _userManager.FindByIdAsync(request.Id);
+
+            var userWithSameUsername = await _userManager.FindByNameAsync(request.UserName);
+
+            if (userWithSameUsername != null && user.UserName!= request.UserName)
+            {
+                response.HasError = true;
+                response.Error = $"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
+                return response;
+            }
+
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userWithSameEmail != null && user.Email!= request.Email)
+            {
+                response.HasError = true;
+                response.Error = $"El correo: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
+                return response;
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.IsActive = request.IsActive;
+            user.UserName = request.UserName;
+            //user.PhoneNumber=request.Phone;
+
+            // Actualizar la contraseña si se envía una nueva 
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                // Generar token de reseteo de contraseña
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await _userManager.ResetPasswordAsync(user, token, request.Password);
+                if (!passwordResult.Succeeded)
+                {
+                    response.HasError = true;
+                    response.Error = "Error al actualizar la contraseña: " + string.Join(", ", passwordResult.Errors.Select(e => e.Description));
+                    return response;
+                }
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+         
+            if (!updateResult.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "Error al actualizar el usuario: " + string.Join(", ", updateResult.Errors.Select(e => e.Description));
+                return response;
+            }
+
+            await _userRepository.UpdateAsync(new User
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                IdentityCard = user.IdentityCard,
+                IsActive = user.IsActive,
+                UserName = user.UserName,
+                Rol = request.Rol
+
+            }, user.Id);
+
+            return response;
+
         }
 
         public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin) 
@@ -223,7 +297,29 @@ namespace RealEstateApp.Infrastructure.Identity.Service
 
         }
 
+        public async Task UpdateStatusAsync(string idUser) 
+        {
+            var user = await _userManager.FindByIdAsync(idUser);
+            user.IsActive=!user.IsActive;
+            var roles =  await _userManager.GetRolesAsync(user);
+            var rol = roles.FirstOrDefault();
 
+            var updateResult= await _userManager.UpdateAsync(user);
+            if (updateResult.Succeeded) 
+            {
+                await _userRepository.UpdateAsync(new User
+                {
+                    Id = user.Id,
+                    FirstName=user.FirstName,
+                    LastName=user.LastName,
+                    Email=user.Email,
+                    IsActive=user.IsActive,
+                    UserName=user.UserName,
+                    Rol= rol,
+                    
+                }, user.Id);
+            }
+        }
         #region Protected
         protected async Task<string> SendVerificationEmailUri(ApplicationUser user, string origin) 
         { 

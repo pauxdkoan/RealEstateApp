@@ -1,7 +1,12 @@
 ﻿@using RealEstateApp.Core.Application.Enums
 @using RealEstateApp.Core.Application.ViewModels.User
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
 @model List<UserVm>
+
+@inject IHttpContextAccessor httpContextAccesor
 @{
+    var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
     ViewData["Title"] = "Mantenimiento de administradores";
 }
 
@@ -23,26 +28,52 @@
         {
             @foreach (UserVm item in Model.Where(u=>u.Rol==Roles.Administrador.ToString()))
             {
-                <div class="col-4">
-                    <div class="card shadow-sm">
 
-                        <div class="card-body">
-                            <h4 class="card-title">@(item.FirstName+" "+ item.LastName)</h4>
-                            <p class="card-text">Cedula: @item.IdentityCard</p>
-                            <p class="card-text">Correo: @item.IdentityCard</p>
+                if(item.Id==user.Id)
+                {
+                    <div class="col-4">
+                        <div class="card shadow-sm">
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
-                                    <a asp-controller="Admin" asp-action="DeleteAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Borrar</a>
-                                    <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@(item.IsActive==true?"Activar":"Desactivar")</a>
+                            <div class="card-body">
+                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
+                                <p class="card-text">Cedula: @item.IdentityCard</p>
+                                <p class="card-text">Correo: @item.IdentityCard</p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-infocus-ring disabled">Editar</a>
+                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger disabled">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
+
+                                    </div>
 
                                 </div>
-                               
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="col-4">
+                        <div class="card shadow-sm">
+
+                            <div class="card-body">
+                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
+                                <p class="card-text">Cedula: @item.IdentityCard</p>
+                                <p class="card-text">Correo: @item.IdentityCard</p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
+                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+        
             }
         }
     </div>
