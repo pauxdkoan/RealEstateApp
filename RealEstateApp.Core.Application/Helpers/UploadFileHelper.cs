@@ -12,16 +12,29 @@ namespace RealEstateApp.Core.Application.Helpers
          de la carpeta en la cual se va guardar la imagen, ejemplo: Cliente o Agente
          y en vez de utilizar el id utilizamos el correo ya q el id de identity es muy 
          largo*/
-        public static string UploadFile(int rol,IFormFile file, string email, bool isEditMode=false, string photo = "") 
+        public static string UploadFile(int? rol,IFormFile file, string codeOrEmail,string? name,bool isEditMode=false, string photo = "") 
         {
             if (isEditMode && file == null)
             {
                 return photo;
             }
 
+            string basePath="";
             //Se crea el path donde queremos guardar las imagenes
-            string Rol = rol == 1 ? Roles.Cliente.ToString() : Roles.Agente.ToString();
-            string basePath = $"/Images/{Rol}/{email}";
+            if(rol != null) 
+            { 
+                string Rol = rol == 1 ? Roles.Cliente.ToString() : Roles.Agente.ToString();
+                basePath = $"/Images/{Rol}/{codeOrEmail}";
+            }
+
+            if (name != null) 
+            {
+                basePath = $"/Images/{name}/{codeOrEmail}";
+            }
+
+           
+
+
             string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot{basePath}");
 
             //Luego creamos el folder si no existe

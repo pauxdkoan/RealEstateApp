@@ -26,6 +26,18 @@ namespace RealEstateApp.Core.Application
             service.AddTransient<IClientService, ClientService>();
             service.AddTransient<IAgentService, AgentService>();
             service.AddTransient<IPropertyService, PropertyService>();
+            service.AddTransient<IChatService, ChatService>();
+            service.AddTransient<IMessageService, MessageService>();
+            service.AddTransient<ISaleTypeService, SaleTypeService>();
+            service.AddTransient<IPropertyTypeService, PropertyTypeService>();
+            service.AddTransient<IImprovementService, ImprovementService>();
+            service.AddTransient<IPropertyImageService, PropertyImageService>();
+            service.AddTransient<IAdminService, AdminService>();
+
+
+
+
+
 
 
         }

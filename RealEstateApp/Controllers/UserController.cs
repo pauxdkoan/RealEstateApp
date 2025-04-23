@@ -71,7 +71,7 @@ namespace RealEstateApp.Controllers
             }
 
 
-            var photoPath = UploadFileHelper.UploadFile(vm.Rol, vm.File, vm.Email);
+            var photoPath = UploadFileHelper.UploadFile(vm.Rol, vm.File, vm.Email, null);
             vm.Photo = photoPath;
 
             var origin = Request.Headers["origin"]; //Esto es para Obtener la url base...

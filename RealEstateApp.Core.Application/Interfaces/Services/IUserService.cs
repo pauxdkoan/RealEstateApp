@@ -13,5 +13,8 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
         Task<RegisterResponse> RegisterAsync(SaveUserVm vm, string origin);
         Task<string> ConfirmEmailAsync(string userId, string token);
         Task<List<string>> GetAllRoles();
+        Task<RegisterResponse> UpdateUserAsync(SaveUserVm vm);
+
+        Task UpdateStatusAsync(string idUser);
     }
 }

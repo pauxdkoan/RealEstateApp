@@ -12,6 +12,7 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
+using RealEstateApp.Core.Application.ViewModels.User.Admin;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Mappings
@@ -48,6 +49,39 @@ namespace RealEstateApp.Core.Application.Mappings
                 .ForMember(x => x.ConfirmPassword, opt => opt.Ignore())
                 .ReverseMap();
 
+            //SaveAdminVm-SaveUserVm
+            CreateMap<SaveAdminVm, SaveUserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.File, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ReverseMap()
+                ;
+
+
+            //SaveAdminVm-SaveUserVm
+            CreateMap<EditAdminVm, SaveUserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.File, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ReverseMap();
+
+
+            //SaveAdminVm-SaveUserVm
+            CreateMap<SaveUserVm, UpdateRequest>()
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ReverseMap();
+
+            //SaveAdminVm-SaveUserVm
+            CreateMap<SaveAdminVm, UserVm>()
+                .ReverseMap();
+
+            //SaveAdminVm-SaveUserVm
+            CreateMap<EditAdminVm, UserVm>()
+                .ReverseMap();
+
+
 
 
 
@@ -63,6 +97,16 @@ namespace RealEstateApp.Core.Application.Mappings
             CreateMap<Property, SavePropertyVm>()
             .ReverseMap();
 
+            //PropertyVm-SavePropertyVm
+            CreateMap<PropertyVm, SavePropertyVm>()
+            .ReverseMap();
+
+            //EditPropertyVm-SavePropertyVm
+            CreateMap<EditPropertyVm, SavePropertyVm>()
+                .ReverseMap();
+
+
+
 
             #endregion
 
@@ -72,7 +116,12 @@ namespace RealEstateApp.Core.Application.Mappings
             CreateMap<PropertyImage, PropertyImageVm>()
                 .ReverseMap();
 
-         
+            //PropertyImage->SavePropertyImageVm
+            CreateMap<PropertyImage, SavePropertyImageVm>()
+            .ReverseMap();
+
+
+
             #endregion
 
             #region PropertyTypeProfile
@@ -119,6 +168,28 @@ namespace RealEstateApp.Core.Application.Mappings
             //Chat->ChatVm
             CreateMap<Chat, ChatVm>()
                 .ReverseMap();
+
+            //Chat ->SaveChatVm
+            CreateMap<Chat, SaveChatViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Property, opt => opt.Ignore())
+                .ForMember(x => x.Client, opt => opt.Ignore())
+                .ForMember(x => x.Agent, opt => opt.Ignore())
+                .ForMember(x => x.Messages, opt => opt.Ignore());
+            #endregion
+
+            #region MessageProfile
+            //Message->MessageVm
+            CreateMap<Message, MessageVm>()
+                .ReverseMap();
+
+            //Message->SaveMessageVm
+            CreateMap<Message, SaveMessageVm>()
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.Chat, opt => opt.Ignore())
+                .ForMember(x => x.Sender, opt => opt.Ignore());
             #endregion
 
         }

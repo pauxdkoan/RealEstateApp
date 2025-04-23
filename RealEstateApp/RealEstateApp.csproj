@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\Cliente\paulimiguel2112%40gmail.com\" />
+    <Folder Include="wwwroot\Images\Propiedad\" />
   </ItemGroup>
 
 </Project>
