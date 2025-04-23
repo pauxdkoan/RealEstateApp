@@ -1,0 +1,197 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+@model EditPropertyVm
+
+@{
+    ViewData["Title"] = "Editar Propiedad";
+    var hasPropertyTypes = Model.PropertyTypes?.Any() ?? false;
+    var hasSaleTypes = Model.SalesTypes?.Any() ?? false;
+    var hasImprovements = Model.Improvements?.Any() ?? false;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8 offset-2">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4>Editar Propiedad - @Model.Code</h4>
+                </div>
+                <div class="card-body">
+                    @if (!hasPropertyTypes || !hasSaleTypes || !hasImprovements)
+                    {
+                        <div class="alert alert-danger">
+                            @if (!hasPropertyTypes)
+                            {
+                                <p>No hay tipos de propiedad registrados</p>
+                            }
+                            @if (!hasSaleTypes)
+                            {
+                                <p>No hay tipos de venta registrados</p>
+                            }
+                            @if (!hasImprovements)
+                            {
+                                <p>No hay mejoras registradas</p>
+                            }
+                            <p>Contacte al administrador para registrar estos elementos</p>
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                        <!-- Imágenes existentes -->
+                        <div class="mb-3">
+                            <label class="form-label">Imágenes actuales</label>
+                            <div class="row">
+
+                                @if (Model.PropertyImageVms.Count > 0)
+                                {
+                                    @foreach (var image in Model.PropertyImageVms)
+                                    {
+                                        <div class="col-md-3 mb-3">
+                                            <div class="card">
+                                                <img src="@image.ImageUrl" class="card-img-top" alt="Imagen propiedad">
+                                                <div class="card-body text-center">
+                                                    <form method="post" asp-controller="Agent" asp-action="DeleteImage" onsubmit="return confirmDelete(this);">
+                                                        <input type="hidden" name="imageId" value="@image.Id" />
+                                                        <input type="hidden" name="propertyId" value="@Model.Id" />
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="mb-3">No tiene imagenes registrada</p>
+                                }
+
+                            </div>
+                        </div>
+
+               
+                        <form method="post" asp-controller="Agent" asp-action="EditProperty" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="Code" />
+                            <input type="hidden" asp-for="AgentId" />
+
+                            <!-- Nuevas imágenes -->
+                            <div class="mb-3">
+                                <label class="form-label">Agregar nuevas imágenes (Máximo 4)</label>
+                                <input type="file" name="Files" class="form-control" multiple
+                                       accept="image/*" data-max-files="4">
+                                <span asp-validation-for="Files" class="text-danger"></span>
+
+                            </div>
+
+                            <!-- Campos existentes igual que en Create -->
+
+                            <div class="mb-3">
+                                <label asp-for="PropertyTypeId" class="form-label">Tipo de Propiedad *</label>
+                                <select asp-for="PropertyTypeId" class="form-select" required>
+                                    <option value="">Seleccione un tipo de propiedad</option>
+                                    @foreach (var type in Model.PropertyTypes)
+                                    {
+                                        <option value="@type.Id" selected="@(type.Id == Model.PropertyTypeId)">@type.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="SalesTypeId" class="form-label">Tipo de Venta: </label>
+                                <select asp-for="SalesTypeId" asp-items="@(new SelectList(Model.SalesTypes ,"Id", "Name" )) " class="form-select">
+                                    <option value="0">Seleccione un tipo de Venta</option>
+
+                                </select>
+                                <span asp-validation-for="SalesTypeId" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label asp-for="Price" class="form-label">Precio (DOP): </label>
+                                <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label asp-for="Description" class="form-label">Descripción: </label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="PropertySize" class="form-label">Tamaño (m²) : </label>
+                                <input asp-for="PropertySize" class="form-control" />
+                                <span asp-validation-for="PropertySize" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="AmountOfRoom" class="form-label">Cantidad de habitaciones: </label>
+                                <input asp-for="AmountOfRoom" class="form-control" />
+                                <span asp-validation-for="AmountOfRoom" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="AmountOfBathroom" class="form-label">Cantidad de baños: </label>
+                                <input asp-for="AmountOfBathroom" class="form-control" />
+                                <span asp-validation-for="AmountOfBathroom" class="text-danger"></span>
+                            </div>
+
+
+                            <!-- Repetir para otros campos manteniendo los valores -->
+                            <!-- Mejoras con selección actual -->
+                            <div class="mb-3">
+                                <label class="form-label">Mejoras</label>
+                                <select required asp-for="SelectedImprovements" class="form-select" multiple>
+                                    @foreach (var improvement in Model.Improvements)
+                                    {
+                                        <option value="@improvement.Id" selected="@(Model.SelectedImprovements?.Contains(improvement.Id) ?? false)">
+                                            @improvement.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
+
+                          
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <a asp-controller="Agent" asp-action="PropertyMaintenance" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+
+                        
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+               function confirmDelete(form) {
+            Swal.fire({
+                title: '¿Eliminar imagen?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+            return false; // Previene el envío automático
+        }
+    </script>
+}

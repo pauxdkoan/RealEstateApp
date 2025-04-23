@@ -11,5 +11,6 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
         Task<List<PropertyVm>> MyFavoritesProperties(string clientId);
         Task<List<PropertyVm>> MyProperties(string agentId);
         Task<PropertyVm> GetByIdViewModel(int id);
+
     }
 }
