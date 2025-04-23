@@ -8,6 +8,7 @@
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
     var isClient = user != null ? user.Rol == Roles.Cliente.ToString() : false;
     var isAgent = user != null ? user.Rol == Roles.Agente.ToString() : false;
+    var isAdmin = user != null ? user.Rol == Roles.Administrador.ToString() : false;
 
 }
 
@@ -62,6 +63,21 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Home</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mi Perfil</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="PropertyMaintenance">Mantenimiento de propiedades</a>
+                            }
+
+
+                            if (isAdmin)
+                            {
+                                <!--Aqui van las vistas del agente-->
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Listado de los agentes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de administradores</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de desarrolladores</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de tipo de propiedades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de tipo de ventas</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de mejoras</a>
+
+
                             }
 
                             <!--Aqui van las vistas compartidas-->
