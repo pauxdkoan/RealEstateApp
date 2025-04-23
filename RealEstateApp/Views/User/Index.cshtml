@@ -5,36 +5,103 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row mt-5">
-    <div class="col-6 offset-3">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                @if (Model.HasError)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <p>@Model.Error</p>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                }
-                <form method="post" asp-controller="User" asp-action="Index">
-                    <div class="mb-3">
-                        <label asp-for="EmailOrUserName" class="form-label">Correo o nombre de usuario</label>
-                        <input class="form-control" asp-for="EmailOrUserName">
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label">Contraseña</label>
-                        <input class="form-control" asp-for="Password">
-                    </div>
+<style>
+    body {
+        background: linear-gradient(to right, #e3f2fd, #fff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-                    <button type="submit" class="btn btn-primary float-end">Iniciar sección</button>
-                   
-                </form>
+    .card {
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
 
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    h4 {
+        color: #333;
+        font-weight: 600;
+    }
+
+    label.form-label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    input.form-control {
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        padding: 12px 15px;
+    }
+
+    .text-muted a {
+        color: #007bff;
+        font-weight: 500;
+    }
+
+        .text-muted a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="mb-4 text-center">Iniciar Sesión</h4>
+
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post" asp-controller="User" asp-action="Index" novalidate>
+                        <div class="mb-3">
+                            <label asp-for="EmailOrUserName" class="form-label">Correo o nombre de usuario</label>
+                            <input asp-for="EmailOrUserName" class="form-control" required placeholder="ej. juan.perez o juan@email.com" />
+                            <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Contraseña</label>
+                            <input asp-for="Password" class="form-control" type="password" required placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4" />
+                    <p class="text-center small text-muted">
+                        ¿Aún no tienes cuenta? <a asp-controller="User" asp-action="Register" class="text-decoration-none">Regístrate aquí</a>
+                    </p>
+                </div>
             </div>
-
         </div>
-
     </div>
 </div>
+
 

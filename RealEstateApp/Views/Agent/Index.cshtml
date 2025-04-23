@@ -5,6 +5,51 @@
 }
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Encuentra tu Agente Ideal</h2>
+
+    <!-- Barra de búsqueda -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <form class="position-relative" method="get">
+                <input type="text" name="Name" class="form-control shadow-lg search-input"
+                       placeholder="Buscar agente por nombre" value="@ViewData["CurrentFilter"]">
+                <button type="submit" class="btn btn-primary search-button">
+                    <i class="fa fa-search text-white"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Listado de agentes -->
+    <div class="row justify-content-center">
+        @if (Model.Any())
+        {
+            @foreach (var agent in Model)
+            {
+                <a asp-action="AgentProperties" asp-controller="Agent" asp-route-agentId="@agent.Id"
+                   class="text-decoration-none col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="agent-card">
+                        <div class="agent-image">
+                            <img src="@agent.PhotoUrl" alt="Foto de @agent.FullName">
+                        </div>
+                        <div class="agent-name">@agent.FullName</div>
+                    </div>
+                </a>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    No se encontraron agentes que coincidan con los filtros aplicados.
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
 <style>
     :root {
         --rich-black: #050517;
@@ -17,35 +62,12 @@
         --radius: 1rem;
     }
 
-    html {
-        font-size: 14px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        scroll-behavior: smooth;
-    }
-
-    @@media (min-width: 768px) {
-        html
-
-    {
-        font-size: 16px;
-    }
-
-    }
-
-    html {
-    position: relative;
-    min-height: 100%;
-    }
-
     body {
-        margin: 0;
-        padding: 0;
         background-color: var(--vanilla);
         color: var(--text-color);
-        line-height: 1.6;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Buscador */
     .search-input {
         border-radius: 50px;
         padding: 0.75rem 1.5rem;
@@ -55,12 +77,6 @@
         transition: all 0.3s ease;
         width: 100%;
     }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--flame);
-            box-shadow: 0 0 0 3px rgba(207, 92, 54, 0.2);
-        }
 
     .search-button {
         position: absolute;
@@ -78,136 +94,36 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.3s ease;
     }
 
-        .search-button:hover {
-            background-color: darken(var(--flame), 10%);
-        }
-
-    /* Tarjetas de agentes */
     .agent-card {
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
+        width: 100%;
+        border-radius: var(--radius);
         overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-color: white;
         box-shadow: 0 6px 20px var(--shadow);
         transition: all 0.3s ease;
-        position: relative;
+        text-align: center;
+        padding: 1rem;
     }
 
         .agent-card:hover {
-            border-radius: var(--radius);
-            transform: scale(1.03);
+            transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-            border: 3px solid var(--flame);
+            border: 2px solid var(--flame);
         }
 
     .agent-image img {
         width: 100%;
-        height: 100%;
+        height: 200px;
         object-fit: cover;
-        border-radius: inherit;
-        transition: all 0.3s ease;
-    }
-
-    .agent-card:hover .agent-image img {
-        border-radius: 0.5rem;
+        border-radius: var(--radius);
     }
 
     .agent-name {
-        position: absolute;
-        bottom: 12px;
-        left: 50%;
-        transform: translateX(-50%) translateY(150%);
-        background-color: var(--rich-black);
-        color: #fff;
-        padding: 6px 14px;
-        border-radius: 25px;
-        font-size: 0.9rem;
+        margin-top: 1rem;
         font-weight: 600;
-        opacity: 0;
-        transition: all 0.4s ease;
-        box-shadow: 0 3px 8px var(--shadow);
-    }
-
-    .agent-card:hover .agent-name {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        font-size: 1.1rem;
+        color: var(--rich-black);
     }
 </style>
-
-
-
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Encuentra tu Agente Ideal</h2>
-
-    <!-- Barra de búsqueda -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-8">
-            <form class="position-relative" method="get">
-                <input type="text" name="Name" class="form-control shadow-lg search-input"
-                       placeholder="Tu próximo agente" value="@ViewData["CurrentFilter"]">
-                <button type="submit" class="btn btn-primary search-button">
-                    <i class="fa fa-search text-white"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Listado de agentes -->
-    <div class="row justify-content-center">
-        @if (Model.Any())
-        {
-            @foreach (var agent in Model)
-            {
-                <a asp-action="AgentProperties" asp-controller="Agent" asp-route-agentId="@agent.Id"
-                   class="text-decoration-none col-md-4 mb-4">
-                    <div class="agent-card shadow">
-                        <div class="agent-image">
-                            <img src="@agent.PhotoUrl" alt="Foto de @agent.FullName">
-                        </div>
-                        <div class="agent-name">@agent.FullName</div>
-                    </div>
-                </a>
-            }
-        }
-        else
-        {
-            <div class="col-12">
-                <div class="alert alert-warning text-center">
-                    No se encontraron agentes que coincidan con los filtros aplicados.
-                </div>
-            </div>
-        }
-    </div> <!-- Cierre del row -->
-</div> <!-- Cierre del container -->
-
-
-
-
-<script>
-    async function searchAgent() {
-        const query = document.getElementById('searchInput').value;
-        const response = await fetch(`/Costumer/SearchAgents?name=${query}`);
-        const agents = await response.json();
-
-        const container = document.getElementById('agentsContainer');
-        container.innerHTML = ''; // Limpiar la lista actual
-
-        agents.forEach(agent => {
-            const agentDiv = document.createElement('div');
-            agentDiv.innerHTML = `
-                <div>
-                    <img src="${agent.profilePictureUrl}" alt="${agent.firstName}">
-                    <p>${agent.firstName} ${agent.lastName}</p>
-                </div>
-            `;
-            container.appendChild(agentDiv);
-        });
-    }
-</script>

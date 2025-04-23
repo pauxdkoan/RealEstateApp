@@ -7,82 +7,119 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-header">Propiedades Activas</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Properties.Where(p=>p.State=true).Count()</h5>
-                <p class="card-text">Cantidad total de propiedades disponibles.</p>
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Panel de Administración</h2>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Propiedades Disponibles</h5>
+                    <h2 class="text-success fw-bold">@Model.Properties.Where(p => p.State == true).Count()</h2>
+                    <p class="text-muted">Total de propiedades activas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Propiedades Vendidas</h5>
+                    <h2 class="text-danger fw-bold">@Model.Properties.Where(p => p.State == false).Count()</h2>
+                    <p class="text-muted">Total de propiedades inactivas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Desarrolladores Activos</h5>
+                    <h2 class="text-primary fw-bold">@Model.Developers.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted">Total de desarrolladores activos</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-header">Propiedades Inactivas</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Properties.Where(p => p.State = false).Count()</h5>
-                <p class="card-text">Cantidad total de propiedades vendidas.</p>
-                
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Desarrolladores Inactivos</h5>
+                    <h2 class="text-secondary fw-bold">@Model.Developers.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted">Total de desarrolladores inactivos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Clientes Activos</h5>
+                    <h2 class="text-success fw-bold">@Model.Clients.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted">Total de clientes activos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Clientes Inactivos</h5>
+                    <h2 class="text-danger fw-bold">@Model.Clients.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted">Total de clientes inactivos</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-header">Desarrolladores activos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Developers.Where(p => p.IsActive = true).Count()</h5>
-                <p class="card-text">Cantidad total de desarrolladores activos.</p>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Agentes Activos</h5>
+                    <h2 class="text-primary fw-bold">@Model.Agents.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted">Total de agentes activos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card info-card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Agentes Inactivos</h5>
+                    <h2 class="text-secondary fw-bold">@Model.Agents.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted">Total de agentes inactivos</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-header">Pagos Hoy</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Developers.Where(p => p.IsActive = false).Count()</h5>
-                <p class="card-text">Cantidad total de desarrolladores inactivos.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header">Clientes Activos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Clients.Where(p => p.IsActive = true).Count()</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-secondary mb-3">
-            <div class="card-header">Clientes Inactivos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Clients.Where(p => p.IsActive = false).Count()</h5>
-            </div>
-        </div>
-    </div>
-</div>
+<style>
+    body {
+        background: linear-gradient(to right, #e3f2fd, #fff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-<div class="col-md-3">
-    <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Agentes Activos</div>
-        <div class="card-body">
-            <h5 class="card-title">@Model.Agents.Where(p => p.IsActive = true).Count()</h5>
-        </div>
-    </div>
-</div>
+    .info-card {
+        border-radius: 1rem;
+        background-color: #ffffff;
+        padding: 1.5rem;
+        transition: all 0.3s ease-in-out;
+    }
 
-<div class="col-md-3">
-    <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Agentes Inactivos</div>
-        <div class="card-body">
-            <h5 class="card-title">@Model.Agents.Where(p => p.IsActive = false).Count()</h5>
-        </div>
-    </div>
-</div>
+        .info-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #050517;
+    }
+
+    .text-muted {
+        font-size: 0.875rem;
+    }
+</style>
 
 
 
