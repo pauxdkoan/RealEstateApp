@@ -227,6 +227,25 @@ namespace RealEstateApp.Core.Application.Services
             return MyPropertiesFavorite;
         }
 
+        public async Task<List<PropertyVm>> MyFavoritesProperties(string clientId, PropertyFilters? filters)
+        {
+
+            //Obtengo las propiedades favoritas del cliente
+            var favoriteProperties = await _favoritePropertyRepository.GetAllListAsync();
+            var myProperties = favoriteProperties.Where(fp => fp.ClientId == clientId).ToList();
+
+
+            //Almaceno los id de las propiedades favoritas del cliente
+            List<int> propertiesId = new();
+            myProperties.ForEach(p => propertiesId.Add(p.PropertyId));
+
+            //Luego obtengo las propiedades con sus includes, luego filtro las propiedades q tengan los id almacenados 
+            var propertyList = await GetWithFilters(filters);
+            var MyPropertiesFavorite = propertyList.Where(p => propertiesId.Contains(p.Id)).ToList();
+
+            return MyPropertiesFavorite;
+        }
+
         //Propiedades de un usuario (agente)
         public async Task<List<PropertyVm>> MyProperties(string agentId) 
         {
@@ -234,8 +253,18 @@ namespace RealEstateApp.Core.Application.Services
             properties=properties.Where(p=>p.AgentId==agentId).ToList();
 
             return properties;
+        }
 
-        
+        public async Task<List<PropertyVm>> MyProperties(string agentId, PropertyFilters? filters)
+        {
+            var properties = await GetWithFilters(filters);
+                if(properties.Count > 0)
+                {
+                    properties = properties.Where(p => p.AgentId == agentId).ToList();
+                }
+            return properties;
+
+
         }
 
         public async Task<PropertyVm> GetByIdViewModel(int id)
