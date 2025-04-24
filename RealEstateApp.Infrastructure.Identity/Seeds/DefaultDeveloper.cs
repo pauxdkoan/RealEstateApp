@@ -16,10 +16,8 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
             defaultDeveloper.FirstName = "Angelito";
             defaultDeveloper.LastName = "Bozo";
             defaultDeveloper.UserName = "devop1";
-            defaultDeveloper.PhoneNumber = "809-403-7589";
             defaultDeveloper.Email = "devop1@email.com";
             defaultDeveloper.IdentityCard = "402-2998511-7";
-            defaultDeveloper.Photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQYE42H29VlT1l7Y9HdJd-jRjW0z0_AlWQ4g&s";
             defaultDeveloper.IsActive = true;
             defaultDeveloper.EmailConfirmed = true;
 
@@ -38,8 +36,6 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
                         Id = defaultDeveloper.Id,
                         FirstName = defaultDeveloper.FirstName,
                         LastName = defaultDeveloper.LastName,
-                        Phone = defaultDeveloper.PhoneNumber,
-                        Photo = defaultDeveloper.Photo,
                         IsActive = defaultDeveloper.IsActive,
                         Email = defaultDeveloper.Email,
                         Rol = rol.FirstOrDefault(),
