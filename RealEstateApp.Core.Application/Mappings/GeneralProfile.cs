@@ -2,6 +2,17 @@
 
 using AutoMapper;
 using RealEstateApp.Core.Application.Dtos.Account;
+using RealEstateApp.Core.Application.Dtos.Improvement;
+using RealEstateApp.Core.Application.Dtos.PropertyType;
+using RealEstateApp.Core.Application.Dtos.SaleType;
+using RealEstateApp.Core.Application.Features.Account.Commands.RegisterDevelopAsync;
+using RealEstateApp.Core.Application.Features.Account.Queries.AuthenticateAsync;
+using RealEstateApp.Core.Application.Features.Improvement.Commands.CreateImprovement;
+using RealEstateApp.Core.Application.Features.Improvement.Commands.UpdateImprovement;
+using RealEstateApp.Core.Application.Features.PropertyType.Commands.CreatePropertyType;
+using RealEstateApp.Core.Application.Features.PropertyType.Commands.UpdatePropertyType;
+using RealEstateApp.Core.Application.Features.SaleType.Commands.CreateSaleType;
+using RealEstateApp.Core.Application.Features.SaleType.Commands.UpdateSaleType;
 using RealEstateApp.Core.Application.ViewModels.Chat;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Application.ViewModels.Improvement.PropertyImprovement;
@@ -192,7 +203,62 @@ namespace RealEstateApp.Core.Application.Mappings
                 .ForMember(x => x.Sender, opt => opt.Ignore());
             #endregion
 
-            #region DTOS
+
+            #region SQRS
+            CreateMap<CreatePropertyTypeCommand, PropertyType>()
+                .ReverseMap();
+
+            CreateMap<UpdatePropertyTypeCommand, PropertyType>()
+                .ReverseMap();
+
+            CreateMap<PropertyTypeUpdateResponse, PropertyType>()
+              .ReverseMap();
+
+            CreateMap<PropertyTypeDto, PropertyType>()
+               .ReverseMap();
+
+            CreateMap<CreateSaleTypeCommand, SalesType>()
+            .ReverseMap();
+
+            CreateMap<UpdateSaleTypeCommand, SalesType>()
+                .ReverseMap();
+
+            CreateMap<SaleTypeUpdateResponse, SalesType>()
+                .ReverseMap();
+
+            CreateMap<SalesTypeDto, SalesType>()
+               .ReverseMap();
+
+
+            CreateMap<UpdateImprovementCommand, Improvement>()
+               .ReverseMap();
+
+
+            CreateMap<ImprovementUpdateResponse, Improvement>()
+               .ReverseMap();
+
+            CreateMap<CreateImprovementCommand, Improvement>()
+            .ReverseMap();
+
+
+            CreateMap<ImprovementDto, Improvement>()
+            .ReverseMap();
+
+
+            CreateMap<AuthenticateAsyncQuery, AuthenticationRequest>()
+           .ReverseMap();
+
+
+            CreateMap<RegisterDeveloperUserAsyncCommand, RegisterRequest>()
+           .ReverseMap();
+
+            
+
+
+
+
+
+
 
             #endregion
 

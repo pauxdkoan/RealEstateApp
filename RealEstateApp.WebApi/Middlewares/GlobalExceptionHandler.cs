@@ -39,7 +39,7 @@ namespace RealEstateApp.WebApi.Middlewares
                     break;
                 case ValidationException e:
                     exceptionTitle = "Bad request";
-                    details = ((ValidationException)exception).Errors.Aggregate((a, b) => a + "," + b);
+                    details = ((ValidationException)exception).Errors.Aggregate((a, b) => a + ", " + b);
                     httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     break;
 

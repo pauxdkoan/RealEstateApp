@@ -1,5 +1,4 @@
 ﻿
-using RealEstateApp.Core.Application.Dtos.Improvements;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Dtos.Property

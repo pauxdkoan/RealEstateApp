@@ -5,12 +5,14 @@ using Microsoft.Extensions.Options;
 using RealEstateApp.Core.Application.Dtos.Account;
 using RealEstateApp.Core.Application.Dtos.Email;
 using RealEstateApp.Core.Application.Enums;
+using RealEstateApp.Core.Application.Exceptions;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Settings;
 using RealEstateApp.Infrastructure.Identity.Entities;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace RealEstateApp.Infrastructure.Identity.Service
 {
@@ -38,31 +40,48 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             var user = await _userManager.FindByEmailAsync(request.EmailOrUsername)??
                 await _userManager.FindByNameAsync(request.EmailOrUsername);
 
+
+
             if (user == null) 
             { 
                 response.HasError = true;
                 response.Error = $"No hay usuario registrada con esta credencial: {request.EmailOrUsername}";
-                return response;
+                throw new ApiException($"No hay usuario registrada con esta credencial: {request.EmailOrUsername}", (int)HttpStatusCode.BadRequest);
             }
-            
+
+
+            var rolesOfUser = await _userManager.GetRolesAsync(user);
+            if (rolesOfUser.Contains(Roles.Agente.ToString()) || rolesOfUser.Contains(Roles.Cliente.ToString()))
+            {
+                throw new ApiException($"No tienes permisos para usar esta API", (int)HttpStatusCode.BadRequest);
+            }
+
+
             var isPasswordValid = await _userManager.CheckPasswordAsync (user, request.Password );
 
             if (!isPasswordValid)
             {
                 response.HasError = true;
                 response.Error = $"Credenciales invalidas para el usuario:{user.Email}";
+                throw new ApiException($"Credenciales invalidas para el usuario:{user.Email}", (int)HttpStatusCode.BadRequest);
+
                 return response ;
             }
-            if (!isPasswordValid) 
+
+
+
+            if (!isPasswordValid || !user.EmailConfirmed) 
             { 
                 response.HasError=true;
                 response.Error = $"Correo no confirmado: {user.Email}, favor confirmar su correo";
+                throw new ApiException($"Correo no confirmado: {user.Email}, favor confirmar su correo", (int)HttpStatusCode.BadRequest);
                 return response;
             }
-            if (!isPasswordValid)
+            if (!isPasswordValid || !user.IsActive)
             {
                 response.HasError = true;
                 response.Error = $"Cuenta desactivada {user.Email}, favor comunicarse con un administrador";
+                throw new ApiException($"Cuenta desactivada {user.Email}, favor comunicarse con un administrador", (int)HttpStatusCode.BadRequest);
                 return response;
             }
 
@@ -84,27 +103,37 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             return response;
         }
 
-        public async Task<RegisterResponse> RegisterDeveloperUserAsync(RegisterRequest request, string origin)
+        public async Task<RegisterResponse> RegisterDeveloperUserAsync(RegisterRequest request)
         {
             RegisterResponse response = new()
             {
                 HasError = false,
             };
 
+            var pwd = request.Password;
+            if (pwd.Length < 6 || !pwd.Any(char.IsUpper) || !pwd.Any(char.IsDigit))
+            {
+               
+                throw new ApiException( "La contraseña debe tener al menos 6 caracteres, " +"una letra mayúscula y un dígito.",(int)HttpStatusCode.BadRequest);
+            }
+
             var userWithSameUsername = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUsername != null)
             {
                 response.HasError = true;
                 response.Error = $"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
-                return response;
+
+                throw new ApiException($"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.", (int)HttpStatusCode.BadRequest);
             }
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail != null)
             {
                 response.HasError = true;
-                response.Error = $"El correo: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
-                return response;
+                response.Error = $"El correo: '{request.Email}' ya esta registrado, intente con uno nuevo.";
+                throw new ApiException($"El correo de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.", (int)HttpStatusCode.BadRequest);
+
+                
             }
 
             var user = new ApplicationUser
@@ -155,33 +184,44 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             {
                 response.HasError = true;
                 response.Error = $"Ocurrio un error inesperado al intentar registrar su usuario.";
+                throw new ApiException($"Ocurrio un error inesperado al intentar registrar su usuario.", (int)HttpStatusCode.InternalServerError);
                 return response;
             }
 
             return response;
         }
 
-        public async Task<RegisterResponse> RegisterAdminUserAsync(RegisterRequest request, string origin)
+        public async Task<RegisterResponse> RegisterAdminUserAsync(RegisterRequest request)
         {
             RegisterResponse response = new()
             {
                 HasError = false,
             };
 
+            var pwd = request.Password;
+            if (pwd.Length < 6 || !pwd.Any(char.IsUpper) || !pwd.Any(char.IsDigit))
+            {
+
+                throw new ApiException("La contraseña debe tener al menos 6 caracteres, " + "una letra mayúscula y un dígito.", (int)HttpStatusCode.BadRequest);
+            }
+
             var userWithSameUsername = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUsername != null)
             {
                 response.HasError = true;
                 response.Error = $"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
-                return response;
+
+                throw new ApiException($"El nombre de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.", (int)HttpStatusCode.BadRequest);
             }
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail != null)
             {
                 response.HasError = true;
-                response.Error = $"El correo: '{request.UserName}' ya esta registrado, intente con uno nuevo.";
-                return response;
+                response.Error = $"El correo: '{request.Email}' ya esta registrado, intente con uno nuevo.";
+                throw new ApiException($"El correo de usuario: '{request.UserName}' ya esta registrado, intente con uno nuevo.", (int)HttpStatusCode.BadRequest);
+
+
             }
 
             var user = new ApplicationUser
@@ -236,6 +276,7 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             {
                 response.HasError = true;
                 response.Error = $"Ocurrio un error inesperado al intentar registrar su usuario.";
+                throw new ApiException($"Ocurrio un error inesperado al intentar registrar su usuario.", (int)HttpStatusCode.InternalServerError);
                 return response;
             }
 

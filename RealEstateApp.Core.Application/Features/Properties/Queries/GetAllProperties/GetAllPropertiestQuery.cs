@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using RealEstateApp.Core.Application.Dtos.Improvements;
 using RealEstateApp.Core.Application.Dtos.Property;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using Swashbuckle.AspNetCore.Annotations;
