@@ -1,0 +1,47 @@
+﻿@model List<RealEstateApp.Core.Application.ViewModels.Agent.AgentViewModel>
+
+@{
+    ViewData["Title"] = "Listado de Agentes";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Agentes Registrados</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var agent in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@agent.PhotoUrl" class="card-img-top rounded-top" style="height: 200px; object-fit: cover;" alt="Foto de @agent.FullName" />
+                        <div class="card-body">
+                            <h5 class="card-title">@agent.FullName</h5>
+                            <p class="card-text mb-1"><strong>Correo:</strong> @agent.Email</p>
+                            <p class="card-text mb-1"><strong>Propiedades:</strong> @(agent.properties?.Count ?? 0)</p>
+                            <p class="card-text">
+                                <strong>Estado:</strong>
+                                <span class="@(agent.IsActive ? "text-success" : "text-danger")">
+                                    @(agent.IsActive ? "Activo" : "Inactivo")
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                            <form asp-action="ToggleAgentStatus" asp-controller="Agent" method="post" class="d-inline">
+                                <input type="hidden" name="agentId" value="@agent.Id" />
+                                <button type="submit" class="btn btn-sm @(agent.IsActive ? "btn-warning" : "btn-success")">
+                                    @(agent.IsActive ? "Inactivar" : "Activar")
+                                </button>
+                            </form>
+                            <a asp-action="Delete" asp-route-id="@agent.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">No hay agentes registrados.</div>
+    }
+</div>

@@ -1,0 +1,64 @@
+﻿@model RealEstateApp.Core.Application.ViewModels.User.Developer.SaveDeveloperVm
+@{
+    ViewData["Title"] = "Crear Desarrollador";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Registrar nuevo desarrollador</h2>
+
+    <form asp-action="CreateDeveloper" asp-controller="Dev" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="UserName" class="form-label"></label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="IdentityCard" class="form-label"></label>
+            <input asp-for="IdentityCard" class="form-control" />
+            <span asp-validation-for="IdentityCard" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-4">
+            <label asp-for="ConfrimPassword" class="form-label"></label>
+            <input asp-for="ConfrimPassword" class="form-control" />
+            <span asp-validation-for="ConfrimPassword" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" asp-controller="Dev" class="btn btn-secondary">Volver al listado</a>
+            <button type="submit" class="btn btn-success">Crear desarrollador</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}
+

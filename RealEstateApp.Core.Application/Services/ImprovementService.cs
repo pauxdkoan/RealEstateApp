@@ -8,10 +8,9 @@ using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Domain.Entities;
 
-
 namespace RealEstateApp.Core.Application.Services
 {
-    public class ImprovementService : GenericService<SaveImprovementVm, ImprovementVm, Improvement, int>,IImprovementService
+    public class ImprovementService : GenericService<SaveImprovementVm, ImprovementVm, Improvement, int>, IImprovementService
     {
         
         private readonly IMapper _mapper;
@@ -24,10 +23,11 @@ namespace RealEstateApp.Core.Application.Services
             _improvementRepository = improvementRepository;
         }
 
-       
-     
-       
-     
-
+        public async Task<ImprovementVm> GetByIdViewModel(int id)
+        {
+            Improvement improvement = await _improvementRepository.GetByIdAsync(id);
+            ImprovementVm vm = _mapper.Map<ImprovementVm>(improvement);
+            return vm;
+        }
     }
 }

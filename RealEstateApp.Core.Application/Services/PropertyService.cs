@@ -20,7 +20,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class PropertyService : GenericService<SavePropertyVm, PropertyVm, Property, int>,IPropertyService
+    public class PropertyService : GenericService<SavePropertyVm, PropertyVm, Property, int>, IPropertyService
     {
         private readonly IPropertyRepository _propertyRepository;
         private readonly IMapper _mapper;
@@ -243,6 +243,90 @@ namespace RealEstateApp.Core.Application.Services
             var property = await _propertyRepository.GetByIdAsync(id);
             var propertyVm = _mapper.Map<PropertyVm>(property);
             return propertyVm;
+        }
+
+        public async Task<List<PropertyVm>> GetByAgent(string id)
+        {
+            List<PropertyVm> propertiesvm = new List<PropertyVm>();
+            List<Property> properties = await _propertyRepository.GetAllListAsync();
+            properties = properties.Where(p => p.AgentId == id.ToString()).ToList();
+            propertiesvm = _mapper.Map<List<PropertyVm>>(properties);
+            return propertiesvm;
+        }
+
+        public async Task<List<PropertyVm>> GetWithFilters(PropertyFilters? filters)
+        {
+            List<PropertyVm> properties = await GetAllListViewModel();
+            if (filters != null)
+            {
+                if (!string.IsNullOrEmpty(filters.Code))
+                {
+                    properties = properties.Where(p => p.Code.Contains(filters.Code)).ToList();
+                }
+
+                if (filters.MinPrice != null && filters.MinPrice != 0)
+                {
+                    properties = properties.Where(p => p.Price >= filters.MinPrice).ToList();
+                }
+
+                if (filters.MaxPrice != null && filters.MaxPrice != 0)
+                {
+                    properties = properties.Where(p => p.Price <= filters.MaxPrice).ToList();
+                }
+
+                if (filters.PropertyTypes != null && filters.PropertyTypes.Count > 0)
+                {
+                    properties = properties
+                        .Where(p => filters.PropertyTypes.Contains(p.PropertyTypeVm.Id))
+                        .ToList();
+                }
+
+                if (filters.Bedrooms.HasValue)
+                {
+                    properties = properties.Where(p => p.AmountOfRoom == filters.Bedrooms).ToList();
+                }
+                if (filters.Bathrooms.HasValue)
+                {
+                    properties = properties.Where(p => p.AmountOfBathroom == filters.Bathrooms).ToList();
+                }
+
+            }
+            return properties;
+        }
+
+        public async Task<List<PropertyVm>> GetByAgentWithFilters(string Id, PropertyFilters? filters)
+        {
+            List<PropertyVm> properties = await GetAllListViewModel();
+            if (filters != null)
+            {
+                if (!string.IsNullOrEmpty(filters.Code))
+                {
+                    properties = properties.Where(p => p.Code.Contains(filters.Code)).ToList();
+                }
+                if (filters.MinPrice != null && filters.MinPrice != 0)
+                {
+                    properties = properties.Where(p => p.Price >= filters.MinPrice).ToList();
+                }
+                if (filters.MaxPrice != null && filters.MaxPrice != 0)
+                {
+                    properties = properties.Where(p => p.Price <= filters.MaxPrice).ToList();
+                }
+                if (filters.PropertyTypes != null && filters.PropertyTypes.Count > 0)
+                {
+                    properties = properties
+                        .Where(p => filters.PropertyTypes.Contains(p.PropertyTypeVm.Id))
+                        .ToList();
+                }
+                if (filters.Bedrooms.HasValue)
+                {
+                    properties = properties.Where(p => p.AmountOfRoom == filters.Bedrooms).ToList();
+                }
+                if (filters.Bathrooms.HasValue)
+                {
+                    properties = properties.Where(p => p.AmountOfBathroom == filters.Bathrooms).ToList();
+                }
+            }
+            return properties.Where(p => p.AgentId == Id).ToList();
         }
     }
 }

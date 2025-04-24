@@ -1,0 +1,71 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+@model PropertyVm
+
+@{
+    ViewData["Title"] = "Detalle de propiedad";
+}
+
+<div class="container mt-4">
+    <h2>Detalle de propiedad</h2>
+
+    <!-- Slider de imágenes -->
+    <div id="propertyCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.PropertyImageVms.Count; i++)
+            {
+                var img = Model.PropertyImageVms.ElementAt(i);
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@img.ImageUrl" class="d-block w-100" style="height: 400px; object-fit: cover;" />
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Información de la propiedad -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p><strong>Código:</strong> @Model.Code</p>
+            <p><strong>Tipo de propiedad:</strong> @Model.PropertyTypeVm?.Name</p>
+            <p><strong>Tipo de venta:</strong> @Model.SalesTypeVm?.Name</p>
+            <p><strong>Precio:</strong> $@Model.Price</p>
+            <p><strong>Habitaciones:</strong> @Model.AmountOfRoom</p>
+            <p><strong>Baños:</strong> @Model.AmountOfBathroom</p>
+            <p><strong>Tamaño:</strong> @Model.PropertySize m²</p>
+            <p><strong>Descripción:</strong> @Model.Description</p>
+
+            <p><strong>Mejoras:</strong></p>
+            @if (Model.PropertyImprovements != null && Model.PropertyImprovements.Any())
+            {
+                <ul>
+                    @foreach (var improvement in Model.PropertyImprovements)
+                    {
+                        <li>@improvement.</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Esta propiedad no tiene mejoras registradas.</p>
+            }
+        </div>
+
+        <!-- Información del agente -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="text-center mb-2">
+                    <img src="@Model.Agent?.Photo" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" alt="Foto del agente" />
+                </div>
+                <h5 class="text-center">@Model.Agent?.FirstName @Model.Agent?.LastName</h5>
+                <p><strong>Email:</strong> @Model.Agent?.Email</p>
+                <p><strong>Teléfono:</strong> @Model.Agent?.Phone</p>
+            </div>
+        </div>
+    </div>
+</div>
+

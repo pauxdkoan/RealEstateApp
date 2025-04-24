@@ -316,7 +316,9 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                     IsActive=user.IsActive,
                     UserName=user.UserName,
                     Rol= rol,
-                    
+                    Photo = user.Photo,
+                    Phone = user.PhoneNumber,
+                    IdentityCard = user.IdentityCard
                 }, user.Id);
             }
         }

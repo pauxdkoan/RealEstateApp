@@ -61,8 +61,8 @@
                             {
                                 <!--Aqui van las vistas del agente-->
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Home</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Mi Perfil</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="PropertyMaintenance">Mantenimiento de propiedades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="EditAgent">Mi Perfil</a>
                             }
 
 
@@ -70,12 +70,12 @@
                             {
                                 <!--Aqui van las vistas del agente-->
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Listado de los agentes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="AgentsList">Listado de los agentes</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminMaintenance">Mantenimiento de administradores</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de desarrolladores</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de tipo de propiedades</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de tipo de ventas</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="PropertyMaintenance">Mantenimiento de mejoras</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Dev" asp-action="Index">Mantenimiento de desarrolladores</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="PropertyType" asp-action="Index">Mantenimiento de tipo de propiedades</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="SalesType" asp-action="Index">Mantenimiento de tipo de ventas</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Improvement" asp-action="Index">Mantenimiento de mejoras</a>
 
 
                             }
@@ -106,7 +106,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Agentes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ViewAgents">Agentes</a>
                             </li>
                         }
 

@@ -8,6 +8,6 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
 {
     public interface ISaleTypeService : IGenericService<SaveSalesTypeVm,SalesTypeVm, SalesType, int>
     {
-       
+        Task<SalesTypeVm> GetByIdViewModel(int id);
     }
 }

@@ -1,0 +1,64 @@
+﻿@using RealEstateApp.Core.Application.Enums
+@using RealEstateApp.Core.Application.ViewModels.User.Developer
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
+@model List<DeveloperVm>
+
+@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    var user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Mantenimiento de desarrolladores";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-end mb-3">
+        <a asp-controller="Dev" asp-action="CreateDeveloper" class="btn btn-outline-success">Registrar nuevo desarrollador</a>
+    </div>
+
+    <div class="row">
+        @if (Model == null || Model.Count == 0)
+        {
+            <h3>No hay desarrolladores registrados</h3>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.FirstName @item.LastName</h5>
+                            <p class="card-text"><strong>Usuario:</strong> @item.UserName</p>
+                            <p class="card-text"><strong>Cédula:</strong> @item.IdentityCard</p>
+                            <p class="card-text"><strong>Correo:</strong> @item.Email</p>
+
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Dev" asp-action="EditDeveloper" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
+
+                                @if (item.Id != user.Id)
+                                {
+                                    <button class="btn btn-sm @(item.IsActive ? "btn-outline-danger" : "btn-outline-success")"
+                                            onclick="confirmAction('@item.Id', '@(item.IsActive ? "desactivar" : "activar")')">
+                                        @(item.IsActive ? "Desactivar" : "Activar")
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(userId, action) {
+            if (confirm(`¿Estás seguro que deseas ${action} este usuario?`)) {
+                window.location.href = `/Dev/TogleState?id=${userId}`;
+            }
+        }
+    </script>
+}
+

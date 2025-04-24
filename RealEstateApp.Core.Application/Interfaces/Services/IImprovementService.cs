@@ -7,6 +7,6 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
 {
     public interface IImprovementService : IGenericService<SaveImprovementVm,ImprovementVm, Improvement, int>
     {
-       
+       Task<ImprovementVm> GetByIdViewModel(int id);
     }
 }

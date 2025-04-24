@@ -6,10 +6,9 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Domain.Entities;
 
-
 namespace RealEstateApp.Core.Application.Services
 {
-    public class PropertyTypeService : GenericService<SavePropertyTypeVm, PropertyTypeVm, PropertyType, int>,IPropertyTypeService
+    public class PropertyTypeService : GenericService<SavePropertyTypeVm, PropertyTypeVm, PropertyType, int>, IPropertyTypeService
     {
         
         private readonly IMapper _mapper;
@@ -28,10 +27,11 @@ namespace RealEstateApp.Core.Application.Services
             _propertyTypeRepository = propertyTypeRepository;
         }
 
-       
-     
-       
-     
-
+        public async Task<PropertyTypeVm> GetByIdViewModel(int id)
+        {
+            PropertyType proptype = await _propertyTypeRepository.GetByIdAsync(id);
+            PropertyTypeVm vm = _mapper.Map<PropertyTypeVm>(proptype);
+            return vm;
+        }
     }
 }

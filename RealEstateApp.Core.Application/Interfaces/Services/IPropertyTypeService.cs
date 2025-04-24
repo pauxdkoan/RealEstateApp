@@ -9,6 +9,6 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
 {
     public interface IPropertyTypeService : IGenericService<SavePropertyTypeVm,PropertyTypeVm, PropertyType, int>
     {
-       
+       Task<PropertyTypeVm> GetByIdViewModel(int id);
     }
 }
