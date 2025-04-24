@@ -431,9 +431,9 @@
     {
         return status switch
         {
-            "1" => "bg-warning",
-            "2" => "bg-success",
-            "3" => "bg-danger",
+            "Pendiente" => "bg-warning",
+            "Aceptada" => "bg-success",
+            "Rechazada" => "bg-danger",
             _ => "bg-secondary"
         };
     }
@@ -442,9 +442,9 @@
     {
         return state switch
         {
-            "1" => "Pendiente",
-            "2" => "Aceptada",
-            "3" => "Rechazada",
+            "Pendiente" => "Pendiente",
+            "Aceptada" => "Aceptada",
+            "Rechazada" => "Rechazada",
             _ => "Desconocido"
         };
     }
