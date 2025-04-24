@@ -43,9 +43,6 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
                         Email = defaultClient.Email,
                         Rol = rol.FirstOrDefault(),
                         UserName = defaultClient.UserName,
-                        
-                        
-
                     });
                 }
             }
