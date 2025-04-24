@@ -9,6 +9,7 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Property;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstateApp.Core.Application.Services;
+using RealEstateApp.Core.Application.ViewModels.User;
 
 namespace RealEstateApp.Controllers
 {
@@ -32,6 +33,26 @@ namespace RealEstateApp.Controllers
 
         public async Task<IActionResult> Index(PropertyFilters filters)
         {
+
+            var user = HttpContext.Session.Get<AuthenticationResponse>("user");
+            if (user != null) 
+            {
+                switch (user.Rol)
+                {
+
+                    case "Administrador":
+                        return RedirectToRoute(new { controller = "Admin", action = "Index" });
+
+                    case "Cliente":
+                        return RedirectToRoute(new { controller = "Client", action = "Index" });
+
+                    case "Agente":
+                        return RedirectToRoute(new { controller = "Agent", action = "Index" });
+
+                }
+            }
+            
+
             // Cargar los tipos de propiedad para el ViewBag
             var propertyTypes = await _propertyTypeService.GetAllListViewModel();
             ViewBag.PropertyTypes = propertyTypes
