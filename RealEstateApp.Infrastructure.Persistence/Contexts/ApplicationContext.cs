@@ -144,7 +144,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Contexts
                .HasMany(c => c.Messages)
                .WithOne(m => m.Chat)
                .HasForeignKey(m => m.ChatId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Cascade);
 
             //Relacion Agent[User] y Chat  1-N
 

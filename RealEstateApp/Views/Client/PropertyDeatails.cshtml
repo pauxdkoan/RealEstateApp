@@ -1,11 +1,10 @@
-﻿
-@using RealEstateApp.Core.Application.ViewModels.Property
-@using RealEstateApp.Core.Application.Helpers
-@using RealEstateApp.Core.Application.Dtos.Account
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+ @using RealEstateApp.Core.Application.Helpers
+ @using RealEstateApp.Core.Application.Dtos.Account
 
 
-@inject IHttpContextAccessor httpContextAccesor
-@model PropertyVm
+ @inject IHttpContextAccessor httpContextAccesor
+ @model PropertyVm
 @{
     ViewData["Title"] = "Detalles de Propiedad";
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
@@ -21,7 +20,7 @@
                 <div class="carousel-inner">
                     @if (Model.PropertyImageVms != null && Model.PropertyImageVms.Any())
                     {
-                        @foreach(var i in Model.PropertyImageVms)
+                        @foreach (var i in Model.PropertyImageVms)
                         {
                             <div class="carousel-item active">
                                 <img src="@i.ImageUrl" class="d-block w-100" alt="Imagen de propiedad" style="height: 500px; object-fit: cover;">
@@ -104,9 +103,6 @@
                                 <i class="fas fa-phone me-2"></i> @Model.Agent.Phone<br>
                                 <i class="fas fa-envelope me-2"></i> @Model.Agent.Email
                             </p>
-                            <button class="btn btn-primary">
-                                <i class="fas fa-comment me-2"></i> Contactar Agente
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +173,7 @@
                         <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>Tus Ofertas</h5>
                         <button class="btn btn-light btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#offerModal"
-                        @(Model.Offers.Any(o => o.ClientId == user.Id && (o.State == "Pendiente" || o.State == "Aceptada")) ? "disabled" : "")>
+                        @(Model.Offers.Any(o => o.ClientId == user.Id && (o.State == "1" || o.State == "2")) ? "disabled" : "")>
                             <i class="fas fa-plus"></i> Nueva
                         </button>
                     </div>
@@ -193,7 +189,9 @@
                                         <div class="fw-bold">@offer.Date.ToString("dd/MM/yyyy HH:mm")</div>
                                         <div>US$ @offer.Amount.ToString("N0")</div>
                                     </div>
-                                    <span class="badge @GetStatusBadge(offer.State)">@offer.State</span>
+                                    <span class="badge @GetStatusBadge(offer.State)">
+                                        @GetStatusText(offer.State)
+                                    </span>
                                 </li>
                             }
                         </ul>
@@ -232,7 +230,7 @@
         </div>
     </div>
 
-  
+
 
     <script>
         // Inicializar carrusel
@@ -246,7 +244,8 @@
             }
         });
     </script>
-    
+    }
+
 </div>
 
 @functions {
@@ -254,13 +253,22 @@
     {
         return status switch
         {
-            "Pendiente" => "bg-warning",
-            "Aceptada" => "bg-success",
-            "Rechazada" => "bg-danger",
+            "1" => "bg-warning",
+            "2" => "bg-success",
+            "3" => "bg-danger",
             _ => "bg-secondary"
+        };
+    }
+    public string GetStatusText(string state)
+    {
+        return state switch
+        {
+            "1" => "Pendiente",
+            "2" => "Aceptada",
+            "3" => "Rechazada",
+            _ => "Desconocido"
         };
     }
 }
 
-   
 

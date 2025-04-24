@@ -9,10 +9,9 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyImage;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Domain.Entities;
 
-
 namespace RealEstateApp.Core.Application.Services
 {
-    public class PropertyImageService : GenericService<SavePropertyImageVm, PropertyImageVm, PropertyImage, int>,IPropertyImageService
+    public class PropertyImageService : GenericService<SavePropertyImageVm, PropertyImageVm, PropertyImage, int>, IPropertyImageService
     {
         
         private readonly IMapper _mapper;
@@ -37,9 +36,12 @@ namespace RealEstateApp.Core.Application.Services
             }
         }
 
-
-
-
-
+        public async Task<List<PropertyImageVm>> GetByPropertyId(int propertyId)
+        {
+            List<PropertyImage> propertyImages = await _propertyImageRepository.GetAllListAsync();
+            propertyImages = propertyImages.Where(x => x.PropertyId == propertyId).ToList();
+            List<PropertyImageVm> propertyImagesVm = _mapper.Map<List<PropertyImageVm>>(propertyImages);
+            return propertyImagesVm;
+        }
     }
 }

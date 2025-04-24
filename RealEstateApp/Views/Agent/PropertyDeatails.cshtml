@@ -1,4 +1,4 @@
-﻿
+﻿@using RealEstateApp.Core.Application.Enums
 @using RealEstateApp.Core.Application.ViewModels.Property
 @using RealEstateApp.Core.Application.Helpers
 @using RealEstateApp.Core.Application.Dtos.Account
@@ -86,49 +86,119 @@
     </div>
 
 
-     <!-- Sección específica para agentes -->
-  
-        <div class="row mt-4">
-            <!-- Ofertas de clientes -->
-            <div class="col-md-12">
-                <div class="card shadow">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>Ofertas de Clientes</h5>
+    <!-- Sección específica para agentes -->
+
+    <div class="row mt-4">
+        <!-- Chat -->
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Clientes</h5>
+                </div>
+                <div class="card-body" style="height: 400px;">
+                    <div class="row h-100">
+                        <!-- Listado de clientes -->
+                        <div class="col-4 border-end overflow-auto">
+                            <h6>Clientes</h6>
+                            <ul class="list-group">
+                                @foreach (var c in Model.Chats)
+                                {
+                                    <li class="list-group-item @(c.ClientId == ViewBag.SelectedClientId ? "active" : "")">
+                                        <a href="?clientId=@c.ClientId" class="text-decoration-none @(c.ClientId == user.Id ? "text-Dark" : "")">
+                                            @c.Client.FirstName @c.Client.LastName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <!-- Conversación -->
+                        <div class="col-8 d-flex flex-column">
+                            <div class="chat-container flex-grow-1 mb-3 overflow-auto" style="max-height: 320px;">
+                                @{
+                                    var selectedChat = Model.Chats.FirstOrDefault(c => c.ClientId.ToString() == Context.Request.Query["clientId"]);
+                                }
+
+                                @if (selectedChat != null && selectedChat.Messages != null)
+                                {
+                                    foreach (var message in selectedChat.Messages.OrderBy(m => m.DateTime))
+                                    {
+                                        <div class="message @(message.SenderId == user.Id ? "client-message" : "agent-message") mb-3">
+                                            <div class="message-header small text-muted">
+                                                @(message.SenderId == user.Id ? "Tú" : selectedChat.Client.FirstName) - @message.DateTime.ToString("dd/MM/yyyy HH:mm")
+                                            </div>
+                                            <div class="message-content p-3 rounded">
+                                                @message.Content
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Selecciona un cliente para ver la conversación.</p>
+                                }
+                            </div>
+
+                            @if (selectedChat != null)
+                            {
+                                <form asp-controller="Agent" asp-action="SendMessage" method="post">
+                                    <input type="hidden" name="propertyId" value="@Model.Id" />
+                                    <input type="hidden" name="chatId" value="@selectedChat.Id" />
+                                    <input type="hidden" name="clientId" value="@selectedChat.ClientId"/>
+                                    <div class="input-group">
+                                        <input type="text" name="message" class="form-control" placeholder="Escribe tu mensaje..." required />
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
                     </div>
-                    <div class="card-body">
-                        @if (Model.Offers != null && Model.Offers.Any())
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Ofertas de clientes -->
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>Ofertas de Clientes</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Offers != null && Model.Offers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var offer in Model.Offers.OrderByDescending(o => o.Date))
+                                    {
                                         <tr>
-                                            <th>Cliente</th>
-                                            <th>Fecha</th>
-                                            <th>Monto</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var offer in Model.Offers.OrderByDescending(o => o.Date))
-                                        {
-                                            <tr>
-                                                <td>@offer.Cliente.FirstName @offer.Cliente.LastName</td>
-                                                <td>@offer.Date.ToString("dd/MM/yyyy HH:mm")</td>
-                                                <td>US$ @offer.Amount.ToString("N0")</td>
-                                                <td>
-                                                    <span class="badge @GetStatusBadge(offer.State)">
-                                                        @offer.State
-                                                    </span>
+                                            <td>@offer.Cliente.FirstName @offer.Cliente.LastName</td>
+                                            <td>@offer.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>US$ @offer.Amount.ToString("N0")</td>
+                                            <td>
+                                                <span class="badge @GetStatusBadge(offer.State)">
+                                                    @GetStatusText(offer.State)
+                                                </span>
+
                                                 </td>
                                                 <td>
                                                     <form asp-controller="Agent" asp-action="UpdateOfferStatus" asp-route-propertyId="@Model.Id" method="post">
                                                         <input type="hidden" name="offerId" value="@offer.Id" />
                                                         <div class="input-group">
                                                             <select name="newStatus" class="form-select form-select-sm">
-                                                                <option value="Pendiente">Pendiente</option>
-                                                                <option value="Aceptada">Aceptada</option>
-                                                                <option value="Rechazada">Rechazada</option>
+                                                                <option value="1">Pendiente</option>
+                                                                <option value="2">Aceptada</option>
+                                                                <option value="3">Rechazada</option>
                                                             </select>
                                                             <button type="submit" class="btn btn-sm btn-primary">
                                                                 <i class="fas fa-save"></i>
@@ -166,11 +236,11 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Ofertas activas
-                                <span class="badge bg-success">@Model.Offers.Count(o => o.State == "Aceptada")</span>
+                                <span class="badge bg-success">@Model.Offers.Count(o => o.State == "2")</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Ofertas rechazadas
-                                <span class="badge bg-danger">@Model.Offers.Count(o => o.State == "Rechazada")</span>
+                                <span class="badge bg-danger">@Model.Offers.Count(o => o.State == "3")</span>
                             </li>
                         </ul>
                     </div>
@@ -199,13 +269,20 @@
     {
         return status switch
         {
-            "Pendiente" => "bg-warning",
-            "Aceptada" => "bg-success",
-            "Rechazada" => "bg-danger",
+            "1" => "bg-warning",
+            "2" => "bg-success",
+            "3" => "bg-danger",
             _ => "bg-secondary"
         };
     }
+        public string GetStatusText(string state)
+        {
+            return state switch
+            {
+                "1" => "Pendiente",
+                "2" => "Aceptada",
+                "3" => "Rechazada",
+                _ => "Desconocido"
+            };
+        }
 }
-
-   
-

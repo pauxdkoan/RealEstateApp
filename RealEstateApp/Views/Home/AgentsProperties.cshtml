@@ -5,15 +5,23 @@
 
 @inject IHttpContextAccessor httpContextAccesor
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Propiedades del Agente";
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+}
+
+@{
+    string agentId = "";
+    foreach (var item in Model)
+    {
+        agentId = item.AgentId;
+    }
 }
 
 <div class="container mt-4">
     <h2 class="mb-4">Propiedades disponibles</h2>
 
     <!-- Formularios de Búsqueda y Filtros -->
-    <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 mb-4">
+    <form asp-controller="Home" asp-action="AgentsProperties" method="get" class="row g-3 mb-4">
         <div class="col-md-3">
             <label for="code" class="form-label">Buscar por código</label>
             <input type="text" name="code" class="form-control" placeholder="Ej: 123456" />
@@ -55,6 +63,7 @@
 
         <div class="col-md-12 text-end">
             <button type="submit" class="btn btn-primary">Filtrar</button>
+            <input type="hidden" name="Id" value="@agentId"/>
         </div>
     </form>
 
@@ -85,3 +94,4 @@
         }
     </div>
 </div>
+
