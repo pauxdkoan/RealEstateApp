@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace RealEstateApp.Core.Application.Dtos.Account
 {
     public class RegisterRequest
@@ -14,6 +16,7 @@ namespace RealEstateApp.Core.Application.Dtos.Account
 
         public string? IdentityCard {  get; set; } // admin/desarrolladores
 
+        [JsonIgnore]
         public string Rol {  get; set; }
     }
 }

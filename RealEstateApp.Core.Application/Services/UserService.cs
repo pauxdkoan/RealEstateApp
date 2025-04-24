@@ -102,7 +102,7 @@ namespace RealEstateApp.Core.Application.Services
 
         public async Task UpdateStatusAsync(string idUser) 
         { 
-            await _accountService.UpdateStatusAsync(idUser);
+            await _accountService.UpdateStatusAsync(idUser, null);
         }
 
 

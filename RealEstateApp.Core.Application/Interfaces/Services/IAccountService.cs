@@ -12,7 +12,7 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
         Task<List<string>> GetAllRoles();
         Task<RegisterResponse> UpdateUser(UpdateRequest request);
 
-        Task UpdateStatusAsync(string idUser);
+        Task UpdateStatusAsync(string idUser, bool? status);
 
     }
 }

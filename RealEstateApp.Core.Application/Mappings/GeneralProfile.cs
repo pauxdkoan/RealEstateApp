@@ -192,6 +192,10 @@ namespace RealEstateApp.Core.Application.Mappings
                 .ForMember(x => x.Sender, opt => opt.Ignore());
             #endregion
 
+            #region DTOS
+
+            #endregion
+
         }
     }
 }

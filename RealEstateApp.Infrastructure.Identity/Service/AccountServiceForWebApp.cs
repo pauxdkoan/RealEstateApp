@@ -1,9 +1,11 @@
 ﻿
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using RealEstateApp.Core.Application.Dtos.Account;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Domain.Settings;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Service
@@ -16,8 +18,8 @@ namespace RealEstateApp.Infrastructure.Identity.Service
 
         public AccountServiceForWebApp(IEmailService emailService, IUserRepository userRepository,
             UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager
-            , RoleManager<IdentityRole> roleManager)
-            : base(userManager, emailService, userRepository,roleManager)
+            , RoleManager<IdentityRole> roleManager, IOptions<JWTSettings> jwtSettings)
+            : base(userManager, emailService, userRepository,roleManager, jwtSettings)
         { 
             _signInManager = signInManager;
             _userManager = userManager;

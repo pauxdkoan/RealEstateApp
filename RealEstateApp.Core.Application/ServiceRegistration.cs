@@ -1,5 +1,8 @@
 ﻿
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using RealEstateApp.Core.Application.Behaviours;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.Services;
@@ -16,13 +19,24 @@ namespace RealEstateApp.Core.Application
         {
             GenericService(service);
             GenericConfigurations(service);
+            service.AddTransient<IUserService, UserService>();
+        }
+
+
+        public static void AddApplicationLayerForWebApi(this IServiceCollection services)
+        {
+            GenericService(services);
+            GenericConfigurations(services);
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
 
         #region Generic
         private static void GenericService(this IServiceCollection service)
         {
             service.AddTransient(typeof(IGenericService<,,,>), typeof(GenericService<,,,>));
-            service.AddTransient<IUserService, UserService>();
+           
             service.AddTransient<IClientService, ClientService>();
             service.AddTransient<IAgentService, AgentService>();
             service.AddTransient<IPropertyService, PropertyService>();
@@ -35,16 +49,12 @@ namespace RealEstateApp.Core.Application
             service.AddTransient<IAdminService, AdminService>();
 
 
-
-
-
-
-
         }
 
         private static void GenericConfigurations(this IServiceCollection service) 
         { 
-            service.AddAutoMapper(Assembly.GetExecutingAssembly()); 
+            service.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
         }
         #endregion
 

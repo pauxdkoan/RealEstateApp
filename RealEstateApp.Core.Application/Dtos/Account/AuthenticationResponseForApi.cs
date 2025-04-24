@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace RealEstateApp.Core.Application.Dtos.Account
 {
-    public class AuthenticationResponse
+    public class AuthenticationResponseForApi
     {
         public string Id {  get; set; }
         public string FirstName {  get; set; }
@@ -13,7 +13,7 @@ namespace RealEstateApp.Core.Application.Dtos.Account
         public string Email {  get; set; }
         public string IdentityCard { get; set; } //Cedula
 
-        public string Rol {  get; set; }
+        public List<string> Roles { get; set; }
         public bool IsVerified {  get; set; }
         public bool HasError {  get; set; }
         public string? Error { get; set; }

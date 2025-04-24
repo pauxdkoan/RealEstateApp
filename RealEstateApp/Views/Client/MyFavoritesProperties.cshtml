@@ -49,17 +49,6 @@
                         <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
 
                         <div class="btn-group">
-
-                            <!--Si hay una propiedad q sea favorita el boton es diferente-->
-                            @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id))
-                            {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" asp-route-fromMyProperties="true"  class="btn btn-sm btn-outline-info">Quitar de favoritos</a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-sm btn-outline-info">Añadir a favorito</a>
-
-                            }
                             
                             <!--OJO NO ES UN BOTON EN SI, ESTO DEBERIA SER CUANDO SE PRESIONE LA TARJETA DONDE ESTA LA PROPIEDAD... -->
                             <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
