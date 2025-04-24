@@ -73,7 +73,7 @@ namespace RealEstateApp.Controllers
 
             return View(agents.OrderBy(a => a.FullName).ToList());
         }
-
+        
         public async Task<IActionResult> AgentsProperties(string Id, PropertyFilters? filters)
         {
             List<PropertyVm> properties = await _propertyService.GetByAgentWithFilters(Id, filters);

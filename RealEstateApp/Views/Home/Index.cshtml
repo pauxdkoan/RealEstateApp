@@ -5,79 +5,165 @@
 
 @inject IHttpContextAccessor httpContextAccesor
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Inicio | PropHub";
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Propiedades disponibles</h2>
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-primary text-white p-4">
+                <div class="card-body py-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7">
+                            <h1 class="display-4 fw-bold mb-3">Encuentra tu hogar ideal</h1>
+                            <p class="lead mb-4">PropHub te ofrece las mejores propiedades del mercado. Busca, filtra y encuentra la propiedad que se ajuste a tus necesidades.</p>
+                            @if (user == null)
+                            {
+                                <div class="d-flex gap-3">
+                                    <a asp-controller="User" asp-action="Register" class="btn btn-light btn-lg px-4">
+                                        <i class="bi bi-person-plus me-2"></i> Regístrate
+                                    </a>
+                                    <a asp-controller="User" asp-action="Index" class="btn btn-outline-light btn-lg px-4">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar sesión
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-lg-5 d-none d-lg-block">
+                            <img src="https://arquitectopablorestrepo.com/wp-content/uploads/2024/06/Diseno-casa-campestre-La-Morada-1.jpg" alt="Imagen de casa" class="img-fluid" style="max-height: 300px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-4 fw-bold">
+        <i class="bi bi-houses me-2"></i>
+        Propiedades disponibles
+    </h2>
 
     <!-- Formularios de Búsqueda y Filtros -->
-    <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 mb-4">
-        <div class="col-md-3">
-            <label for="code" class="form-label">Buscar por código</label>
-            <input type="text" name="code" class="form-control" placeholder="Ej: 123456" />
-        </div>
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="bi bi-funnel me-2"></i>
+                Filtrar propiedades
+            </h5>
+            <form asp-controller="Home" asp-action="Index" method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="code" class="form-label fw-medium">Código de propiedad</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                        <input type="text" name="code" class="form-control" placeholder="Ej: 123456" />
+                    </div>
+                </div>
 
-        <div class="col-md-3">
-            <label for="propertyTypes" class="form-label">Tipo de propiedad</label>
-            <select class="form-select" name="propertyTypes" multiple>
-                @if (ViewBag.PropertyTypes != null)
-                {
-                    foreach (var type in ViewBag.PropertyTypes)
-                    {
-                        <option value="@type.Value">@type.Text</option>
-                    }
-                }
-            </select>
-            <small class="text-muted">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios</small>
-        </div>
+                <div class="col-md-3">
+                    <label for="propertyTypes" class="form-label fw-medium">Tipo de propiedad</label>
+                    <select class="form-select" name="propertyTypes" multiple>
+                        @if (ViewBag.PropertyTypes != null)
+                        {
+                            foreach (var type in ViewBag.PropertyTypes)
+                            {
+                                <option value="@type.Value">@type.Text</option>
+                            }
+                        }
+                    </select>
+                    <small class="text-muted">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios</small>
+                </div>
 
-        <div class="col-md-2">
-            <label class="form-label">Precio mínimo</label>
-            <input type="number" name="minPrice" class="form-control" />
-        </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-medium">Precio mínimo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                        <input type="number" name="minPrice" class="form-control" />
+                    </div>
+                </div>
 
-        <div class="col-md-2">
-            <label class="form-label">Precio máximo</label>
-            <input type="number" name="maxPrice" class="form-control" />
-        </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-medium">Precio máximo</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                        <input type="number" name="maxPrice" class="form-control" />
+                    </div>
+                </div>
 
-        <div class="col-md-1">
-            <label class="form-label">Habitaciones</label>
-            <input type="number" name="bedrooms" class="form-control" />
-        </div>
+                <div class="col-md-1">
+                    <label class="form-label fw-medium">Habitaciones</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-door-closed"></i></span>
+                        <input type="number" name="bedrooms" class="form-control" />
+                    </div>
+                </div>
 
-        <div class="col-md-1">
-            <label class="form-label">Baños</label>
-            <input type="number" name="bathrooms" class="form-control" />
-        </div>
+                <div class="col-md-1">
+                    <label class="form-label fw-medium">Baños</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-droplet"></i></span>
+                        <input type="number" name="bathrooms" class="form-control" />
+                    </div>
+                </div>
 
-        <div class="col-md-12 text-end">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
+                <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-search me-2"></i>
+                        Filtrar
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 
     <!-- Lista de Propiedades -->
     <div class="row">
         @if (Model == null || !Model.Any())
         {
-            <h4>No hay propiedades disponibles</h4>
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-house-slash display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">No hay propiedades disponibles</h4>
+                <p class="text-muted">Intenta con otros filtros o vuelve más tarde</p>
+            </div>
         }
         else
         {
             foreach (var item in Model.Where(p => p.State).OrderByDescending(p => p.Id))
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm h-100" style="cursor:pointer;" onclick="location.href='@Url.Action("Details", "Home", new { id = item.Id })'">
-                        <img class="card-img-top" src="@item.PropertyImageVms?.FirstOrDefault(i => true)?.ImageUrl" alt="Imagen de propiedad" style="height: 200px; object-fit: cover;" />
+                    <div class="card shadow-sm h-100 property-card" style="cursor:pointer;" onclick="location.href='@Url.Action("Details", "Home", new { id = item.Id })'">
+                        <div class="position-relative">
+                            <img class="card-img-top" src="@item.PropertyImageVms?.FirstOrDefault(i => true)?.ImageUrl" alt="Imagen de propiedad" style="height: 200px; object-fit: cover; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem;" />
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-primary">@item.SalesTypeVm?.Name</span>
+                            </div>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">@item.PropertyTypeVm?.Name</h5>
-                            <p class="card-text">Código: <strong>@item.Code</strong></p>
-                            <p class="card-text">Tipo de venta: @item.SalesTypeVm?.Name</p>
-                            <p class="card-text">Precio: $@item.Price</p>
-                            <p class="card-text">Habitaciones: @item.AmountOfRoom | Baños: @item.AmountOfBathroom</p>
-                            <p class="card-text">Tamaño: @item.PropertySize m²</p>
+                            <h5 class="card-title fw-bold">@item.PropertyTypeVm?.Name</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-secondary">Código: @item.Code</span>
+                                <span class="text-primary fw-bold">$@item.Price.ToString("N0")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-door-closed me-1"></i>
+                                    <span>@item.AmountOfRoom</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-droplet me-1"></i>
+                                    <span>@item.AmountOfBathroom</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-rulers me-1"></i>
+                                    <span>@item.PropertySize m²</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <button class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-info-circle me-1"></i> Ver detalles
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -85,3 +171,16 @@
         }
     </div>
 </div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+</style>
