@@ -5,8 +5,10 @@ using RealEstateApp.Core.Application.Dtos.Account;
 using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Agent;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Application.ViewModels.User.Admin;
+using RealEstateApp.Core.Application.ViewModels.User.Developer;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services
@@ -105,7 +107,27 @@ namespace RealEstateApp.Core.Application.Services
             await _accountService.UpdateStatusAsync(idUser, null);
         }
 
+        //Solo obtener desarrolladores
+        public async Task<List<DeveloperVm>> GetAllDevelopers()
+        {
+            List<DeveloperVm> devs = new List<DeveloperVm>();
+            List<UserVm> developersVm = _mapper.Map<List<UserVm>>(await _userRepository.GetAllListAsync());
+            devs = _mapper.Map<List<DeveloperVm>>(developersVm.Where(s => s.Rol == Roles.Desarrollador.ToString()).ToList());
+            return devs;
+        }
 
+        public async Task<List<AgentViewModel>> GetAllAgents()
+        {
+            List<AgentViewModel> agents = new List<AgentViewModel>();
+            List<UserVm> agentsVm = _mapper.Map<List<UserVm>>(await _userRepository.GetAllListAsync());
+            agents = _mapper.Map<List<AgentViewModel>>(agentsVm.Where(s => s.Rol == Roles.Agente.ToString()).ToList());
+            return agents;
+        }
 
+        public async Task<UserVm> GetByIdViewModel(string id)
+        {
+            UserVm user = _mapper.Map<UserVm>(await _userRepository.GetByIdAsync(id));
+            return user;
+        }
     }
 }

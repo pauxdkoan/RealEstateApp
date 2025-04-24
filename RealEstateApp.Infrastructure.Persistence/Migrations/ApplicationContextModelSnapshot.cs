@@ -397,7 +397,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     b.HasOne("RealEstateApp.Core.Domain.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RealEstateApp.Core.Domain.Entities.User", "Sender")

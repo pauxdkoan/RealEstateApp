@@ -12,7 +12,6 @@ namespace RealEstateApp.Core.Application.Interfaces.Services
 {
     public interface IPropertyImageService : IGenericService<SavePropertyImageVm,PropertyImageVm, PropertyImage, int>
     {
-
-
+        Task<List<PropertyImageVm>> GetByPropertyId(int propertyId);
     }
 }

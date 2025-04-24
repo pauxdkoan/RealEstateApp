@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RealEstateApp.Core.Application.ViewModels.Property;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,5 +17,7 @@ namespace RealEstateApp.Core.Application.ViewModels.Agent
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
+
+        public List<PropertyVm> properties { get; set; } = new List<PropertyVm>();
     }
 }

@@ -16,12 +16,14 @@ namespace RealStateApp.Core.Application.ViewModels.Agent
         [Required(ErrorMessage = "El apellido es obligatorio.")]
         public string Apellido { get; set; }
 
+        public string UserName { get; set; } = " ";
+
         [Required(ErrorMessage = "El teléfono es obligatorio.")]
         public string Telefono { get; set; }
 
-        public string? FotoUrl { get; set; }
-        
-        public IFormFile? Foto { get; set; } // Para subida de imagen
+        public string? FotoUrl { get; set; } = " ";
+
+        public IFormFile? Foto { get; set; }
     }
 
 }

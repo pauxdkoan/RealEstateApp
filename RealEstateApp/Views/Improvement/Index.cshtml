@@ -1,0 +1,47 @@
+﻿@model List<RealEstateApp.Core.Application.ViewModels.Improvement.ImprovementVm>
+
+@{
+    ViewData["Title"] = "Mantenimiento de Mejoras";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Mantenimiento de Mejoras</h2>
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">Crear Nueva Mejora</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad de Propiedades</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@(item.PropertyImprovements?.Count ?? 0)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-2">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No hay mejoras registradas.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

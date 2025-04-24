@@ -1,0 +1,31 @@
+﻿@model RealEstateApp.Core.Application.ViewModels.SalesType.SalesTypeVm
+
+@{
+    ViewData["Title"] = "Eliminar Tipo de Venta";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger">¿Está seguro que desea eliminar este tipo de venta y las propiedades asociadas?</h2>
+
+    <div class="mt-4">
+        <dl class="row">
+            <dt class="col-sm-3">Nombre:</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Descripción:</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Propiedades asociadas:</dt>
+            <dd class="col-sm-9">@Model.Properties?.Count ?? 0</dd>
+        </dl>
+    </div>
+
+    <form asp-action="ConfirmDelete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </div>
+    </form>
+</div>
+

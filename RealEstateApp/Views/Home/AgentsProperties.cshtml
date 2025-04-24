@@ -1,0 +1,97 @@
+﻿@using RealEstateApp.Core.Application.ViewModels.Property
+@using RealEstateApp.Core.Application.Helpers
+@using RealEstateApp.Core.Application.Dtos.Account
+@model List<PropertyVm>
+
+@inject IHttpContextAccessor httpContextAccesor
+@{
+    ViewData["Title"] = "Propiedades del Agente";
+    var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+}
+
+@{
+    string agentId = "";
+    foreach (var item in Model)
+    {
+        agentId = item.AgentId;
+    }
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Propiedades disponibles</h2>
+
+    <!-- Formularios de Búsqueda y Filtros -->
+    <form asp-controller="Home" asp-action="AgentsProperties" method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label for="code" class="form-label">Buscar por código</label>
+            <input type="text" name="code" class="form-control" placeholder="Ej: 123456" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="propertyTypes" class="form-label">Tipo de propiedad</label>
+            <select class="form-select" name="propertyTypes" multiple>
+                @if (ViewBag.PropertyTypes != null)
+                {
+                    foreach (var type in ViewBag.PropertyTypes)
+                    {
+                        <option value="@type.Value">@type.Text</option>
+                    }
+                }
+            </select>
+            <small class="text-muted">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios</small>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Precio mínimo</label>
+            <input type="number" name="minPrice" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Precio máximo</label>
+            <input type="number" name="maxPrice" class="form-control" />
+        </div>
+
+        <div class="col-md-1">
+            <label class="form-label">Habitaciones</label>
+            <input type="number" name="bedrooms" class="form-control" />
+        </div>
+
+        <div class="col-md-1">
+            <label class="form-label">Baños</label>
+            <input type="number" name="bathrooms" class="form-control" />
+        </div>
+
+        <div class="col-md-12 text-end">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <input type="hidden" name="Id" value="@agentId"/>
+        </div>
+    </form>
+
+    <!-- Lista de Propiedades -->
+    <div class="row">
+        @if (Model == null || !Model.Any())
+        {
+            <h4>No hay propiedades disponibles</h4>
+        }
+        else
+        {
+            foreach (var item in Model.Where(p => p.State).OrderByDescending(p => p.Id))
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100" style="cursor:pointer;" onclick="location.href='@Url.Action("Details", "Home", new { id = item.Id })'">
+                        <img class="card-img-top" src="@item.PropertyImageVms?.FirstOrDefault(i => true)?.ImageUrl" alt="Imagen de propiedad" style="height: 200px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@item.PropertyTypeVm?.Name</h5>
+                            <p class="card-text">Código: <strong>@item.Code</strong></p>
+                            <p class="card-text">Tipo de venta: @item.SalesTypeVm?.Name</p>
+                            <p class="card-text">Precio: $@item.Price</p>
+                            <p class="card-text">Habitaciones: @item.AmountOfRoom | Baños: @item.AmountOfBathroom</p>
+                            <p class="card-text">Tamaño: @item.PropertySize m²</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+

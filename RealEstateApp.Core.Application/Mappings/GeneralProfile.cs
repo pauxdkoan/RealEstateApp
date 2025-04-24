@@ -13,6 +13,7 @@ using RealEstateApp.Core.Application.Features.PropertyType.Commands.CreateProper
 using RealEstateApp.Core.Application.Features.PropertyType.Commands.UpdatePropertyType;
 using RealEstateApp.Core.Application.Features.SaleType.Commands.CreateSaleType;
 using RealEstateApp.Core.Application.Features.SaleType.Commands.UpdateSaleType;
+using RealEstateApp.Core.Application.ViewModels.Agent;
 using RealEstateApp.Core.Application.ViewModels.Chat;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Application.ViewModels.Improvement.PropertyImprovement;
@@ -24,7 +25,10 @@ using RealEstateApp.Core.Application.ViewModels.Property.PropertyType;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Application.ViewModels.User.Admin;
+using RealEstateApp.Core.Application.ViewModels.User.Client;
+using RealEstateApp.Core.Application.ViewModels.User.Developer;
 using RealEstateApp.Core.Domain.Entities;
+using RealStateApp.Core.Application.ViewModels.Agent;
 
 namespace RealEstateApp.Core.Application.Mappings
 {
@@ -58,6 +62,7 @@ namespace RealEstateApp.Core.Application.Mappings
                 .ForMember(x => x.RolList, opt => opt.Ignore())
                 .ForMember(x => x.File, opt => opt.Ignore())
                 .ForMember(x => x.ConfirmPassword, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
                 .ReverseMap();
 
             //SaveAdminVm-SaveUserVm
@@ -92,11 +97,86 @@ namespace RealEstateApp.Core.Application.Mappings
             CreateMap<EditAdminVm, UserVm>()
                 .ReverseMap();
 
+            //SaveDeveloperVm -> SaveUserVm
+            CreateMap<SaveDeveloperVm, SaveUserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.File, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ReverseMap();
 
+            //DeveloperVm -> UserVm
+            CreateMap<DeveloperVm, UserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.IsActive, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ReverseMap();
 
+            //EditDeveloperVm -> UserVm
+            CreateMap<EditDeveloperVm, UserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.IsActive, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(x => x.HasError, opt =>opt.Ignore())
+                .ForMember(x => x.Error, opt => opt.Ignore());
 
+            //EditDeveloperVm -> SaveUserVm
+            CreateMap<EditDeveloperVm, SaveUserVm>()
+                .ForMember(x => x.Photo, opt => opt.Ignore())
+                .ForMember(x => x.IsActive, opt => opt.Ignore())
+                .ForMember(x => x.Phone, opt => opt.Ignore())
+                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ReverseMap();
 
+            //AgentViewModel -> UserVm
+            CreateMap<UserVm, AgentViewModel>()
+                .ForMember(x => x.FullName,
+                       opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+                .ForMember(x => x.PhotoUrl,
+                       opt => opt.MapFrom(src => src.Photo))
+                .ForMember(x => x.PhoneNumber,
+                       opt => opt.MapFrom(src => src.Phone))
+                .ForMember(x => x.properties,
+                       opt => opt.Ignore())
+                .ForMember(x => x.Id,
+                       opt => opt.MapFrom(src => src.Id))
+                .ForMember(x => x.Email,
+                       opt => opt.MapFrom(src => src.Email))
+                .ForMember(x => x.IsActive,
+                       opt => opt.MapFrom(src => src.IsActive));
 
+            //EditAgentViewModel -> user
+            CreateMap<User, EditAgentViewModel>()
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.FotoUrl, opt => opt.MapFrom(src => src.Photo))
+                .ForMember(dest => dest.Foto, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Nombre))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Apellido))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.FotoUrl))
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Email, opt => opt.Ignore())
+                .ForMember(dest => dest.UserName, opt => opt.Ignore())
+                .ForMember(dest => dest.Rol, opt => opt.Ignore())
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+                .ForMember(dest => dest.IdentityCard, opt => opt.Ignore())
+                .ForMember(dest => dest.Properties, opt => opt.Ignore())
+                .ForMember(dest => dest.Offers, opt => opt.Ignore())
+                .ForMember(dest => dest.FavoriteProperties, opt => opt.Ignore())
+                .ForMember(dest => dest.ClientChats, opt => opt.Ignore())
+                .ForMember(dest => dest.AgentChats, opt => opt.Ignore())
+                .ForMember(dest => dest.Messages, opt => opt.Ignore());
+
+                // Mapeo User -> ClientVm
+            CreateMap<User, ClientVm>()
+                .ForMember(dest => dest.CurrentProperties, opt => opt.Ignore())
+                .ForMember(dest => dest.FavoriteProperties, opt => opt.MapFrom(src => src.FavoriteProperties));
+
+            ;
             #endregion
 
             #region PropertyProfile
@@ -140,13 +220,19 @@ namespace RealEstateApp.Core.Application.Mappings
             //PropertyType->PropertyTypeVm
             CreateMap<PropertyType, PropertyTypeVm>()
                 .ReverseMap();
+
+            //PropertyType->SavePropertyTypeVm
+            CreateMap<PropertyType, SavePropertyTypeVm>()
+                .ReverseMap()
+                .ForMember(x => x.Properties, opt => opt.Ignore());
             #endregion
 
             #region FavoritePropertyProfile
 
             //FavoriteProperty->FavoritePropertyVm
+            // Mapeo FavoriteProperty -> FavoritePropertyVm
             CreateMap<FavoriteProperty, FavoritePropertyVm>()
-                .ReverseMap();
+                .ForMember(dest => dest.Client, opt => opt.Ignore()); // Evitamos ciclo aquí
 
 
             #endregion
@@ -155,6 +241,11 @@ namespace RealEstateApp.Core.Application.Mappings
             //SalesType->SalesTypeVm
             CreateMap<SalesType, SalesTypeVm>()
                 .ReverseMap();
+
+            //SalesType->SaveSalesTypeVm
+            CreateMap<SalesType, SaveSalesTypeVm>()
+                .ReverseMap()
+                .ForMember(x => x.Properties, opt => opt.Ignore());
             #endregion
 
             #region PropertyImprovementsProfile
@@ -167,6 +258,11 @@ namespace RealEstateApp.Core.Application.Mappings
             //Improvement->ImprovementVm
             CreateMap<Improvement, ImprovementVm>()
                 .ReverseMap();
+
+            //Improvement->SaveImprovementVm
+            CreateMap<Improvement, SaveImprovementVm>()
+                .ReverseMap()
+                .ForMember(x => x.PropertyImprovements, opt => opt.Ignore());
             #endregion
 
             #region OffersProfile

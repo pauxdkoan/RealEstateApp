@@ -7,10 +7,9 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.SalesType;
 using RealEstateApp.Core.Domain.Entities;
 
-
 namespace RealEstateApp.Core.Application.Services
 {
-    public class SaleTypeService : GenericService<SaveSalesTypeVm, SalesTypeVm, SalesType, int>,ISaleTypeService
+    public class SaleTypeService : GenericService<SaveSalesTypeVm, SalesTypeVm, SalesType, int>, ISaleTypeService
     {
         
         private readonly IMapper _mapper;
@@ -29,10 +28,11 @@ namespace RealEstateApp.Core.Application.Services
             _salesTypeRepository = salesTypeRepository;
         }
 
-       
-     
-       
-     
-
+        public async Task<SalesTypeVm> GetByIdViewModel(int id)
+        {
+            SalesType salesType = await _salesTypeRepository.GetByIdAsync(id);
+            SalesTypeVm vm = _mapper.Map<SalesTypeVm>(salesType);
+            return vm;
+        }
     }
 }

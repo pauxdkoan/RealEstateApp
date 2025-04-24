@@ -1,0 +1,41 @@
+﻿@model List<RealEstateApp.Core.Application.ViewModels.Agent.AgentViewModel>
+
+@{
+    ViewData["Title"] = "Agentes Inmobiliarios";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Agentes Inmobiliarios</h2>
+
+    <form method="get" class="mb-4 d-flex justify-content-center">
+        <input type="text" name="search" class="form-control w-50 me-2" placeholder="Buscar agente por nombre..." value="@Context.Request.Query["search"]" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var agent in Model.OrderBy(a => a.FullName))
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <img src="@agent.PhotoUrl" class="rounded-circle mb-3" alt="Foto del agente" style="width: 120px; height: 120px; object-fit: cover;">
+                            <h5>@agent.FullName</h5>
+                            <p class="text-muted mb-1"><i class="fas fa-phone me-1"></i>@agent.PhoneNumber</p>
+                            <p class="text-muted"><i class="fas fa-envelope me-1"></i>@agent.Email</p>
+                            <a asp-controller="Home" asp-action="AgentsProperties" asp-route-id="@agent.Id" class="btn btn-outline-primary mt-2">Ver Propiedades</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No se encontraron agentes activos.</p>
+            </div>
+        }
+    </div>
+</div>
+

@@ -23,7 +23,7 @@ namespace RealEstateApp.Core.Application.ViewModels.User.Client
         public List<PropertyVm>? CurrentProperties { get; set; }
 
         //Propiedades favoritas:
-        //
-       
+        public List<PropertyVm>? FavoriteProperties { get; set; }
+
     }
 }

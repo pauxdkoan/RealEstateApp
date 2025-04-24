@@ -1,0 +1,33 @@
+﻿@model RealEstateApp.Core.Application.ViewModels.Improvement.ImprovementVm
+
+@{
+    ViewData["Title"] = "Eliminar Mejora";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">¿Está seguro que desea eliminar esta mejora?</h2>
+
+    <div class="alert alert-danger">
+        <strong>Advertencia:</strong> Al eliminar esta mejora, se eliminarán permanentemente todos los datos asociados a ella.
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Nombre</th>
+            <td>@Model.Name</td>
+        </tr>
+        <tr>
+            <th>Descripción</th>
+            <td>@Model.Description</td>
+        </tr>
+    </table>
+
+    <div class="mb-3">
+        <form asp-action="ConfirmDelete" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <a asp-action="Index" class="btn btn-secondary me-2">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+    </div>
+</div>
+
