@@ -114,7 +114,7 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
                     });
                 }
 
-                await DefaultProperties.SeedAsync(propertyRepository, new string[] {defaultAgent1.Id, defaultAgent2.Id });
+                await DefaultProperties.SeedAsync(propertyRepository, new string[] {defaultAgent1.Id, defaultAgent2.Id, defaultAgent3.Id });
             }
         }
     }

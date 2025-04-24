@@ -14,11 +14,11 @@ namespace RealEstateApp.Infrastructure.Identity.Seeds
         {
             PropertyType propertyType1 = new();
             propertyType1.Name = "Apartamento";
-            propertyType1.Description = "Sabana Peridada, Santo Domingo"; //No se muy bien que va en la descripcion realmente
+            propertyType1.Description = "Construccion de mas de 3 pisos y menos de 7"; //No se muy bien que va en la descripcion realmente
 
             PropertyType propertyType2 = new();
             propertyType2.Name = "Casa";
-            propertyType2.Description = "San Isidro, Santo Domingo Este";
+            propertyType2.Description = "Maximo 3 pisos";
 
             var propertyList = await _propertyTypeRepository.GetAllListAsync();
 
