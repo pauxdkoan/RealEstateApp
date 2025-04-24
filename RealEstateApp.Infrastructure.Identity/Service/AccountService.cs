@@ -77,7 +77,8 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             user.Email = request.Email;
             user.IsActive = request.IsActive;
             user.UserName = request.UserName;
-            //user.PhoneNumber=request.Phone;
+            user.PhoneNumber = request.Phone;
+            user.Photo = request.Photo;
 
             // Actualizar la contraseña si se envía una nueva 
             if (!string.IsNullOrEmpty(request.Password))
@@ -111,7 +112,9 @@ namespace RealEstateApp.Infrastructure.Identity.Service
                 IdentityCard = user.IdentityCard,
                 IsActive = user.IsActive,
                 UserName = user.UserName,
-                Rol = request.Rol
+                Rol = request.Rol,
+                Photo = request.Photo,
+                Phone = request.Phone
 
             }, user.Id);
 

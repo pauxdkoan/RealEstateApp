@@ -86,8 +86,19 @@ namespace RealEstateApp.Core.Application.Mappings
 
             //SaveAdminVm-SaveUserVm
             CreateMap<SaveUserVm, UpdateRequest>()
-                .ForMember(x => x.Rol, opt => opt.Ignore())
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.IdentityCard, opt => opt.MapFrom(src => src.IdentityCard))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ReverseMap();
+
+
 
             //SaveAdminVm-SaveUserVm
             CreateMap<SaveAdminVm, UserVm>()

@@ -11,6 +11,7 @@ namespace RealEstateApp.Core.Application.Dtos.Account
         public string? IdentityCard { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
+        public string? Photo { get; set; } // Opcional: Solo actualizar si se proporciona
         public string? Password { get; set; } // Opcional: Solo actualizar si se proporciona
         public string Rol { get; set; }  // Para poder actualizar el rol si fuera necesario
         public bool IsActive { get; set; }
