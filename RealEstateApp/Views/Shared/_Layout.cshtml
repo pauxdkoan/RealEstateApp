@@ -51,7 +51,7 @@
                             {
                                 <!--Aqui van las vistas del cliente-->
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="Index">Home</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Agentes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="ViewAgents">Agentes</a>
 
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="MyFavoritesProperties" asp-route-clientId="@user.Id">Mis Propiedades</a>
                                 
@@ -82,7 +82,6 @@
 
                             <!--Aqui van las vistas compartidas-->
 
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="MyProfile">Mi Perfil</a>
                             <li class="nav-item align-content-end">
                                 <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="User" asp-action="LogOut">Cerrar session </a>
                             </li>
