@@ -259,5 +259,16 @@ namespace RealEstateApp.Controllers
             await _agentService.UpdateOfferStatus(offerId, newStatus);
             return RedirectToAction("PropertyDeatails", new { id = propertyId });
         }
+
+        public async Task<IActionResult> ViewAgents()
+        {
+            List<AgentViewModel> agents = await _userService.GetAllAgents();
+            foreach (var agent in agents)
+            {
+                List<PropertyVm> properties = await _propertyService.GetByAgent(agent.Id);
+                agent.properties = properties;
+            }
+            return View(agents);
+        }
     }
 }
