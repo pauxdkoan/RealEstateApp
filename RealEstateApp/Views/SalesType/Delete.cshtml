@@ -1,31 +1,57 @@
 ﻿@model RealEstateApp.Core.Application.ViewModels.SalesType.SalesTypeVm
 
 @{
-    ViewData["Title"] = "Eliminar Tipo de Venta";
+    ViewData["Title"] = "Eliminar Tipo de Venta | PropHub";
 }
 
-<div class="container mt-4">
-    <h2 class="text-danger">¿Está seguro que desea eliminar este tipo de venta y las propiedades asociadas?</h2>
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Tipos de Ventas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+        </ol>
+    </nav>
 
-    <div class="mt-4">
-        <dl class="row">
-            <dt class="col-sm-3">Nombre:</dt>
-            <dd class="col-sm-9">@Model.Name</dd>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Confirmar Eliminación
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        <strong>¡Atención!</strong> Esta acción eliminará permanentemente el tipo de venta y todas las propiedades asociadas.
+                    </div>
 
-            <dt class="col-sm-3">Descripción:</dt>
-            <dd class="col-sm-9">@Model.Description</dd>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@Model.Name</h5>
+                            <p class="card-text">@Model.Description</p>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-building me-2 text-primary"></i>
+                                <span>Propiedades asociadas: <strong>@(Model.Properties?.Count ?? 0)</strong></span>
+                            </div>
+                        </div>
+                    </div>
 
-            <dt class="col-sm-3">Propiedades asociadas:</dt>
-            <dd class="col-sm-9">@Model.Properties?.Count ?? 0</dd>
-        </dl>
-    </div>
-
-    <form asp-action="ConfirmDelete" method="post">
-        <input type="hidden" asp-for="Id" />
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <form asp-action="ConfirmDelete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Eliminar Permanentemente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
-

@@ -267,7 +267,7 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                         column: x => x.ChatId,
                         principalTable: "Chats",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Mensajes_Usuarios_SenderId",
                         column: x => x.SenderId,

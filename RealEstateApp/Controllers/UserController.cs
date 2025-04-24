@@ -97,5 +97,10 @@ namespace RealEstateApp.Controllers
             return View("ConfirmEmail", response);
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
     }
 }

@@ -6,23 +6,32 @@
 
 @inject IHttpContextAccessor httpContextAccesor
 @{
-    ViewData["Title"] = "Registro de propiedad";
+    ViewData["Title"] = "Registrar Propiedad | PropHub";
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
     var hasPropertyTypes = Model.PropertyTypes?.Any() ?? false;
     var hasSaleTypes = Model.SalesTypes?.Any() ?? false;
     var hasImprovements = Model.Improvements?.Any() ?? false;
 }
 
-<div class="container-fluid">
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Agent" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Agent" asp-action="PropertyMaintenance">Mantenimiento</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Registrar propiedad</li>
+        </ol>
+    </nav>
 
     <div class="row">
-        <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card-header bg-dark text-light">
-                    <h4>Registro de nuevo usuario</h4>
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-building-add me-2 text-primary"></i>
+                        Registrar Nueva Propiedad
+                    </h4>
                 </div>
                 <div class="card-body">
-
                     @if (!hasPropertyTypes || !hasSaleTypes || !hasImprovements)
                     {
                         <div class="alert alert-danger">
@@ -43,110 +52,141 @@
                     }
                     else
                     {
-
                         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-
                         <form method="post" enctype="multipart/form-data" asp-controller="Agent" asp-action="CreateProperty">
+                            <input type="hidden" asp-for="AgentId" value="@user.Id" />
+                            <input type="hidden" asp-for="Id" />
 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PropertyTypeId" class="form-label fw-medium">Tipo de Propiedad *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-house"></i></span>
+                                        <select asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes ,"Id", "Name" ))" class="form-select" required>
+                                            <option value="0">Seleccione una opción</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                                </div>
 
-
-
-                            <div class="mb-3">
-                                <label asp-for="PropertyTypeId" class="form-label">Tipo de Propiedad: </label>
-                                <select asp-for="PropertyTypeId" asp-items="@(new SelectList(Model.PropertyTypes ,"Id", "Name" )) " class="form-select">
-                                    <option value="0">Seleccione una opcion</option>
-
-                                </select>
-                                <span asp-validation-for="PropertyTypes" class="text-danger"></span>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="SalesTypeId" class="form-label fw-medium">Tipo de Venta *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                        <select asp-for="SalesTypeId" asp-items="@(new SelectList(Model.SalesTypes ,"Id", "Name" ))" class="form-select" required>
+                                            <option value="0">Seleccione un tipo de Venta</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="SalesTypeId" class="text-danger"></span>
+                                </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Price" class="form-label fw-medium">Precio (RD$) *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RD$</span>
+                                        <input asp-for="Price" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
 
-
-                            <div class="mb-3">
-                                <label asp-for="SalesTypeId" class="form-label">Tipo de Venta: </label>
-                                <select asp-for="SalesTypeId" asp-items="@(new SelectList(Model.SalesTypes ,"Id", "Name" )) " class="form-select">
-                                    <option value="0">Seleccione un tipo de Venta</option>
-
-                                </select>
-                                <span asp-validation-for="SalesTypeId" class="text-danger"></span>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PropertySize" class="form-label fw-medium">Tamaño (m²) *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-rulers"></i></span>
+                                        <input asp-for="PropertySize" class="form-control" required />
+                                        <span class="input-group-text">m²</span>
+                                    </div>
+                                    <span asp-validation-for="PropertySize" class="text-danger"></span>
+                                </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="AmountOfRoom" class="form-label fw-medium">Habitaciones *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-door-closed"></i></span>
+                                        <input asp-for="AmountOfRoom" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="AmountOfRoom" class="text-danger"></span>
+                                </div>
 
-                            <div class="mb-3">
-                                <label asp-for="Price" class="form-label">Precio (DOP): </label>
-                                <input asp-for="Price" class="form-control" />
-                                <span asp-validation-for="Price" class="text-danger"></span>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="AmountOfBathroom" class="form-label fw-medium">Baños *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-droplet"></i></span>
+                                        <input asp-for="AmountOfBathroom" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="AmountOfBathroom" class="text-danger"></span>
+                                </div>
                             </div>
 
-
                             <div class="mb-3">
-                                <label asp-for="Description" class="form-label">Descripción: </label>
-                                <input asp-for="Description" class="form-control" />
+                                <label asp-for="Description" class="form-label fw-medium">Descripción *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-text-paragraph"></i></span>
+                                    <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                                </div>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
 
-                            <div class="mb-3">
-                                <label asp-for="PropertySize" class="form-label">Tamaño (m²) : </label>
-                                <input asp-for="PropertySize" class="form-control" />
-                                <span asp-validation-for="PropertySize" class="text-danger"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label asp-for="AmountOfRoom" class="form-label">Cantidad de habitaciones: </label>
-                                <input asp-for="AmountOfRoom" class="form-control" />
-                                <span asp-validation-for="AmountOfRoom" class="text-danger"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label asp-for="AmountOfBathroom" class="form-label">Cantidad de baños: </label>
-                                <input asp-for="AmountOfBathroom" class="form-control" />
-                                <span asp-validation-for="AmountOfBathroom" class="text-danger"></span>
-                            </div>
-
                             <!-- Mejoras -->
-                            <div class="mb-3">
-                                <label class="form-label">Mejoras</label>
-                                <select asp-for="SelectedImprovements" class="form-select" multiple size="5">
-                                    @foreach (var improvement in Model.Improvements)
-                                    {
-                                        <option value="@improvement.Id">@improvement.Name</option>
-                                    }
-                                </select>
-                                <small class="form-text text-muted">Mantén presionado Ctrl para seleccionar múltiples</small>
+                            <div class="mb-4">
+                                <label class="form-label fw-medium">Mejoras *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-stars"></i></span>
+                                    <select required asp-for="SelectedImprovements" class="form-select" multiple size="5">
+                                        @foreach (var improvement in Model.Improvements)
+                                        {
+                                            <option value="@improvement.Id">@improvement.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <small class="text-muted">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varias mejoras</small>
                             </div>
 
                             <!-- Imágenes -->
-                            <div class="mb-3">
-                                <label class="form-label">Imágenes (1-4 archivos) *</label>
-                                <input type="file" name="Files" class="form-control" multiple
-                                       accept="image/*" data-max-files="4" required>
-                                <small class="form-text text-muted">Seleccione entre 1 y 4 imágenes</small>
+                            <div class="mb-4">
+                                <label class="form-label fw-medium">Imágenes (1-4 archivos) *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-images"></i></span>
+                                    <input type="file" name="Files" class="form-control" multiple
+                                           accept="image/*" data-max-files="4" required>
+                                </div>
+                                <small class="text-muted">Seleccione entre 1 y 4 imágenes</small>
                             </div>
 
-
-                            <input type="hidden" asp-for="AgentId" value="@user.Id" />
-
-                            <input type="hidden" asp-for="Id" />
-
-                            <button type="submit" class="btn btn-primary">Registrar Propiedad</button>
-                            <a asp-controller="Agent" asp-action="PropertyMaintenance" class="btn btn-warning">Volver atras</a>
-
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Agent" asp-action="PropertyMaintenance" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Volver atrás
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-2"></i>Registrar Propiedad
+                                </button>
+                            </div>
                         </form>
-                    
                     }
-
-
-
-
-
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+</style>
+
 @section Scripts {
     <script>
         // Validación de imágenes

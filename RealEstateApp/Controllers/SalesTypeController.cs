@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.Services;
@@ -7,6 +8,7 @@ using RealEstateApp.Core.Application.ViewModels.SalesType;
 
 namespace RealEstateApp.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class SalesTypeController : Controller
     {
         private readonly ISaleTypeService _salesTypeService;

@@ -4,9 +4,11 @@ using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.User.Developer;
 using RealEstateApp.Core.Application.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstateApp.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class DevController : Controller
     {
         private readonly IUserService _userService;

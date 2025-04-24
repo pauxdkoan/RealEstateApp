@@ -12,9 +12,11 @@ using RealEstateApp.Core.Application.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstateApp.Core.Application.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstateApp.Controllers
 {
+   
     public class AgentController : Controller
     {
         private readonly IAgentService _agentService;
@@ -48,6 +50,7 @@ namespace RealEstateApp.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Authorize(Roles = "Agente")]
         public async Task<IActionResult> Index(PropertyFilters? filters)
         {
             // Cargar los tipos de propiedad para el ViewBag
@@ -71,6 +74,7 @@ namespace RealEstateApp.Controllers
             return View(propertyDetails);
         }
 
+        [Authorize(Roles = "Agente")]
         public async Task<IActionResult> PropertyMaintenance()
         {
             var agentInSession = HttpContext.Session.Get<AuthenticationResponse>("user");
@@ -78,6 +82,7 @@ namespace RealEstateApp.Controllers
             return View(propertyList);
         }
 
+        [Authorize(Roles = "Agente")]
         public async Task<IActionResult> CreateProperty()
         {
             SavePropertyVm propertyVm = new();
@@ -86,6 +91,8 @@ namespace RealEstateApp.Controllers
             propertyVm.Improvements = await _improvementService.GetAllListViewModel();
             return View(propertyVm);
         }
+
+        [Authorize(Roles = "Agente")]
 
         [HttpPost]
         public async Task<IActionResult> CreateProperty(SavePropertyVm vm)
@@ -102,6 +109,7 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("PropertyMaintenance");
         }
 
+        [Authorize(Roles = "Agente")]
         public async Task<IActionResult> EditProperty(int id)
         {
             var property = await _propertyService.GetByIdSaveViewModel(id);
@@ -114,6 +122,7 @@ namespace RealEstateApp.Controllers
             return View(editVm);
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> DeleteProperty(int propertyId)
         {
@@ -121,6 +130,7 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("PropertyMaintenance");
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> EditProperty(EditPropertyVm vm)
         {
@@ -147,7 +157,7 @@ namespace RealEstateApp.Controllers
             await _propertyService.Update(svm, vm.Id);
             return RedirectToAction("PropertyMaintenance");
         }
-
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> DeleteImage(int imageId, int propertyId)
         {
@@ -166,6 +176,7 @@ namespace RealEstateApp.Controllers
             return View(agents);
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> ToggleAgentStatus(string agentId)
         {
@@ -180,6 +191,7 @@ namespace RealEstateApp.Controllers
             return View("DeleteAgent", agent);
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> ConfirmDeleteAgent(string Id)
         {
@@ -187,6 +199,7 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("AgentsList");
         }
 
+        [Authorize(Roles = "Agente")]
         public async Task<IActionResult> EditAgent()
         {
             var user = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
@@ -210,6 +223,7 @@ namespace RealEstateApp.Controllers
             return View("MyProfile", vm);
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> EditAgent(EditAgentViewModel vm)
         {
@@ -255,7 +269,7 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("Index", "Agent");
         }
 
-
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> SendMessage(string message, int chatId, int propertyId, string clientId)
         {
@@ -285,6 +299,7 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("PropertyDeatails", new { id = propertyId });
         }
 
+        [Authorize(Roles = "Agente")]
         [HttpPost]
         public async Task<IActionResult> UpdateOfferStatus(int offerId, string newStatus, int propertyId)
         {
@@ -292,6 +307,9 @@ namespace RealEstateApp.Controllers
             return RedirectToAction("PropertyDeatails", new { id = propertyId });
         }
 
+
+
+        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> ViewAgents()
         {
             List<AgentViewModel> agents = await _userService.GetAllAgents();

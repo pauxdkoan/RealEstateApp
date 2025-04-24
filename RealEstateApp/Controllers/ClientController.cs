@@ -1,6 +1,8 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
@@ -10,6 +12,7 @@ using RealEstateApp.Core.Application.ViewModels.User.Client;
 
 namespace RealEstateApp.Controllers
 {
+    [Authorize(Roles = "Cliente")]
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;

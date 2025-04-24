@@ -5,104 +5,144 @@
 
 @inject IHttpContextAccessor httpContextAccesor
 @{
-    ViewData["Title"] = "Home";
-    var user =  httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
-   
+    ViewData["Title"] = "Mantenimiento de Propiedades | PropHub";
+    var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
 }
 
-
-
-
-    <div class="row mb-3">
-        <div class="col-3 offset-9">
-            <a asp-controller="Agent" asp-action="CreateProperty" class="btn btn-outline-success">Registrar nueva propiedad</a>
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">
+                    <i class="bi bi-building-gear me-2 text-primary"></i>
+                    Mantenimiento de Propiedades
+                </h2>
+                <p class="text-muted">Gestiona tus propiedades activas</p>
+            </div>
+            <a asp-controller="Agent" asp-action="CreateProperty" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-2"></i>Registrar nueva propiedad
+            </a>
         </div>
     </div>
 
     <div class="row">
-
-        
-
-
-        @if(Model==null || Model.Count==0)
+        @if (Model == null || Model.Count == 0)
         {
-            <h2>No hay propiedades</h2>
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-house-slash display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">No hay propiedades registradas</h4>
+                <p class="text-muted">Comienza creando tu primera propiedad</p>
+                <a asp-controller="Agent" asp-action="CreateProperty" class="btn btn-primary mt-3">
+                    <i class="bi bi-plus-lg me-2"></i>Registrar nueva propiedad
+                </a>
+            </div>
+        }
+        else if (Model.All(p => !p.State))
+        {
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-house-slash display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">No hay propiedades activas</h4>
+                <p class="text-muted">Todas tus propiedades están marcadas como vendidas</p>
+                <a asp-controller="Agent" asp-action="CreateProperty" class="btn btn-primary mt-3">
+                    <i class="bi bi-plus-lg me-2"></i>Registrar nueva propiedad
+                </a>
+            </div>
         }
         else
         {
-
-            @if(Model.All(p=>!p.State))
+            @foreach (PropertyVm item in Model)
             {
-                <h2>No hay propiedades activas</h2>
-            }
-            else
-            {
-
-                @foreach (PropertyVm item in Model)
+                @if (item.State)
                 {
-                    @if (item.State)
-                    {
-                        <div class="col-4">
-                            <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Select(i=>i.ImageUrl).FirstOrDefault()" />
-                                <h4 class="card-title">@item.PropertyTypeVm.Name | <b>@(item.State == true ? "Disponible" : "Vendida")</b></h4>
-                                <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
-                                <p class="card-text">Codigo: @item.Code</p>
-                                <p class="card-text">Precio: @item.Price</p>
-                                <p class="card-text">Metros: @item.PropertySize</p>
-                                <p class="card-text">Baños: @item.AmountOfBathroom</p>
-                                <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
-
-                                <div class="btn-group">
-                                    
-                                    <a asp-controller="Agent" asp-action="EditProperty" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm h-100 property-card">
+                            <div class="position-relative">
+                                <img class="card-img-top" src="@item.PropertyImageVms.Select(i=>i.ImageUrl).FirstOrDefault()" alt="Imagen de propiedad" style="height: 200px; object-fit: cover; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem;" />
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-primary">@item.SalesTypeVm.Name</span>
+                                </div>
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge bg-success">Disponible</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">@item.PropertyTypeVm.Name</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-secondary">Código: @item.Code</span>
+                                    <span class="text-primary fw-bold">RD$ @item.Price.ToString("N0")</span>
+                                </div>
+                                <p class="card-text text-muted mb-3">@(item.Description?.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-door-closed me-1"></i>
+                                        <span>@item.AmountOfRoom</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-droplet me-1"></i>
+                                        <span>@item.AmountOfBathroom</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-rulers me-1"></i>
+                                        <span>@item.PropertySize m²</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-top-0">
+                                <div class="d-flex justify-content-between">
+                                    <a asp-controller="Agent" asp-action="EditProperty" asp-route-id="@item.Id" class="btn btn-primary">
+                                        <i class="bi bi-pencil-square me-1"></i>Editar
+                                    </a>
                                     <form class="delete-form" method="post" asp-controller="Agent" asp-action="DeleteProperty"
                                           asp-route-propertyId="@item.Id">
-                                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn">Eliminar</button>
+                                        <button type="button" class="btn btn-danger delete-btn">
+                                            <i class="bi bi-trash me-1"></i>Eliminar
+                                        </button>
                                     </form>
                                 </div>
-
-
-
-
                             </div>
                         </div>
-
-                    }
-
-
-
-
+                    </div>
                 }
-              
             }
-            @section Scripts {
-            <script>
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const form = this.closest('form');
-
-                        Swal.fire({
-                            title: '¿Eliminar propiedad?',
-                            text: "¡Esta acción no se puede deshacer!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            confirmButtonText: 'Sí, eliminar!',
-                            cancelButtonText: 'Cancelar'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit();
-                            }
-                        });
-                    });
-                });
-            </script>
-            }
-         
         }
     </div>
- 
 </div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+</style>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: '¿Eliminar propiedad?',
+                    text: "¡Esta acción no se puede deshacer!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

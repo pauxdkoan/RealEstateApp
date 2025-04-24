@@ -3,9 +3,11 @@ using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using AutoMapper;
 using RealEstateApp.Core.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstateApp.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class ImprovementController : Controller
     {
         private readonly IImprovementService _improvementService;

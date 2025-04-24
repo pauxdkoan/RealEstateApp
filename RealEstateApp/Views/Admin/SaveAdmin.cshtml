@@ -2,88 +2,122 @@
 
 @model SaveAdminVm
 @{
-    bool editMode = Model.Id==null ? false : true;
-    ViewData["Title"] = "Guardar categoria";
+    bool editMode = Model.Id == null ? false : true;
+    ViewData["Title"] = editMode ? "Editar Administrador | PropHub" : "Nuevo Administrador | PropHub";
 }
 
-<div class="container-fluid">
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="AdminMaintenance">Administradores</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@(editMode ? "Editar" : "Nuevo") administrador</li>
+        </ol>
+    </nav>
 
     <div class="row">
-        <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card-header bg-dark text-light">
-                    <h4>@(editMode ? $"Editando el Administrador: {Model.FirstName}" : "Registrando nuevo administrador")</h4>
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-person-gear me-2 text-primary"></i>
+                        @(editMode ? $"Editar Administrador: {Model.FirstName}" : "Registrar Nuevo Administrador")
+                    </h4>
                 </div>
                 <div class="card-body">
-
                     @if (Model.HasError)
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <p>@Model.Error</p>
+                            <p class="mb-0">@Model.Error</p>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     }
 
-
                     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                    <form method="post" asp-controller="Admin" asp-action="@(editMode ? "EditAdmin":"CreateAdmin")">
 
-                        <div class="mb-3">
-                            <label asp-for="FirstName" class="form-label">Nombre: </label>
-                            <input asp-for="FirstName" class="form-control" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                    <form method="post" asp-controller="Admin" asp-action="@(editMode ? "EditAdmin" : "CreateAdmin")">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label fw-medium">Nombre *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input asp-for="FirstName" class="form-control" required />
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label fw-medium">Apellido *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input asp-for="LastName" class="form-control" required />
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="LastName" class="form-label">Apellido: </label>
-                            <input  asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="UserName" class="form-label">Nombre de usuario: </label>
-                            <input  asp-for="UserName" class="form-control" />
+                            <label asp-for="UserName" class="form-label fw-medium">Nombre de usuario *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                <input asp-for="UserName" class="form-control" required />
+                            </div>
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
 
-
                         <div class="mb-3">
-                            <label asp-for="IdentityCard" class="form-label">Cedula: </label>
-                            <input  asp-for="IdentityCard" class="form-control" />
+                            <label asp-for="IdentityCard" class="form-label fw-medium">Cédula *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                <input asp-for="IdentityCard" class="form-control" required />
+                            </div>
                             <span asp-validation-for="IdentityCard" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Correo: </label>
-                            <input  asp-for="Email" class="form-control" />
+                            <label asp-for="Email" class="form-label fw-medium">Correo electrónico *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" class="form-control" required />
+                            </div>
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-
                         <div class="mb-3">
-                            <label asp-for="Password" class="form-label">Contraseña: </label>
-                            <input  asp-for="Password" class="form-control" />
+                            <label asp-for="Password" class="form-label fw-medium">Contraseña *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-key"></i></span>
+                                <input asp-for="Password" class="form-control" required />
+                            </div>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="ConfrimPassword" class="form-label">Confirmar Contraseña: </label>
-                            <input  asp-for="ConfrimPassword" class="form-control" />
+                        <div class="mb-4">
+                            <label asp-for="ConfrimPassword" class="form-label fw-medium">Confirmar Contraseña *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                                <input asp-for="ConfrimPassword" class="form-control" required />
+                            </div>
                             <span asp-validation-for="ConfrimPassword" class="text-danger"></span>
                         </div>
 
                         <input type="hidden" asp-for="Id" />
 
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                        <a asp-controller="Admin" asp-action="AdminMaintenance" class="btn btn-warning">Volver atras</a>
-
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Admin" asp-action="AdminMaintenance" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Volver atrás
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-2"></i>Registrar administrador
+                            </button>
+                        </div>
                     </form>
-
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

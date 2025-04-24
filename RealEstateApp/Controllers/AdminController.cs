@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Helpers;
@@ -10,6 +11,7 @@ using RealEstateApp.Core.Application.ViewModels.User.Admin;
 
 namespace RealEstateApp.Controllers
 {
+    [Authorize(Roles= "Administrador")]
     public class AdminController : Controller
     {
 

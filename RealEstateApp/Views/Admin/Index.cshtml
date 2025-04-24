@@ -2,87 +2,184 @@
 @model AdminVm
 
 @{
-    ViewData["Title"] = "Dashboard - Administrador";
+    ViewData["Title"] = "Dashboard | PropHub";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-speedometer2 me-2 text-primary"></i>
+                Panel de Administración
+            </h2>
+            <p class="text-muted">Gestión centralizada de PropHub</p>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-header">Propiedades Activas</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Properties.Where(p=>p.State=true).Count()</h5>
-                <p class="card-text">Cantidad total de propiedades disponibles.</p>
+    <div class="row mb-4">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-success mb-0">Propiedades Activas</h5>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-building-check text-success fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Properties.Where(p => p.State == true).Count()</h2>
+                    <p class="text-muted mt-2">Propiedades disponibles en el mercado</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-primary mb-0">Propiedades Vendidas</h5>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-building-lock text-primary fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Properties.Where(p => p.State == false).Count()</h2>
+                    <p class="text-muted mt-2">Propiedades vendidas o no disponibles</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-info mb-0">Desarrolladores Activos</h5>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-code-square text-info fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Developers.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted mt-2">Desarrolladores activos en la plataforma</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-header">Propiedades Inactivas</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Properties.Where(p => p.State = false).Count()</h5>
-                <p class="card-text">Cantidad total de propiedades vendidas.</p>
-                
+
+    <div class="row mb-4">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100 border-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-warning mb-0">Desarrolladores Inactivos</h5>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-code-slash text-warning fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Developers.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted mt-2">Desarrolladores inactivos o suspendidos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-danger mb-0">Clientes Activos</h5>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-people text-danger fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Clients.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted mt-2">Usuarios activos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-secondary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-secondary mb-0">Clientes Inactivos</h5>
+                        <div class="bg-secondary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-person-slash text-secondary fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Clients.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted mt-2">Usuarios inactivos</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-header">Desarrolladores activos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Developers.Where(p => p.IsActive = true).Count()</h5>
-                <p class="card-text">Cantidad total de desarrolladores activos.</p>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-success mb-0">Agentes Activos</h5>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-person-badge text-success fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Agents.Where(p => p.IsActive == true).Count()</h2>
+                    <p class="text-muted mt-2">Agentes inmobiliarios activos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100 border-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title fw-bold text-danger mb-0">Agentes Inactivos</h5>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-person-x text-danger fs-3"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-0">@Model.Agents.Where(p => p.IsActive == false).Count()</h2>
+                    <p class="text-muted mt-2">Agentes inmobiliarios inactivos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-gear-fill me-2 text-primary"></i>
+                        Acciones Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a asp-controller="Admin" asp-action="AdminMaintenance" class="btn btn-outline-primary w-100 p-3">
+                                <i class="bi bi-person-gear fs-4 d-block mb-2"></i>
+                                Gestionar Administradores
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="Agent" asp-action="Index" class="btn btn-outline-primary w-100 p-3">
+                                <i class="bi bi-person-badge fs-4 d-block mb-2"></i>
+                                Gestionar Agentes
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="Dev" asp-action="Index" class="btn btn-outline-primary w-100 p-3">
+                                <i class="bi bi-code-square fs-4 d-block mb-2"></i>
+                                Gestionar Desarrolladores
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="PropertyType" asp-action="Index" class="btn btn-outline-primary w-100 p-3">
+                                <i class="bi bi-houses fs-4 d-block mb-2"></i>
+                                Tipos de Propiedades
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-header">Pagos Hoy</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Developers.Where(p => p.IsActive = false).Count()</h5>
-                <p class="card-text">Cantidad total de desarrolladores inactivos.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header">Clientes Activos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Clients.Where(p => p.IsActive = true).Count()</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-secondary mb-3">
-            <div class="card-header">Clientes Inactivos</div>
-            <div class="card-body">
-                <h5 class="card-title">@Model.Clients.Where(p => p.IsActive = false).Count()</h5>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3">
-    <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Agentes Activos</div>
-        <div class="card-body">
-            <h5 class="card-title">@Model.Agents.Where(p => p.IsActive = true).Count()</h5>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3">
-    <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Agentes Inactivos</div>
-        <div class="card-body">
-            <h5 class="card-title">@Model.Agents.Where(p => p.IsActive = false).Count()</h5>
-        </div>
-    </div>
-</div>
-
-
-

@@ -7,75 +7,116 @@
 @inject IHttpContextAccessor httpContextAccesor
 @{
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
-    ViewData["Title"] = "Mantenimiento de administradores";
+    ViewData["Title"] = "Administradores | PropHub";
 }
 
-<div class="container-fluid">
-
-    <div class="row mb-3">
-        <div class="col-3 offset-9">
-            <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-outline-success">Registrar nuevo administrador</a>
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-person-gear me-2 text-primary"></i>
+                Gestión de Administradores
+            </h2>
+            <p class="text-muted">Administra los usuarios con privilegios administrativos</p>
         </div>
     </div>
 
-    <div class="row">
-
-        @if (Model == null || Model.Count == 0)
-        {
-            <h2>No hay Administradores registrados</h2>
-        }
-        else
-        {
-            @foreach (UserVm item in Model.Where(u=>u.Rol==Roles.Administrador.ToString()))
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">
+                    <i class="bi bi-list-ul me-2"></i>
+                    Administradores Registrados
+                </h5>
+                <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-2"></i>Registrar Nuevo Administrador
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model == null || Model.Count == 0 || !Model.Any(u => u.Rol == Roles.Administrador.ToString()))
             {
-
-                if(item.Id==user.Id)
-                {
-                    <div class="col-4">
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
-                                <p class="card-text">Cedula: @item.IdentityCard</p>
-                                <p class="card-text">Correo: @item.IdentityCard</p>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-infocus-ring disabled">Editar</a>
-                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger disabled">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-4">
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
-                                <p class="card-text">Cedula: @item.IdentityCard</p>
-                                <p class="card-text">Correo: @item.IdentityCard</p>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
-                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-        
+                <div class="text-center py-5">
+                    <i class="bi bi-person-x display-1 text-muted"></i>
+                    <h4 class="mt-3 text-muted">No hay administradores registrados</h4>
+                    <p class="text-muted">Registra nuevos administradores para comenzar</p>
+                    <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-lg me-2"></i>Registrar Nuevo Administrador
+                    </a>
+                </div>
             }
-        }
+            else
+            {
+                <div class="row">
+                    @foreach (UserVm item in Model.Where(u => u.Rol == Roles.Administrador.ToString()))
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm h-100 property-card">
+                                <div class="card-header bg-white py-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0 fw-bold">@(item.FirstName + " " + item.LastName)</h5>
+                                        <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
+                                            @(item.IsActive ? "Activo" : "Inactivo")
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <p class="card-text mb-2">
+                                            <i class="bi bi-person-badge me-2 text-primary"></i>
+                                            <strong>Usuario:</strong> @item.UserName
+                                        </p>
+                                        <p class="card-text mb-2">
+                                            <i class="bi bi-card-text me-2 text-primary"></i>
+                                            <strong>Cédula:</strong> @item.IdentityCard
+                                        </p>
+                                        <p class="card-text">
+                                            <i class="bi bi-envelope me-2 text-primary"></i>
+                                            <strong>Correo:</strong> @item.Email
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-top-0">
+                                    @if (item.Id == user.Id)
+                                    {
+                                        <div class="d-flex justify-content-center">
+                                            <span class="badge bg-info p-2">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Este es tu usuario actual
+                                            </span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex justify-content-between">
+                                            <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-primary">
+                                                <i class="bi bi-pencil-square me-1"></i>Editar
+                                            </a>
+                                            <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn @(item.IsActive ? "btn-warning" : "btn-success")">
+                                                <i class="bi @(item.IsActive ? "bi-toggle-off" : "bi-toggle-on") me-1"></i>
+                                                @(item.IsActive ? "Desactivar" : "Activar")
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
-
 </div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+</style>

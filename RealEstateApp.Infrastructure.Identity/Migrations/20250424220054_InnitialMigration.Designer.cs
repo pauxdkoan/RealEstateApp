@@ -12,7 +12,7 @@ using RealEstateApp.Infrastructure.Identity.Contexts;
 namespace RealEstateApp.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20250423054141_InnitialMigration")]
+    [Migration("20250424220054_InnitialMigration")]
     partial class InnitialMigration
     {
         /// <inheritdoc />

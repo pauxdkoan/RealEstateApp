@@ -1,33 +1,57 @@
 ﻿@model RealEstateApp.Core.Application.ViewModels.Improvement.ImprovementVm
 
 @{
-    ViewData["Title"] = "Eliminar Mejora";
+    ViewData["Title"] = "Eliminar Mejora | PropHub";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">¿Está seguro que desea eliminar esta mejora?</h2>
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Mejoras</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+        </ol>
+    </nav>
 
-    <div class="alert alert-danger">
-        <strong>Advertencia:</strong> Al eliminar esta mejora, se eliminarán permanentemente todos los datos asociados a ella.
-    </div>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Confirmar Eliminación
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        <strong>¡Atención!</strong> Al eliminar esta mejora, se eliminarán permanentemente todos los datos asociados a ella.
+                    </div>
 
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>Nombre</th>
-            <td>@Model.Name</td>
-        </tr>
-        <tr>
-            <th>Descripción</th>
-            <td>@Model.Description</td>
-        </tr>
-    </table>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@Model.Name</h5>
+                            <p class="card-text">@Model.Description</p>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-building me-2 text-primary"></i>
+                                <span>Propiedades asociadas: <strong>@(Model.PropertyImprovements?.Count ?? 0)</strong></span>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="mb-3">
-        <form asp-action="ConfirmDelete" method="post">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <a asp-action="Index" class="btn btn-secondary me-2">Cancelar</a>
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-        </form>
+                    <form asp-action="ConfirmDelete" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Eliminar Permanentemente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-

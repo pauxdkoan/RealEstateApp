@@ -12,8 +12,8 @@ using RealEstateApp.Infrastructure.Persistence.Contexts;
 namespace RealEstateApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250424153651_CascadeOnDeleteChats")]
-    partial class CascadeOnDeleteChats
+    [Migration("20250424220036_InnitialMigration")]
+    partial class InnitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

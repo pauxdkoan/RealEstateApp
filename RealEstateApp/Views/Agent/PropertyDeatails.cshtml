@@ -3,166 +3,337 @@
 @using RealEstateApp.Core.Application.Helpers
 @using RealEstateApp.Core.Application.Dtos.Account
 
-
 @inject IHttpContextAccessor httpContextAccesor
 @model PropertyVm
 @{
-    ViewData["Title"] = "Detalles de Propiedad";
+    ViewData["Title"] = "Detalles de Propiedad | PropHub";
     var user = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var hasAcceptedOffer = Model.Offers.Any(o => o.State == "2");
 }
 
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Agent" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detalles de propiedad</li>
+        </ol>
+    </nav>
 
-
-<div class="container-fluid mt-4">
     <div class="row">
         <!-- Slider de imágenes -->
         <div class="col-md-8">
-            <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @if (Model.PropertyImageVms != null && Model.PropertyImageVms.Any())
-                    {
-                        @foreach(var i in Model.PropertyImageVms)
+            <div class="card shadow-sm mb-4 overflow-hidden">
+                <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if (Model.PropertyImageVms != null && Model.PropertyImageVms.Any())
+                        {
+                            @for (int i = 0; i < Model.PropertyImageVms.Count; i++)
+                            {
+                                var img = Model.PropertyImageVms.ElementAt(i);
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <img src="@img.ImageUrl" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Imagen de propiedad" />
+                                </div>
+                            }
+                        }
+                        else
                         {
                             <div class="carousel-item active">
-                                <img src="@i.ImageUrl" class="d-block w-100" alt="Imagen de propiedad" style="height: 500px; object-fit: cover;">
+                                <div class="bg-light d-flex justify-content-center align-items-center" style="height: 500px;">
+                                    <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+                                </div>
                             </div>
                         }
-                    }
-                    else
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                    
+                    <!-- Indicadores de imágenes -->
+                    @if(Model.PropertyImageVms != null && Model.PropertyImageVms.Count > 1)
                     {
-                        <div class="carousel-item active">
-                            <img src="~/images/placeholder.jpg" class="d-block w-100" alt="Imagen no disponible" style="height: 500px; object-fit: cover;">
+                        <div class="carousel-indicators">
+                            @for (int i = 0; i < Model.PropertyImageVms.Count; i++)
+                            {
+                                <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i+1)"></button>
+                            }
                         </div>
                     }
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+            </div>
+
+            <!-- Información de la propiedad -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0 fw-bold">@Model.PropertyTypeVm.Name</h3>
+                        <div>
+                            <span class="badge bg-primary px-3 py-2 me-2">@Model.SalesTypeVm.Name</span>
+                            <span class="badge @(Model.State ? "bg-success" : "bg-danger") px-3 py-2">
+                                @(Model.State ? "Disponible" : "Vendida")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Código:</strong> <span class="badge bg-secondary">@Model.Code</span></p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <h4 class="text-primary fw-bold">RD$ @Model.Price.ToString("N0")</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-door-closed text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-muted mb-0">Habitaciones</p>
+                                    <h5 class="mb-0">@Model.AmountOfRoom</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-droplet text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-muted mb-0">Baños</p>
+                                    <h5 class="mb-0">@Model.AmountOfBathroom</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle p-3 me-3">
+                                    <i class="bi bi-rulers text-primary"></i>
+                                </div>
+                                <div>
+                                    <p class="text-muted mb-0">Tamaño</p>
+                                    <h5 class="mb-0">@Model.PropertySize m²</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-3">Descripción</h5>
+                        <p>@Model.Description</p>
+                    </div>
+                    
+                    <div>
+                        <h5 class="fw-bold mb-3">Mejoras</h5>
+                        @if (Model.PropertyImprovements != null && Model.PropertyImprovements.Any())
+                        {
+                            <div class="row">
+                                @foreach (var improvement in Model.PropertyImprovements)
+                                {
+                                    <div class="col-md-6 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            <span>@improvement.Improvement.Name</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Esta propiedad no tiene mejoras registradas.</p>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-between">
+                        <a asp-controller="Agent" asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Volver
+                        </a>
+                        <a asp-controller="Agent" asp-action="EditProperty" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil-square me-2"></i>Editar propiedad
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Detalles de la propiedad -->
         <div class="col-md-4">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">@Model.Code - @Model.PropertyTypeVm.Name</h3>
+            <!-- Estadísticas rápidas -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-graph-up me-2"></i>
+                        Estadísticas
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <h4 class="text-success">@Model.SalesTypeVm.Name: US$ @Model.Price.ToString("N0")</h4>
-
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <p><i class="fas fa-bed me-2"></i> @Model.AmountOfRoom Habitaciones</p>
-                            <p><i class="fas fa-bath me-2"></i> @Model.AmountOfBathroom Baños</p>
-                        </div>
-                        <div class="col-6">
-                            <p><i class="fas fa-expand me-2"></i> @Model.PropertySize m²</p>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <h5>Descripción</h5>
-                    <p class="text-muted">@Model.Description</p>
-
-                    @if (Model.PropertyImprovements != null && Model.PropertyImprovements.Any())
-                    {
-                        <h5 class="mt-3">Mejoras</h5>
-                        <ul class="list-group">
-                            @foreach (var improvement in Model.PropertyImprovements)
-                            {
-                                <li class="list-group-item">@improvement.Improvement.Name</li>
-                            }
-                        </ul>
-                    }
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ofertas totales
+                            <span class="badge bg-primary rounded-pill">@Model.Offers.Count</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ofertas pendientes
+                            <span class="badge bg-warning rounded-pill">@Model.Offers.Count(o => o.State == "1")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ofertas aceptadas
+                            <span class="badge bg-success rounded-pill">@Model.Offers.Count(o => o.State == "2")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ofertas rechazadas
+                            <span class="badge bg-danger rounded-pill">@Model.Offers.Count(o => o.State == "3")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Acciones rápidas -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-lightning-charge me-2"></i>
+                        Acciones rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <a href="#chatSection" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="bi bi-chat-dots me-2"></i>Ver mensajes de clientes
+                    </a>
+                    <a href="#offersSection" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="bi bi-cash-coin me-2"></i>Gestionar ofertas
+                    </a>
+                    <a href="#" onclick="window.print(); return false;" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-printer me-2"></i>Imprimir detalles
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- Sección específica para agentes -->
-
-    <div class="row mt-4">
-        <!-- Chat -->
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Clientes</h5>
+    <!-- Sección de Chat -->
+    <div class="row mt-4" id="chatSection">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-chat-dots me-2"></i>
+                        Mensajes de Clientes
+                    </h5>
                 </div>
-                <div class="card-body" style="height: 400px;">
-                    <div class="row h-100">
+                <div class="card-body">
+                    <div class="row">
                         <!-- Listado de clientes -->
-                        <div class="col-4 border-end overflow-auto">
-                            <h6>Clientes</h6>
-                            <ul class="list-group">
-                                @foreach (var c in Model.Chats)
+                        <div class="col-md-3 border-end">
+                            <h6 class="fw-bold mb-3">Clientes</h6>
+                            <div class="list-group">
+                                @if (Model.Chats != null && Model.Chats.Any())
                                 {
-                                    <li class="list-group-item @(c.ClientId == ViewBag.SelectedClientId ? "active" : "")">
-                                        <a href="?clientId=@c.ClientId" class="text-decoration-none @(c.ClientId == user.Id ? "text-Dark" : "")">
-                                            @c.Client.FirstName @c.Client.LastName
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-
-                        <!-- Conversación -->
-                        <div class="col-8 d-flex flex-column">
-                            <div class="chat-container flex-grow-1 mb-3 overflow-auto" style="max-height: 320px;">
-                                @{
-                                    var selectedChat = Model.Chats.FirstOrDefault(c => c.ClientId.ToString() == Context.Request.Query["clientId"]);
-                                }
-
-                                @if (selectedChat != null && selectedChat.Messages != null)
-                                {
-                                    foreach (var message in selectedChat.Messages.OrderBy(m => m.DateTime))
+                                    @foreach (var c in Model.Chats)
                                     {
-                                        <div class="message @(message.SenderId == user.Id ? "client-message" : "agent-message") mb-3">
-                                            <div class="message-header small text-muted">
-                                                @(message.SenderId == user.Id ? "Tú" : selectedChat.Client.FirstName) - @message.DateTime.ToString("dd/MM/yyyy HH:mm")
+                                        <a href="?clientId=@c.ClientId#chatSection" class="list-group-item list-group-item-action @(c.ClientId.ToString() == Context.Request.Query["clientId"] ? "active" : "")">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">@c.Client.FirstName @c.Client.LastName</h6>
+                                                @if (c.Messages != null && c.Messages.Any())
+                                                {
+                                                    <small>@c.Messages.OrderByDescending(m => m.DateTime).First().DateTime.ToString("dd/MM")</small>
+                                                }
                                             </div>
-                                            <div class="message-content p-3 rounded">
-                                                @message.Content
-                                            </div>
-                                        </div>
+                                            @if (c.Messages != null && c.Messages.Any())
+                                            {
+                                                <small class="text-truncate d-inline-block" style="max-width: 100%;">
+                                                    @c.Messages.OrderByDescending(m => m.DateTime).First().Content
+                                                </small>
+                                            }
+                                        </a>
                                     }
                                 }
                                 else
                                 {
-                                    <p class="text-muted">Selecciona un cliente para ver la conversación.</p>
+                                    <div class="text-center py-4">
+                                        <i class="bi bi-chat-left-text display-4 text-muted"></i>
+                                        <p class="mt-3 text-muted">No hay conversaciones</p>
+                                    </div>
                                 }
                             </div>
+                        </div>
 
-                            @if (selectedChat != null)
-                            {
-                                <form asp-controller="Agent" asp-action="SendMessage" method="post">
-                                    <input type="hidden" name="propertyId" value="@Model.Id" />
-                                    <input type="hidden" name="chatId" value="@selectedChat.Id" />
-                                    <input type="hidden" name="clientId" value="@selectedChat.ClientId"/>
-                                    <div class="input-group">
-                                        <input type="text" name="message" class="form-control" placeholder="Escribe tu mensaje..." required />
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                        <!-- Conversación -->
+                        <div class="col-md-9">
+                            <div class="chat-container" style="height: 400px; overflow-y: auto;">
+                                @{
+                                    var selectedChat = Model.Chats?.FirstOrDefault(c => c.ClientId.ToString() == Context.Request.Query["clientId"]);
+                                }
+
+                                @if (selectedChat != null && selectedChat.Messages != null && selectedChat.Messages.Any())
+                                {
+                                    <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                                        <i class="bi bi-person-circle me-2 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-0">@selectedChat.Client.FirstName @selectedChat.Client.LastName</h6>
+                                            <small class="text-muted">@selectedChat.Client.Email</small>
+                                        </div>
                                     </div>
-                                </form>
-                            }
+
+                                    <div class="messages-container px-2">
+                                        @foreach (var message in selectedChat.Messages.OrderBy(m => m.DateTime))
+                                        {
+                                            <div class="message @(message.SenderId == user.Id ? "agent-message" : "client-message") mb-3">
+                                                <div class="message-header small text-muted">
+                                                    @(message.SenderId == user.Id ? "Tú" : selectedChat.Client.FirstName) -
+                                                    @message.DateTime.ToString("dd/MM/yyyy HH:mm")
+                                                </div>
+                                                <div class="message-content p-3 rounded @(message.SenderId == user.Id ? "bg-primary text-white" : "bg-light")">
+                                                    @message.Content
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <form asp-controller="Agent" asp-action="SendMessage" method="post" class="message-form">
+                                            <input type="hidden" name="propertyId" value="@Model.Id" />
+                                            <input type="hidden" name="chatId" value="@selectedChat.Id" />
+                                            <input type="hidden" name="clientId" value="@selectedChat.ClientId"/>
+                                            <div class="input-group">
+                                                <input type="text" name="message" class="form-control" placeholder="Escribe tu mensaje..." required />
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="bi bi-send-fill"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-center py-5">
+                                        <i class="bi bi-chat-square-text display-4 text-muted"></i>
+                                        <p class="mt-3 text-muted">Selecciona un cliente para ver la conversación</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-
-        <!-- Ofertas de clientes -->
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>Ofertas de Clientes</h5>
+    <!-- Sección de Ofertas -->
+    <div class="row mt-4" id="offersSection">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-cash-coin me-2"></i>
+                        Ofertas de Clientes
+                    </h5>
                 </div>
                 <div class="card-body">
                     @if (Model.Offers != null && Model.Offers.Any())
@@ -184,85 +355,100 @@
                                         <tr>
                                             <td>@offer.Cliente.FirstName @offer.Cliente.LastName</td>
                                             <td>@offer.Date.ToString("dd/MM/yyyy HH:mm")</td>
-                                            <td>US$ @offer.Amount.ToString("N0")</td>
+                                            <td>RD$ @offer.Amount.ToString("N0")</td>
                                             <td>
                                                 <span class="badge @GetStatusBadge(offer.State)">
                                                     @GetStatusText(offer.State)
                                                 </span>
-
-                                                </td>
-                                                <td>
+                                            </td>
+                                            <td>
+                                                @if (!hasAcceptedOffer || offer.State == "2")
+                                                {
                                                     <form asp-controller="Agent" asp-action="UpdateOfferStatus" asp-route-propertyId="@Model.Id" method="post">
                                                         <input type="hidden" name="offerId" value="@offer.Id" />
                                                         <div class="input-group">
-                                                            <select name="newStatus" class="form-select form-select-sm">
-                                                                <option value="1">Pendiente</option>
-                                                                <option value="2">Aceptada</option>
-                                                                <option value="3">Rechazada</option>
+                                                            <select name="newStatus" class="form-select form-select-sm" @(offer.State == "2" ? "disabled" : "")>
+                                                                <option value="1" >Pendiente</option>
+                                                                <option value="2" >Aceptada</option>
+                                                                <option value="3" >Rechazada</option>
                                                             </select>
-                                                            <button type="submit" class="btn btn-sm btn-primary">
-                                                                <i class="fas fa-save"></i>
+                                                            <button type="submit" class="btn btn-sm btn-primary" @(offer.State == "2" ? "disabled" : "")>
+                                                                <i class="bi bi-save"></i>
                                                             </button>
                                                         </div>
                                                     </form>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No disponible</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if (hasAcceptedOffer)
+                        {
+                            <div class="alert alert-info mt-3">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Ya existe una oferta aceptada para esta propiedad. No se pueden modificar otras ofertas.
                             </div>
                         }
-                        else
-                        {
-                            <p class="text-muted">No hay ofertas registradas para esta propiedad</p>
-                        }
-
-
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="bi bi-cash-stack display-4 text-muted"></i>
+                            <p class="mt-3 text-muted">No hay ofertas registradas para esta propiedad</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-
-        <!-- Estadísticas rápidas -->
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h5><i class="fas fa-chart-line me-2"></i>Estadísticas</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ofertas totales
-                                <span class="badge bg-primary">@Model.Offers.Count</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ofertas activas
-                                <span class="badge bg-success">@Model.Offers.Count(o => o.State == "2")</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ofertas rechazadas
-                                <span class="badge bg-danger">@Model.Offers.Count(o => o.State == "3")</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
-
-    <script>
-        // Inicializar carrusel
-        $(document).ready(function(){
-            $('#propertyCarousel').carousel();
-
-            // Scroll automático al final del chat
-            const chatContainer = document.querySelector('.chat-container');
-            if(chatContainer) {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-        });
-    </script>
-    
+    </div>
 </div>
+
+<style>
+    .client-message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .agent-message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-align: right;
+    }
+    
+    .message-content {
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+    
+    .client-message .message-content {
+        border-radius: 15px 15px 15px 0;
+    }
+    
+    .agent-message .message-content {
+        border-radius: 15px 15px 0 15px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Scroll automático al final del chat
+        const chatContainer = document.querySelector('.chat-container');
+        const messagesContainer = document.querySelector('.messages-container');
+        if(messagesContainer) {
+            chatContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    });
+</script>
 
 @functions {
     string GetStatusBadge(string status)
@@ -275,14 +461,15 @@
             _ => "bg-secondary"
         };
     }
-        public string GetStatusText(string state)
+    
+    string GetStatusText(string state)
+    {
+        return state switch
         {
-            return state switch
-            {
-                "1" => "Pendiente",
-                "2" => "Aceptada",
-                "3" => "Rechazada",
-                _ => "Desconocido"
-            };
-        }
+            "1" => "Pendiente",
+            "2" => "Aceptada",
+            "3" => "Rechazada",
+            _ => "Desconocido"
+        };
+    }
 }
