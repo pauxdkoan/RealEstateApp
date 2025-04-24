@@ -13,14 +13,51 @@
 <div class="container-fluid">
 
     <div class="row mb-3">
-        <div class="col-3 offset-9">
-            <p>Buscar por codigo</p>
-            <p>Filtrar por tipo de propiedad</p>
-            <p>Filtrar por precio [precio minimo] y un precio maximo</p>
-            <p>Un filtro para colocar la cantidad de habitacion y de baños</p>
+        <!-- Formularios de Búsqueda y Filtros -->
+        <form asp-controller="Client" asp-action="Index" method="get" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label for="code" class="form-label">Buscar por código</label>
+                <input type="text" name="code" class="form-control" placeholder="Ej: 123456" />
+            </div>
 
+            <div class="col-md-3">
+                <label for="propertyTypes" class="form-label">Tipo de propiedad</label>
+                <select class="form-select" name="propertyTypes" multiple>
+                    @if (ViewBag.PropertyTypes != null)
+                    {
+                        foreach (var type in ViewBag.PropertyTypes)
+                        {
+                            <option value="@type.Value">@type.Text</option>
+                        }
+                    }
+                </select>
+                <small class="text-muted">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varios</small>
+            </div>
 
-        </div>
+            <div class="col-md-2">
+                <label class="form-label">Precio mínimo</label>
+                <input type="number" name="minPrice" class="form-control" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Precio máximo</label>
+                <input type="number" name="maxPrice" class="form-control" />
+            </div>
+
+            <div class="col-md-1">
+                <label class="form-label">Habitaciones</label>
+                <input type="number" name="bedrooms" class="form-control" />
+            </div>
+
+            <div class="col-md-1">
+                <label class="form-label">Baños</label>
+                <input type="number" name="bathrooms" class="form-control" />
+            </div>
+
+            <div class="col-md-12 text-end">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </form>
     </div>
 
     <div class="row">

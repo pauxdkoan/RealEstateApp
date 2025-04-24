@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
 using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.User.Client;
@@ -15,19 +17,31 @@ namespace RealEstateApp.Controllers
         private readonly IChatService _chatService;
         private readonly IAgentService _agentService;
         private readonly IMessageService _messageService;
+        private readonly IPropertyTypeService _propertyTypeService;
 
-        public ClientController(IClientService clientService, IPropertyService propertyService, IChatService chatService, IAgentService agentService, IMessageService messageService)
+        public ClientController(IClientService clientService, IPropertyService propertyService, IChatService chatService, 
+            IAgentService agentService, IMessageService messageService, IPropertyTypeService propertyTypeService)
         {
             _clientService = clientService;
             _propertyService = propertyService;
             _chatService = chatService;
             _agentService = agentService;
             _messageService = messageService;
+            _propertyTypeService = propertyTypeService;
         }
 
-        public async Task<IActionResult> Index() 
+        public async Task<IActionResult> Index(PropertyFilters filters) 
         {
-            var propertyList=await _propertyService.GetAllListViewModel();
+            // Cargar los tipos de propiedad para el ViewBag
+            var propertyTypes = await _propertyTypeService.GetAllListViewModel();
+            ViewBag.PropertyTypes = propertyTypes
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                }).ToList();
+
+            var propertyList=await _propertyService.GetWithFilters(filters);
             return View(propertyList);
         }
 
@@ -47,9 +61,17 @@ namespace RealEstateApp.Controllers
             return View(propertyDetails);
         }
 
-        public async Task<IActionResult> MyFavoritesProperties(string clientId)
+        public async Task<IActionResult> MyFavoritesProperties(string clientId, PropertyFilters? filters)
         {
-            var myPropertyList = await _propertyService.MyFavoritesProperties(clientId);
+            // Cargar los tipos de propiedad para el ViewBag
+            var propertyTypes = await _propertyTypeService.GetAllListViewModel();
+            ViewBag.PropertyTypes = propertyTypes
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                }).ToList();
+            var myPropertyList = await _propertyService.MyFavoritesProperties(clientId, filters);
             return View(myPropertyList);
         }
 

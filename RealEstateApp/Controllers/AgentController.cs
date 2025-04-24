@@ -10,6 +10,7 @@ using RealStateApp.Core.Application.ViewModels.Agent;
 using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Application.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RealEstateApp.Controllers
 {
@@ -46,10 +47,19 @@ namespace RealEstateApp.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(PropertyFilters? filters)
         {
+            // Cargar los tipos de propiedad para el ViewBag
+            var propertyTypes = await _propertyTypeService.GetAllListViewModel();
+            ViewBag.PropertyTypes = propertyTypes
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                }).ToList();
+
             var agentInSession = HttpContext.Session.Get<AuthenticationResponse>("user");
-            var propertyList = await _propertyService.MyProperties(agentInSession.Id);
+            var propertyList = await _propertyService.MyProperties(agentInSession.Id, filters);
             return View("Home", propertyList);
         }
 
