@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RealEstateApp.Core.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,9 @@ namespace RealStateApp.Core.Application.ViewModels.Agent
         [Required(ErrorMessage = "El apellido es obligatorio.")]
         public string Apellido { get; set; }
 
-        public string UserName { get; set; } = " ";
+        public string UserName { get; set; }
+
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "El teléfono es obligatorio.")]
         public string Telefono { get; set; }
@@ -24,6 +27,10 @@ namespace RealStateApp.Core.Application.ViewModels.Agent
         public string? FotoUrl { get; set; } = " ";
 
         public IFormFile? Foto { get; set; }
+
+        public string Rol { get; set; } = Roles.Agente.ToString();
+
+        public bool isActive { get; set; } = true;
     }
 
 }

@@ -11,6 +11,7 @@ using RealEstateApp.Core.Application.ViewModels.User;
 using RealEstateApp.Core.Application.Services;
 using RealEstateApp.Core.Application.ViewModels.Chat;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RealEstateApp.Core.Application.Enums;
 
 namespace RealEstateApp.Controllers
 {
@@ -217,22 +218,43 @@ namespace RealEstateApp.Controllers
             if (user == null)
                 return RedirectToAction("Login", "User");
 
+            ModelState.Remove("Foto");
+            ModelState.Remove("UserName");
+            ModelState.Remove("Email");
+
             if (!ModelState.IsValid)
             {
                 return View("MyProfile", vm);
             }
+
+            UserVm uservm = await _userService.GetByIdViewModel(user.Id);
+
+            // Subida o conservación de la foto
+            string fotoPath = UploadFileHelper.UploadFile(
+                rol: (int)Roles.Agente,
+                file: vm.Foto,
+                codeOrEmail: uservm.Email,
+                name: null, // opcional, se puede usar null si ya estamos usando el rol
+                isEditMode: true,
+                photo: vm.FotoUrl
+            );
 
             await _userService.UpdateUserAsync(new()
             {
                 Id = user.Id,
                 FirstName = vm.Nombre,
                 LastName = vm.Apellido,
+                UserName = uservm.UserName,
+                Email = uservm.Email,
                 Phone = vm.Telefono,
-                Photo = vm.FotoUrl,
+                Photo = fotoPath,
+                Rol = (int)Roles.Agente,
+                IsActive = true
             });
 
             return RedirectToAction("Index", "Agent");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SendMessage(string message, int chatId, int propertyId, string clientId)
