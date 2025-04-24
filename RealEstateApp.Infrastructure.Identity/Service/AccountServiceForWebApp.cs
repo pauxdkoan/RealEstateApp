@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using RealEstateApp.Core.Application.Dtos.Account;
+using RealEstateApp.Core.Application.Enums;
 using RealEstateApp.Core.Application.Interfaces.Repositories;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Domain.Settings;
@@ -39,6 +40,16 @@ namespace RealEstateApp.Infrastructure.Identity.Service
             }
             
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+
+            
+            var roles=  await _userManager.GetRolesAsync(user);
+            if (roles.Contains(Roles.Desarrollador.ToString())) 
+            { 
+                response.HasError= true;
+                response.Error = $"Los desarrolladores no tienen permisos para utilizar la App";
+                return response ;
+            }
+
             if (!result.Succeeded)
             {
                 response.HasError = true;
