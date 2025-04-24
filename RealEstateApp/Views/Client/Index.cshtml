@@ -10,68 +10,114 @@
    
 }
 
-<div class="container-fluid">
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Explora las propiedades disponibles</h2>
 
-    <div class="row mb-3">
-        <div class="col-3 offset-9">
-            <p>Buscar por codigo</p>
-            <p>Filtrar por tipo de propiedad</p>
-            <p>Filtrar por precio [precio minimo] y un precio maximo</p>
-            <p>Un filtro para colocar la cantidad de habitacion y de baños</p>
-
-
+    <!-- Filtros de búsqueda -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control search-input" placeholder="Buscar por código">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select search-input">
+                        <option selected disabled>Tipo de propiedad</option>
+                        <option>Casa</option>
+                        <option>Apartamento</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control search-input" placeholder="Precio mínimo">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control search-input" placeholder="Precio máximo">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control search-input" placeholder="Habitaciones" style="min-width: 120px;">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control search-input" placeholder="Baños" style="min-width: 120px;">
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row">
-
-        
-
-        @if(Model==null || Model.Count==0)
+        @if (Model == null || Model.Count == 0)
         {
-            <h2>No hay propiedades</h2>
+            <div class="col-12">
+                <div class="alert alert-info text-center">No hay propiedades disponibles en este momento.</div>
+            </div>
         }
         else
         {
-            @foreach(PropertyVm item in Model)
+            @foreach (PropertyVm item in Model)
             {
-               
-                <div class="col-4">
-                    <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" src="@item.PropertyImageVms.Select(i=>i.ImageUrl).FirstOrDefault()" />
-                        <h4 class="card-title">@item.PropertyTypeVm.Name</h4>
-                        <p class="card-text">Descripcion: @item.PropertyTypeVm.Description</p>
-                        <p class="card-text">Codigo: @item.Code</p>
-                        <p class="card-text">Precio: @item.Price</p>
-                        <p class="card-text">Metros: @item.PropertySize</p>
-                        <p class="card-text">Baños: @item.AmountOfBathroom</p>
-                        <p class="card-text">Habitaciones: @item.AmountOfRoom</p>
-
-                        <div class="btn-group">
-
-                            <!--Si hay una propiedad q sea favorita el boton es diferente-->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img class="card-img-top" src="@item.PropertyImageVms.Select(i => i.ImageUrl).FirstOrDefault()" alt="Imagen de propiedad">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.PropertyTypeVm.Name</h5>
+                            <p class="card-text small">@item.PropertyTypeVm.Description</p>
+                            <ul class="list-unstyled small">
+                                <li><strong>Código:</strong> @item.Code</li>
+                                <li><strong>Precio:</strong> RD$@item.Price</li>
+                                <li><strong>Metros:</strong> @item.PropertySize m²</li>
+                                <li><strong>Baños:</strong> @item.AmountOfBathroom</li>
+                                <li><strong>Habitaciones:</strong> @item.AmountOfRoom</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex flex-column gap-2">
                             @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id))
                             {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-sm btn-outline-info">Quitar de favoritos</a>
+                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-outline-danger btn-sm">
+                                    <i class="fa fa-heart"></i> Quitar de favoritos
+                                </a>
                             }
                             else
                             {
-                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-sm btn-outline-info">Añadir a favorito</a>
-
+                                <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa fa-heart-o"></i> Añadir a favoritos
+                                </a>
                             }
-                            
-                            <!--OJO NO ES UN BOTON EN SI, ESTO DEBERIA SER CUANDO SE PRESIONE LA TARJETA DONDE ESTA LA PROPIEDAD... -->
-                            <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detalles de la propiedad</a>
+                            <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">
+                                Ver detalles de la propiedad
+                            </a>
                         </div>
-
-                        
-
-
                     </div>
                 </div>
-            
             }
         }
     </div>
- 
 </div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #e3f2fd, #fff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .search-input {
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        border: 1px solid #D3D5D7;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .card {
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #050517;
+    }
+</style>

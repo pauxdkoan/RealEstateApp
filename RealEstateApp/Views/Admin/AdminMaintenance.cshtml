@@ -10,72 +10,75 @@
     ViewData["Title"] = "Mantenimiento de administradores";
 }
 
-<div class="container-fluid">
-
-    <div class="row mb-3">
-        <div class="col-3 offset-9">
-            <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-outline-success">Registrar nuevo administrador</a>
-        </div>
+<div class="container py-5">
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-success px-4 py-2 shadow-sm rounded-pill">
+            <i class="fa fa-user-plus me-2"></i> Registrar nuevo administrador
+        </a>
     </div>
 
     <div class="row">
-
         @if (Model == null || Model.Count == 0)
         {
-            <h2>No hay Administradores registrados</h2>
+            <div class="col-12">
+                <div class="alert alert-info text-center">No hay administradores registrados.</div>
+            </div>
         }
         else
         {
-            @foreach (UserVm item in Model.Where(u=>u.Rol==Roles.Administrador.ToString()))
+            @foreach (UserVm item in Model.Where(u => u.Rol == Roles.Administrador.ToString()))
             {
-
-                if(item.Id==user.Id)
-                {
-                    <div class="col-4">
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
-                                <p class="card-text">Cedula: @item.IdentityCard</p>
-                                <p class="card-text">Correo: @item.IdentityCard</p>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-infocus-ring disabled">Editar</a>
-                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger disabled">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
-
-                                    </div>
-
-                                </div>
-                            </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@item.FirstName @item.LastName</h5>
+                            <ul class="list-unstyled small">
+                                <li><strong>Cédula:</strong> @item.IdentityCard</li>
+                                <li><strong>Correo:</strong> @item.Email</li>
+                                <li><strong>Estado:</strong> @(item.IsActive ? "Activo" : "Inactivo")</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            @if (item.Id == user.Id)
+                            {
+                                <button class="btn btn-outline-secondary btn-sm" disabled>Editar</button>
+                                <button class="btn btn-outline-secondary btn-sm" disabled>@(item.IsActive ? "Desactivar" : "Activar")</button>
+                            }
+                            else
+                            {
+                                <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">
+                                    <i class="fa fa-edit"></i> Editar
+                                </a>
+                                <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                    @(item.IsActive ? "Desactivar" : "Activar")
+                                </a>
+                            }
                         </div>
                     </div>
-                }
-                else
-                {
-                    <div class="col-4">
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-                                <h4 class="card-title">@(item.FirstName + " " + item.LastName)</h4>
-                                <p class="card-text">Cedula: @item.IdentityCard</p>
-                                <p class="card-text">Correo: @item.IdentityCard</p>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Editar</a>
-                                        <a asp-controller="Admin" asp-action="TogleState" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">@(item.IsActive == true ? "Desactivar" : "Activar")</a>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-        
+                </div>
             }
         }
     </div>
-
 </div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #e3f2fd, #fff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-title {
+        font-size: 1.2rem;
+        color: #050517;
+    }
+</style>
