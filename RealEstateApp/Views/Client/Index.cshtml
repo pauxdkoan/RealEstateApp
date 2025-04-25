@@ -114,7 +114,7 @@
                             <div class="position-absolute top-0 end-0 m-2">
                                 <span class="badge bg-primary">@item.SalesTypeVm.Name</span>
                             </div>
-                            @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id))
+                            @if (item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id && fp.ClientId == user.Id))
                             {
                                 <div class="position-absolute top-0 start-0 m-2">
                                     <span class="badge bg-danger">
@@ -146,9 +146,9 @@
                             </div>
                         </div>
                         <div class="card-footer bg-white border-top-0 d-flex justify-content-between">
-                            <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id) ? "btn-danger" : "btn-outline-danger") btn-sm">
-                                <i class="bi @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id) ? "bi-heart-fill" : "bi-heart") me-1"></i>
-                                @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id) ? "Quitar de favoritos" : "Añadir a favoritos")
+                            <a asp-controller="Client" asp-action="ToggleFavoriteProperty" asp-route-id="@item.Id" asp-route-clientId="@user.Id" class="btn @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id && fp.ClientId == user.Id) ? "btn-danger" : "btn-outline-danger") btn-sm">
+                                <i class="bi @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id && fp.ClientId == user.Id) ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                                @(item.FavoritePropertyVms.Any(fp => fp.PropertyId == item.Id && fp.ClientId == user.Id) ? "Quitar de favoritos" : "Añadir a favoritos")
                             </a>
                             <a asp-controller="Client" asp-action="PropertyDeatails" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
                                 <i class="bi bi-info-circle me-1"></i> Ver detalles

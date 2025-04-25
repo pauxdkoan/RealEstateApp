@@ -164,7 +164,7 @@ namespace RealEstateApp.Controllers
             await _propertyImageService.Delete(imageId);
             return RedirectToAction("EditProperty", new { id = propertyId });
         }
-
+        [Authorize(Roles ="Administrador")]
         public async Task<IActionResult> AgentsList()
         {
             List<AgentViewModel> agents = await _userService.GetAllAgents();
@@ -176,7 +176,7 @@ namespace RealEstateApp.Controllers
             return View(agents);
         }
 
-        [Authorize(Roles = "Agente")]
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> ToggleAgentStatus(string agentId)
         {
